@@ -78,7 +78,7 @@
         
             <li><a href="tips.html">tips</a></li>
         
-            <li><a href="test2.html">test2</a></li>
+            <li><a href="theory.html">theory</a></li>
          
 
       </ul>
@@ -147,7 +147,7 @@
 </ul>
 
 
-<h2 id="toc_0">Using curly braces in Bash substitution</h2>
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
 
 <p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
 
@@ -160,18 +160,14 @@
 <p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/><br/>
 <a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
 
-<hr/>
-
-<h2 id="toc_1">nohup to a different file</h2>
+<h1 id="toc_1">nohup to a different file</h1>
 
 <pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
 </code></pre>
 
 <p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
 
-<hr/>
-
-<h2 id="toc_2">Append multiple lines to a file</h2>
+<h1 id="toc_2">Append multiple lines to a file</h1>
 
 <p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
 
@@ -183,9 +179,7 @@ EOI
 
 <p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
 
-<hr/>
-
-<h2 id="toc_3">copy from bash shell to clipboard</h2>
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
 
 <p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
 
@@ -194,9 +188,7 @@ EOI
 
 <p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
 
-<hr/>
-
-<h2 id="toc_4">Hadoop hdfs get all except one folder (file)</h2>
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
 
 <p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
 
@@ -216,9 +208,7 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 
 <p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
 
-<hr/>
-
-<h2 id="toc_5">check file encoding</h2>
+<h1 id="toc_5">check file encoding</h1>
 
 <pre><code class="language-bash">file -I filename
 </code></pre>
@@ -230,8 +220,6 @@ For example:  </p>
 <pre><code class="language-bash">file -I Base.pig
 Base.pig: application/octet-stream; charset=binary
 </code></pre>
-
-<hr/>
 
 <ul>
 <li>
@@ -270,14 +258,33 @@ Base.pig: application/octet-stream; charset=binary
       <p class="text-right" style="padding:15px 0px;">
       
           <a  href="14742154380051.html" 
-          title="Next Post: ---">--- &raquo;</a>
+          title="Next Post: bayesian statistics">bayesian statistics &raquo;</a>
       
       </p>
         </div>
       </div>
       <div class="comments-wrap">
         <div class="share-comments">
-          
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
           
 
@@ -326,7 +333,7 @@ Base.pig: application/octet-stream; charset=binary
         
             <a href="tips.html"><strong>tips</strong></a>
         
-            <a href="test2.html"><strong>test2</strong></a>
+            <a href="theory.html"><strong>theory</strong></a>
          
         </p>
 
@@ -349,7 +356,7 @@ Base.pig: application/octet-stream; charset=binary
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">---</a>
+			        <a href="14742154380051.html">bayesian statistics</a>
 			      </li>
 		     
 		  

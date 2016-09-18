@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-18T09:52:37-07:00</updated>
+  <updated>2016-09-18T16:35:27-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -44,7 +44,7 @@
 </ul>
 
 
-<h2 id="toc_0">Using curly braces in Bash substitution</h2>
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
 
 <p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
 
@@ -57,18 +57,14 @@
 <p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/><br/>
 <a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
 
-<hr/>
-
-<h2 id="toc_1">nohup to a different file</h2>
+<h1 id="toc_1">nohup to a different file</h1>
 
 <pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
 </code></pre>
 
 <p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
 
-<hr/>
-
-<h2 id="toc_2">Append multiple lines to a file</h2>
+<h1 id="toc_2">Append multiple lines to a file</h1>
 
 <p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
 
@@ -80,9 +76,7 @@ EOI
 
 <p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
 
-<hr/>
-
-<h2 id="toc_3">copy from bash shell to clipboard</h2>
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
 
 <p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
 
@@ -91,9 +85,7 @@ EOI
 
 <p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
 
-<hr/>
-
-<h2 id="toc_4">Hadoop hdfs get all except one folder (file)</h2>
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
 
 <p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
 
@@ -113,9 +105,7 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 
 <p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
 
-<hr/>
-
-<h2 id="toc_5">check file encoding</h2>
+<h1 id="toc_5">check file encoding</h1>
 
 <pre><code class="language-bash">file -I filename
 </code></pre>
@@ -127,8 +117,6 @@ For example:  </p>
 <pre><code class="language-bash">file -I Base.pig
 Base.pig: application/octet-stream; charset=binary
 </code></pre>
-
-<hr/>
 
 <ul>
 <li>
@@ -156,25 +144,23 @@ Base.pig: application/octet-stream; charset=binary
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[---]]></title>
+    <title type="html"><![CDATA[bayesian statistics]]></title>
     <link href="www.echo-ohce.com/14742154380051.html"/>
     <updated>2016-09-18T09:17:18-07:00</updated>
     <id>www.echo-ohce.com/14742154380051.html</id>
     <content type="html"><![CDATA[
-<p>title: bayesian statistics<br/>
-categories:<br/>
-- theory<br/>
-tags:<br/>
-- statistics<br/>
-- bayesian</p>
-
-<h2 id="toc_0">toc: true</h2>
-
 <p>This documents my personal understandings about bayesian, keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">Likelihood function is not a pdf</h5>
+<ul>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
+</ul>
+
+
+<h1 id="toc_0">Likelihood function is not a pdf</h1>
 
 <p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
 Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
@@ -184,7 +170,12 @@ If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta
 <a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
 <a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
 
-<hr/>
+<ul>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
+</ul>
+
 
 ]]></content>
   </entry>
