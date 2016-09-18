@@ -1,0 +1,436 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  bash - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="test2.html">test2</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>bash</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">Using curly braces in Bash substitution</h2>
+
+<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
+
+<ul>
+<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
+<li>expanding arrays <code>${array[42]}</code></li>
+<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
+</ul>
+
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/><br/>
+<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
+
+<hr/>
+
+<h2 id="toc_1">nohup to a different file</h2>
+
+<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+
+<hr/>
+
+<h2 id="toc_2">Append multiple lines to a file</h2>
+
+<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
+
+<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
+multiple lines
+input here
+EOI
+</code></pre>
+
+<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
+
+<hr/>
+
+<h2 id="toc_3">copy from bash shell to clipboard</h2>
+
+<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
+
+<pre><code class="language-bash">cat ~/.bashrc | pbcopy
+</code></pre>
+
+<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
+
+<hr/>
+
+<h2 id="toc_4">Hadoop hdfs get all except one folder (file)</h2>
+
+<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
+
+<pre><code class="language-bash">$ hls alibaba/ipstats/
+Found 8 items
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
+
+$ hdfs dfs -get alibaba/ipstats/[^I]*
+</code></pre>
+
+<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
+
+<hr/>
+
+<h2 id="toc_5">check file encoding</h2>
+
+<pre><code class="language-bash">file -I filename
+</code></pre>
+
+<p>The output is in format of:<br/><br/>
+<code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>.<br/><br/>
+For example:  </p>
+
+<pre><code class="language-bash">file -I Base.pig
+Base.pig: application/octet-stream; charset=binary
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742154380051.html" 
+          title="Next Post: ---">--- &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="email" href="mailto:yugan2005@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="test2.html"><strong>test2</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14742154380014.html">bash</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380051.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380085.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380115.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380139.html">giraph</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

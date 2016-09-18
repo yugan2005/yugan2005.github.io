@@ -1,0 +1,392 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  --- - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="test2.html">test2</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>---</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='test2.html'>test2</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>title: git<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- git</p>
+
+<h2 id="toc_0">toc: true</h2>
+
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<h5 id="toc_1">Back to the unaltered HEAD</h5>
+
+<p>Run these two in order:  </p>
+
+<pre><code class="language-bash">git reset --hard HEAD
+git clean -df
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_2">Messed up local master, come back to the origin/master</h5>
+
+<pre><code class="language-bash">git checkout -B master origin/master
+</code></pre>
+
+<p>If <code>-B</code> is given, the new branch is created if it doesn’t exist; otherwise, it is reset.  </p>
+
+<hr/>
+
+<h5 id="toc_3">Reset one file</h5>
+
+<pre><code class="language-bash">git checkout HEAD -- my-file.txt
+</code></pre>
+
+<p><a href="http://stackoverflow.com/questions/7147270/hard-reset-of-a-single-file">Reference post1</a><br/><br/>
+<a href="http://stackoverflow.com/questions/6561142/difference-between-git-checkout-filename-and-git-checkout-filename/6561160#####6561160">Reference post2</a></p>
+
+<hr/>
+
+<h5 id="toc_4">Save change in one branch and apply it (partially apply it) to another branch</h5>
+
+<pre><code class="language-bash">git stash
+git checkout branch2
+git stash list       ##### to check the various stash made in different branch
+git stash pop        ##### pop out the last stash, and it will be deleted from the stash
+git stash apply stash@{0}    ##### to select the stash and apply to branch2, the stash still saved in the list
+git stash -u   ##### to stash currenlty untracked (newly added) files
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_5">Add only modified changes and ignore untracked (newly added) files</h5>
+
+<pre><code class="language-bash">git add .   ##### stage all changed / untracked (newly added), but not includes deleted
+git add -u  ##### stage all changed / deleted, but not untracked (newly added)
+git add -A  ##### doing both of above
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_6">Syntax of <code>.gitignore</code></h5>
+
+<pre><code class="language-bash">**/foo # matches file or directory &quot;foo&quot; anywhere
+foo # the same as above  
+**/foo/bar # matches file or   directory &quot;bar&quot; anywhere that is directly under directory &quot;foo&quot;  
+abc/** # matches all files inside directory &quot;abc&quot;, infinite depth  
+abc/* # matches all files inside directory &quot;abc&quot;, but not its sub-directories.  
+a/**/b # match 0 or more directories in between  
+a/**/b # matches &quot;a/b&quot;, &quot;a/x/b&quot;, &quot;a/x/y/b&quot; and so on.
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_7">Untracked directory and file</h5>
+
+<ol>
+<li><p>File previously tracked (in git repository) need remove it from the repo but keep it at local. <em>This is called as delete the cache</em><br/><br/>
+<code>git rm -r -f --cached mydirectory/myfile</code><br/><br/>
+the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tracked file has uncommitted change).  </p></li>
+<li><p>Only change the local repo&#39;s <code>.gitignore</code> without change the remote repo&#39;s tracking behavior. Add ignore into <code>.git/info/exclude</code> instead of the <code>.gitignore</code> file at root.<br/><br/>
+<a href="http://stackoverflow.com/questions/767147/ignore-the-gitignore-file-itself">reference post</a></p></li>
+</ol>
+
+<hr/>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14742154380139.html" 
+          title="Previous Post: giraph">&laquo; giraph</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742154380184.html" 
+          title="Next Post: ---">--- &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="email" href="mailto:yugan2005@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="test2.html"><strong>test2</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14742154380014.html">bash</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380051.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380085.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380115.html">---</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742154380139.html">giraph</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>
