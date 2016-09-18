@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Welcome to MWeb - echo-ohce
+  	--- - echo-ohce
   	
 	</title>
 
@@ -118,22 +118,107 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">Welcome to MWeb</h1>
+		<h1 class="title" itemprop="name">---</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<p>What is MWeb? MWeb is a Pro Markdown writing, note taking and static blog generator App. MWeb used Github Flavored Markdown syntax. Please check the MWeb official website: <a href="http://www.mweb.im">http://www.mweb.im</a> introduction video, it will show you how to use MWeb. We also suggest that you check the MWeb official help document: <a href="http://www.mweb.im/help.html">http://www.mweb.im/help.html</a></p>
+			<p>title: giraph<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- giraph<br/>
+- hadoop</p>
 
-<h2 id="toc_0">Things you should know</h2>
+<h2 id="toc_0">toc: true  </h2>
 
-<p>MWeb has two Mode, External Mode and Library Mode. <br/>
-In External Mode, you can edit classic text and markdown files from anywhere on your Mac. As an example, you can point MWeb to a folder on Dropbox. Library Mode design for note taking and static blog/website generator. For more info, please check the <a href="http://www.mweb.im">MWeb official website</a> introduction video and help document.</p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
-<h2 id="toc_1">Help us to make MWeb better!</h2>
+<span id="more"></span><!-- more -->
 
-<ol>
-<li>Tell your friends about MWeb.</li>
-<li>Send a feedback: <a href="mailto:coderforart+233@gmail.com">coderforart+233@gmail.com</a></li>
-<li>Leave a review or at least a rating in Mac App Store.</li>
-</ol>
+<h5 id="toc_1">Kill the background job</h5>
+
+<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+
+<pre><code class="language-bash">ps u
+hadoop job -list | grep yu
+</code></pre>
+
+<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+
+<pre><code class="language-bash">ps --pid pid#
+</code></pre>
+
+<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
+
+<pre><code class="language-bash">yarn application -appStates RUNNING -list
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_2">Giraph Unit testing</h5>
+
+<ul>
+<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
+<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+</ul>
+
+<hr/>
+
+<h5 id="toc_3">giraph edge value not Mutable in place</h5>
+
+<p>edges are just a reference, it can not be changed in place.<br/>
+After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+
+<hr/>
+
+<h5 id="toc_4">giraph shell runner / command line</h5>
+
+<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+
+<pre><code class="language-bash">WORKER=177
+MEM=5120
+HEAP=4352
+#zoo keeper
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
+        com.adsymp.dpp.giraph.lp.LPRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dmapreduce.map.memory.mb=$MEM \
+        -Dmapreduce.task.timeout=1800000 \
+        -Dmapred.task.timeout=1800000 \
+        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
+        -Dgiraph.zkList=$ZKLIST \
+        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
+        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
+        -ca giraph.textAggregatorWriter.frequency=1 \
+        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
+        -vip $ADJ \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op $OUT \
+        -w $WORKER -ca giraph.SplitMasterWorker=true \
+        -ca giraph.zkSessionMsecTimeout=360000 \
+        -ca giraph.zkOpsMaxAttempts=20 \
+        -ca giraph.zkOpsRetryWaitMsecs=10000 \
+        -ca mapred.job.tracker=sc2-rm1:8088 \
+        -ca mapreduce.job.tracker=sc2-rm1:8088 \
+        -ca com.adsymp.giraph.max.cd=8 \
+        -ca giraph.waitingRequestMsecs=300000 \
+        -ca com.adsymp.giraph.max.cc=100 \
+        -ca com.adsymp.giraph.max.dd=8 \
+        -ca com.adsymp.giraph.max.degree=80 \
+        -ca com.adsymp.giraph.ignore.dev.types=false \
+        -ca com.adsymp.giraph.weight.threshold=0.4 \
+        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
+        -ca mapred.job.queue.name=datascience \
+        -ca mapred.output.compress=true \
+        -ca mapred.task.timeout=1800004 \
+        -ca mapreduce.map.memory.mb=$MEM \
+        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+</code></pre>
+
+<p>Couple important points:<br/>
+1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
 
 		</div>
 	</article>

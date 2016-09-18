@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Welcome to MWeb - echo-ohce
+  	--- - echo-ohce
   	
 	</title>
 
@@ -118,21 +118,87 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">Welcome to MWeb</h1>
+		<h1 class="title" itemprop="name">---</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<p>What is MWeb? MWeb is a Pro Markdown writing, note taking and static blog generator App. MWeb used Github Flavored Markdown syntax. Please check the MWeb official website: <a href="http://www.mweb.im">http://www.mweb.im</a> introduction video, it will show you how to use MWeb. We also suggest that you check the MWeb official help document: <a href="http://www.mweb.im/help.html">http://www.mweb.im/help.html</a></p>
+			<p>title: setting<br/>
+categories:<br/>
+- documentation<br/>
+tags:<br/>
+- setting</p>
 
-<h2 id="toc_0">Things you should know</h2>
+<h2 id="toc_0">toc: true</h2>
 
-<p>MWeb has two Mode, External Mode and Library Mode. <br/>
-In External Mode, you can edit classic text and markdown files from anywhere on your Mac. As an example, you can point MWeb to a folder on Dropbox. Library Mode design for note taking and static blog/website generator. For more info, please check the <a href="http://www.mweb.im">MWeb official website</a> introduction video and help document.</p>
+<p>This documents various settings that I normally use. Keep updating.  </p>
 
-<h2 id="toc_1">Help us to make MWeb better!</h2>
+<span id="more"></span><!-- more -->
+
+<h5 id="toc_1">python notebook imports and setting</h5>
+
+<pre><code class="language-python">import os
+import pandas as pd
+import numpy as np
+import math
+import plotly.plotly as py
+import plotly.offline as po
+import plotly.graph_objs as go
+import plotly.tools as tls
+import colorlover as cl
+import cufflinks as cf
+import subprocess
+from ipywidgets import interact
+import glob # for shell expansion
+from IPython.display import display, HTML, Image
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+
+po.init_notebook_mode()
+cf.set_config_file(theme=&#39;white&#39;)
+pd.set_option(&#39;precision&#39;, 3) # printing precision
+np.set_printoptions(precision=3) # printing precision 
+cf.go_offline() # using cufflinks at offline mode
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_2">Mac multiple desktop screen spaces setting.</h5>
+
+<p><a href="http://www.tweaking4all.com/os-tips-and-tricks/macosx-tips-and-tricks/mac-multiple-desktops-spaces/">Very good post</a><br/><br/>
+Using <code>SteerMouse</code> to set the mouse shortcut.</p>
+
+<hr/>
+
+<h5 id="toc_3">python conda virtual environment and jupyter notebook kernel</h5>
+
+<p>Need install a plugin <code>nb_conda_kernels</code></p>
 
 <ol>
-<li>Tell your friends about MWeb.</li>
-<li>Send a feedback: <a href="mailto:coderforart+233@gmail.com">coderforart+233@gmail.com</a></li>
-<li>Leave a review or at least a rating in Mac App Store.</li>
+<li>switch to the desired virtual environment</li>
+<li>install plugin</li>
+<li>run jupyter notebook then pick the desired kernel from notebook</li>
+</ol>
+
+<pre><code class="language-bash">source activate environment_name
+conda install -c conda-forge nb_conda_kernels
+jupyter notebook
+
+source deactive
+</code></pre>
+
+<p><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">plugin&#39;s main page</a><br/>
+<a href="http://stackoverflow.com/a/38880722">stackoverflow post</a></p>
+
+<hr/>
+
+<h5 id="toc_4">Mac OS gets very busy on background process</h5>
+
+<ol>
+<li>It is because of <code>optimal Layout</code></li>
+<li>The app to check the system performance is <code>Activity Monitor</code></li>
+<li><p>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/><br/>
+See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a>  </p>
+
+<hr/></li>
 </ol>
 
 		</div>

@@ -1,0 +1,372 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	--- - echo-ohce
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="echo-ohce" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+					
+					<h1><a href="index.html">echo-ohce</a></h1>
+					<p class="subtitle">Technical Blog</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="email" href="mailto:yugan2005@gmail.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">---</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<p>title: pig<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- pig</p>
+
+<h2 id="toc_0">toc: true</h2>
+
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<h5 id="toc_1">File Name Pattern Substitution</h5>
+
+<p>Pig is using hadoop file <code>glob</code> utilities to process the file name pattern. It is <font color=red>NOT</font> using shell&#39;s <code>glob</code>. Hadoop&#39;s <code>glob</code> are documented <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">here</a>. Specially, it does not support <code>..</code> operator for a range.</p>
+
+<p><a href="http://stackoverflow.com/questions/3515481/pig-latin-load-multiple-files-from-a-date-range-part-of-the-directory-structur">reference post</a></p>
+
+<hr/>
+
+<h5 id="toc_2"><code>ToDate(milliseconds)</code> gives wrong date</h5>
+
+<p>Bug looks like always return date of some time at <code>1970-01-17</code>. This is because the input is 10 digits in seconds, and input should be in milliseconds. Need \( \times 1000\) on the input to get the correct DateTime.</p>
+
+<hr/>
+
+<h5 id="toc_3">DateTime SimpleDateFormat</h5>
+
+<p>Pig&#39;s <code>DateTime</code> type conforms to the following format:</p>
+
+<pre><code class="language-java">SimpleDateFormat dateFormat = 
+    new SimpleDateFormat(&quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&quot;);
+</code></pre>
+
+<p>The string format is: <code>2001-07-04T12:08:56.235-07:00</code><br/>
+<a href="https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">Java official example table</a></p>
+
+<p>[YGMARK] <code>-07:00</code> timezone format is only supported after JDK 7.</p>
+
+<hr/>
+
+<h5 id="toc_4">Parameter substitution Shell Runner subtle bug</h5>
+
+<p>I like to define <code>_</code> as the output file separator. I usually have parameter <code>SEP= &#39;_&#39;</code> in my pig script and shell runner. However, if this parameter is defined inside shell runner, <em>it has to be escaped</em>, like: <code>SEP=&#39;\_&#39;</code>. Otherwise, this mislead error message will show:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.Main - ERROR 1000: Error during parsing. Lexical error at line 1, column 6.  Encountered: <EOF> after : &quot;&quot;  </p>
+</blockquote>
+
+<p>It does not need be escaped if only defined inside pig script.<br/>
+Another side note for seeing the above message. It is very likely caused by unbalanced bracket, quote, <font color='red'>extra space between the bash line separator <code>\</code> and the new line</font> etc.</p>
+
+<hr/>
+
+<h5 id="toc_5">Becareful of <code>DateTime</code> data type in pig</h5>
+
+<p>It is convenient to get the time duration of difference by using the <code>DateTime</code> data type. However, in pig it is a know bug that <a href="https://issues.apache.org/jira/browse/PIG-3953">it can not be compared correctly.</a> Therefore ordering, grouping type of work should use either <code>ToUnixTime()</code> or <code>ToString()</code> before ordering.</p>
+
+<blockquote>
+<p>Error: org.joda.time.DateTime.compareTo ...</p>
+</blockquote>
+
+<hr/>
+
+<h5 id="toc_6">More pitfalls for <code>DateTime</code> data type</h5>
+
+<ul>
+<li>The 2nd argument of <code>ToString(datetime [, format string])</code> is not optional, but a must for pig 0.12 (<a href="https://issues.apache.org/jira/browse/PIG-3805">Bug fixed on 0.13</a>)</li>
+<li>For my case, <code>ToString(date, &#39;yyyyMMdd&#39;)</code> works.</li>
+<li>All capital function name is not accepted, like <code>TOSTRING()</code> fails.</li>
+<li>Also, there is no way to directly read in the <code>DateTime</code> type to pig. It still need be read in as <code>chararray</code>, otherwise it will be just null. (I tested it). <a href="http://stackoverflow.com/a/22052965">Stackoverflow post</a></li>
+<li><code>GetMilliSecond(DateTime datetime)</code> is not the function to get the millisecond from epoch. It ... en, as the name indicates ... just get the millisecond of the time. To get the <strong>second</strong> use <code>ToUnixTime(DateTime datetime)</code>. To get the <strong>millisecond</strong> use <code>ToMilliSeconds(DateTime datetime)</code>.</li>
+</ul>
+
+<hr/>
+
+<h5 id="toc_7">Setting of memory</h5>
+
+<p>In side pig script or grunt:  </p>
+
+<pre><code class="language-bash">SET mapreduce.map.memory.mb 4096;
+SET mapreduce.reduce.memory.mb 8192;
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_8">Pig Unit Test <code>override()</code> method</h5>
+
+<p>Code normally like:  </p>
+
+<pre><code class="language-java">PigTest test = new PigTest(pigScript, parameters);
+test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
+</code></pre>
+
+<p>Inside the override, can not use variable substitution, otherwise will see error like:  </p>
+
+<blockquote>
+<p>org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1066: Unable to open iterator for alias  </p>
+</blockquote>
+
+<p>Wrong:  </p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;$INPUT&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<p>Should always use actual file path:</p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;input.txt&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_9">Error message for wrong reference operator</h5>
+
+<p>If receive following error message:  </p>
+
+<blockquote>
+<p>Error: Scalar has more than one row in the output.  </p>
+</blockquote>
+
+<p>It is very likely that I got a dot <code>Alias.field</code> where you need a double semi-colon <code>Alias::field</code>.<br/><br/>
+<a href="http://stackoverflow.com/questions/22522155/pig-scalar-has-more-than-one-row-in-the-output">stackoverflow post</a>  </p>
+
+<hr/>
+
+<h5 id="toc_10">Pig Java UDF Unit Test</h5>
+
+<p>Find a good <a href="http://www.crackinghadoop.com/unit-test-java-udfs/">post</a> specifically for Java UDF unit test.<br/><br/>
+The main point is to use <code>DefaultTuple</code> to inject test cases into the UDF.  </p>
+
+<pre><code class="language-java">String inputText = &quot;09/15/2014&quot;;
+DefaultTuple input = new DefaultTuple();
+input.append(inputText);
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_11">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h5>
+
+<ul>
+<li><code>join</code> (more specifically, inner join) acts on more than two relations:<br/>
+<code>X = JOIN A BY fieldA, B BY fieldB, C BY fieldC;</code> </li>
+<li><code>join</code> on duplicates gives cross product on the two relations.<br/></li>
+</ul>
+
+<pre><code class="language-sql">A = LOAD &#39;data1&#39; AS (a1:int,a2:int,a3:int);
+DUMP A;   
+(1,2,3)
+(4,2,1)
+(4,3,3)
+   
+B = LOAD &#39;data2&#39; AS (b1:int,b2:int);
+DUMP B;
+(4,6)
+(4,9)
+   
+X = JOIN A BY a1, B BY b1;
+DUMP X;
+(4,2,1,4,6)
+(4,3,3,4,6)
+(4,2,1,4,9)
+(4,3,3,4,9)  
+</code></pre>
+
+<ul>
+<li><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.<br/></li>
+<li><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.<br/></li>
+<li><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a><br/></li>
+<li><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.<br/></li>
+<li><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</li>
+</ul>
+
+<hr/>
+
+<h5 id="toc_12">specify function output data type</h5>
+
+<p>No matter whether it is builtin function or UDF, it is always better to specify this function&#39;s output data type.  </p>
+
+<p>This is wrong, because the CONCAT output type is <code>bytearray</code>:    </p>
+
+<pre><code class="language-sql">ip_db = FOREACH ip_db_m3 GENERATE MD5(CONCAT(ip_raw, &#39;umpdmp&#39;)) AS ip;   
+</code></pre>
+
+<p>This is right by specifying clearly that the output data type is <code>chararray</code>:  </p>
+
+<pre><code class="language-sql">ip_db_m3 = FOREACH ip_db_m2 GENERATE CONCAT(ip_raw, &#39;umpdmp&#39;) AS ip:chararray;
+ip_db = FOREACH ip_db_m3 GENERATE MD5(ip) AS ip;   
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_13">using <code>\u0001</code> as the delimiter</h5>
+
+<ul>
+<li>If want to use <code>LzoPigStorage</code> need be careful about in pig, to specify the parameter of the function, you cannot do it at the code where calls this function, but need do it in the <code>DEFINE</code> statement at the beginning, like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">DEFINE LzoPigStorage com.twitter.elephantbird.pig.store.LzoPigStorage(&#39;\u0001&#39;);   
+
+store OUT into &#39;$OUTPUT&#39; using LzoPigStorage();   
+</code></pre>
+
+<ul>
+<li>Note that <code>&#39;^A&#39;</code> will <strong>NOT</strong> work, Only <code>&#39;\u0001&#39;</code> works.<br/></li>
+<li>If use <code>PigStorage</code> just specify it inside the function like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">A = LOAD &#39;input.txt&#39; USING PigStorage(&#39;,&#39;);   
+STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);   
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_14">Error with SUBSTRING AND SIZE FUNCTION</h5>
+
+<p>I was trying to remove the leading <code>.</code> of a ip string, and used <code>SUBSTRING(ip, 1, SIZE(ip)) AS ip_fixed:chararray</code>. The error message reads:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1045: Could not infer the matching function for org.apache.pig.builtin.SUBSTRING as multiple or none of them fit. Please use an explicit cast  </p>
+</blockquote>
+
+<p>The reason is because <code>SIZE()</code> function returns <code>long</code> type, but <code>SUBSTRING()</code> function needs <code>int</code> type. The following code passes: <code>SUBSTRING(ip, 1, (int) SIZE(ip)) AS ip_fixed:chararray</code>  </p>
+
+<hr/>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>

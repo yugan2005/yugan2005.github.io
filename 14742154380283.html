@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Welcome to MWeb - echo-ohce
+  	--- - echo-ohce
   	
 	</title>
 
@@ -118,22 +118,43 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">Welcome to MWeb</h1>
+		<h1 class="title" itemprop="name">---</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<p>What is MWeb? MWeb is a Pro Markdown writing, note taking and static blog generator App. MWeb used Github Flavored Markdown syntax. Please check the MWeb official website: <a href="http://www.mweb.im">http://www.mweb.im</a> introduction video, it will show you how to use MWeb. We also suggest that you check the MWeb official help document: <a href="http://www.mweb.im/help.html">http://www.mweb.im/help.html</a></p>
+			<p>title: technical analysis<br/>
+categories:<br/>
+- stock<br/>
+tags:<br/>
+- stock</p>
 
-<h2 id="toc_0">Things you should know</h2>
+<h2 id="toc_0">toc: true</h2>
 
-<p>MWeb has two Mode, External Mode and Library Mode. <br/>
-In External Mode, you can edit classic text and markdown files from anywhere on your Mac. As an example, you can point MWeb to a folder on Dropbox. Library Mode design for note taking and static blog/website generator. For more info, please check the <a href="http://www.mweb.im">MWeb official website</a> introduction video and help document.</p>
+<p>This documents my learning of stock technical analysis, keep updating.</p>
 
-<h2 id="toc_1">Help us to make MWeb better!</h2>
+<span id="more"></span><!-- more -->
+
+<h5 id="toc_1">python packages to use</h5>
 
 <ol>
-<li>Tell your friends about MWeb.</li>
-<li>Send a feedback: <a href="mailto:coderforart+233@gmail.com">coderforart+233@gmail.com</a></li>
-<li>Leave a review or at least a rating in Mac App Store.</li>
+<li>zipline - for testing framework</li>
+<li>tushare - for chinese stock market data</li>
+<li><a href="https://github.com/mrjbq7/ta-lib">talib</a> - for indicators and functions. </li>
 </ol>
+
+<h5 id="toc_2">python notebook extra setting</h5>
+
+<pre><code class="language-python">import zipline as zp
+import tushare as ts
+ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf60&#39;) # use your own free api key
+</code></pre>
+
+<h5 id="toc_3">Some good blogs</h5>
+
+<ol>
+<li><a href="http://pythontrader.blogspot.com">使用Python語言開發「程式交易」系統</a></li>
+<li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
+</ol>
+
+<hr/>
 
 		</div>
 	</article>

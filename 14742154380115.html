@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	--- - echo-ohce
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="echo-ohce" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+					
+					<h1><a href="index.html">echo-ohce</a></h1>
+					<p class="subtitle">Technical Blog</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+
+
+
+
+
+
+
+<a target="_blank" class="email" href="mailto:yugan2005@gmail.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">---</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<p>title: giraph with jython<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- giraph<br/>
+- jython<br/>
+- hadoop</p>
+
+<h2 id="toc_0">toc: true  </h2>
+
+<p>This post specifically documents the key point of using giraph with jython. Once everything is done, I will write another post for a tutorial with giraph + jython</p>
+
+<span id="more"></span><!-- more -->
+
+<h5 id="toc_1">Hadoop version</h5>
+
+<p>In order to use Jython, in the maven pom.xml setting up, do <font color='red'><strong>NOT</strong></font> include other hadoop dependencies, but use the below specific version of hadoop:  </p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
+    &lt;artifactId&gt;giraph-core&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+    &lt;artifactId&gt;hadoop-core&lt;/artifactId&gt;
+    &lt;version&gt;1.2.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.python&lt;/groupId&gt;
+    &lt;artifactId&gt;jython-standalone&lt;/artifactId&gt;
+    &lt;version&gt;2.7.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>Otherwise, there will be error message like:</p>
+
+<blockquote>
+<p>Exception in thread &quot;main&quot; java.lang.IncompatibleClassChangeError: Found interface org.apache.hadoop.mapreduce.JobContext, but class was expected`  </p>
+</blockquote>
+
+<p><a href="http://stackoverflow.com/questions/22630323/hadoop-java-lang-incompatibleclasschangeerror-found-interface-org-apache-hadoo">Because Hadoop 1.0.3: JobContext is a class, but in Hadoop 2.0.0: JobContext is an interface</a></p>
+
+<p>Another way of solving this Hadoop version issue is specify the hadoop version in maven build by <code>-Phadoop_2 -fae -DskipTests</code>:  </p>
+
+<pre><code class="language-bash">mvn package -Phadoop_2 -fae -DskipTests
+mvn -Phadoop_2 -fae -DskipTests clean install
+</code></pre>
+
+<p>Note: the reason <code>-Phadoop_2</code> works is because of the maven <code>profile hadoop_2</code>.<br/><br/>
+The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-for-<font color='red'><strong>hadoop-2.5.1</strong></font>-jar-with-dependencies.jar</p>
+
+<hr/>
+
+<h5 id="toc_2">Use <code>jython-standalone</code> dependency not <code>jython</code></h5>
+
+<p>Otherwise it will show error message like:  </p>
+
+<blockquote>
+<p>Exception in thread &quot;main&quot; ImportError: Cannot import site module and its dependencies: No module named site`  </p>
+</blockquote>
+
+<p>This is because <code>jython-standalone-2.7.0.jar</code> has <code>Lib</code> folder but <code>jython-2.7.0.jar</code> does not have that folder.  </p>
+
+<p>Another possible issue about jython with error message like:  </p>
+
+<blockquote>
+<p>java.lang.IncompatibleClassChangeError: Found class com.kenai.jffi.InvocationBuffer, but interface was expected  </p>
+</blockquote>
+
+<p>is also about the jar of jython. Using <a href="https://github.com/scijava/jython-shaded"><code>jython-shade</code></a> will solve this issue.   </p>
+
+<h5 id="toc_3">Run from jython REPL</h5>
+
+<ul>
+<li>For installing the jython, remeber to add the following path to <code>.bashrc</code><br/></li>
+</ul>
+
+<pre><code class="language-bash">export PATH=/Users/yugan/jython2.7.0/bin:$PATH
+</code></pre>
+
+<ul>
+<li>Need import the following two pathes, in order to get the java <code>import</code> work.<br/></li>
+</ul>
+
+<pre><code class="language-python">import sys
+sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0-dependencies.jar&quot;)
+sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0.jar&quot;)
+sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/hadoop/hadoop-core/1.2.1/hadoop-core-1.2.1.jar&quot;)
+
+from org.apache.giraph.jython import JythonJob
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_4">Config intellij for Jython and Java</h5>
+
+<ol>
+<li>using <code>command + ;</code> to call out the project setting.</li>
+<li>project SDK should be java (to recognize java packages etc)</li>
+<li>In the <code>Facets</code>, add Python framework, and config <code>python interpreter</code> as <code>jython</code></li>
+</ol>
+
+<hr/>
+
+<h5 id="toc_5">Run giraph jython from Hadoop Yarn</h5>
+
+<p>Got a working version using the <code>count-edges.py</code> example.  </p>
+
+<ol>
+<li>python file is at:<br/>
+<code>giraph/giraph-core/src/test/resources/org/apache/giraph/jython/count-edges.py</code><br/>
+In this python file, it builds the python class <code>CountEdges</code> which subclasses giraph&#39;s <code>JythonComputation</code><br/></li>
+<li>the input file is from:<br/>
+<code>giraph/giraph-core/src/test/java/org/apache/giraph/jython/TestJythonComputation.java</code><br/>
+I build the same text file as it showed in the <code>testCountEdges</code> method and put it on hdfs.<br/></li>
+<li>put the python file on the working folder</li>
+</ol>
+
+<pre><code class="language-bash">yarn jar giraph-examples-1.2.0-SNAPSHOT-for-hadoop-2.5.1-jar-with-dependencies.jar \
+org.apache.giraph.GiraphRunner \
+count-edges.py \
+--jythonClass CountEdges \
+--typesHolder org.apache.giraph.utils.IntIntNullNoOpComputation \
+-eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+-eip /user/yugan20059778/giraph_input/edgeinput \
+-vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+-op /user/yugan20059778/giraph_output_3 \
+-w 1 \
+-ca giraph.SplitMasterWorker=false
+</code></pre>
+
+<ol>
+<li>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code><br/>
+
+<ul>
+<li>The first one is at <code>org.apache.giraph.conf.TypesHolder</code> - Interface for classes that are parameterized by all of the Giraph types.<br/></li>
+<li>The second one is an inner class at <code>org.apache.giraph.jython.JythonJob</code></li>
+</ul></li>
+<li></li>
+</ol>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>

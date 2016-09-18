@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Welcome to MWeb - echo-ohce
+  	--- - echo-ohce
   	
 	</title>
 
@@ -118,22 +118,54 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">Welcome to MWeb</h1>
+		<h1 class="title" itemprop="name">---</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<p>What is MWeb? MWeb is a Pro Markdown writing, note taking and static blog generator App. MWeb used Github Flavored Markdown syntax. Please check the MWeb official website: <a href="http://www.mweb.im">http://www.mweb.im</a> introduction video, it will show you how to use MWeb. We also suggest that you check the MWeb official help document: <a href="http://www.mweb.im/help.html">http://www.mweb.im/help.html</a></p>
+			<p>title: python<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- python</p>
 
-<h2 id="toc_0">Things you should know</h2>
+<h2 id="toc_0">toc: true</h2>
 
-<p>MWeb has two Mode, External Mode and Library Mode. <br/>
-In External Mode, you can edit classic text and markdown files from anywhere on your Mac. As an example, you can point MWeb to a folder on Dropbox. Library Mode design for note taking and static blog/website generator. For more info, please check the <a href="http://www.mweb.im">MWeb official website</a> introduction video and help document.</p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
 
-<h2 id="toc_1">Help us to make MWeb better!</h2>
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h5 id="toc_1">shell expansion insdie python with  <code>subprocess.call</code></h5>
+
+<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
+when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
+But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
+
+<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_2">plotly using LaTex</h5>
+
+<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
+It works when using the online mode.</p>
+
+<hr/>
+
+<h5 id="toc_3">plotly cufflinks pandas dataframe customize the plot</h5>
 
 <ol>
-<li>Tell your friends about MWeb.</li>
-<li>Send a feedback: <a href="mailto:coderforart+233@gmail.com">coderforart+233@gmail.com</a></li>
-<li>Leave a review or at least a rating in Mac App Store.</li>
+<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
+<li>using <code>update</code> method to update the layout python dictionary</li>
+<li>using <code>po.iplot()</code> to plot the figure</li>
 </ol>
+
+<p>Example:  </p>
+
+<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
+figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
+po.iplot(figure)
+</code></pre>
 
 		</div>
 	</article>
