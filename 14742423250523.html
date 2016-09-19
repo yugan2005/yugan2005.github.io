@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  --- - Echo-ohcE
+  bayesian statistics - Echo-ohcE
   
   </title>
   
@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -101,17 +103,19 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>---</h1>
+          <h1>bayesian statistics</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='tips.html'>tips</a></span>
+              <span class="posted-in"><a href='theory.html'>theory</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250523.html#disqus_thread">comments</a>
             
 
             
@@ -121,135 +125,37 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>title: Github Page, Hexo, MWeb, GoDaddy setting<br/>
-categories:<br/>
-- documentation<br/>
-tags:<br/>
-- mweb<br/>
-- hexo<br/>
-- mac<br/>
-- godaddy<br/>
-- markdown</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>For the first post, I am documenting the setup of this blog site.</p>
+      <p>This documents my personal understandings about bayesian, keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">Set two separate GitLab (Corp) and GitHub (Personal) account</h5>
-
-<p>The most important steps are:<br/>
-1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
-2. Generate two separate ssh keys and put them in the folder <code>~/.ssh/</code><br/>
-3. The main account is set by <code>git config --global</code> and the other account is set by locally <code>git config</code> overridden. </p>
-
-<p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
-
-<hr/>
-
-<h5 id="toc_2">Github page</h5>
-
-<p>Nothing special, just first need first create an empty repository using the unique name required.</p>
-
-<hr/>
-
-<h5 id="toc_3">Hexo</h5>
-
-<p>Hexo is used to build everything and managers everything. <br/>
-It sets the local folder structures, manages the style / theme / plugin, generates the sites, publish to the github pages. Some important things about hexo</p>
-
-<ol>
-<li><a href="">hexo installation and integration with github pages</a></li>
-<li><a href="https://hexo.io/docs/index.html">Hexo basic commands</a></li>
-<li><a href="https://hexo.io/docs/front-matter.html">Hexo Front-matter</a>. The <code>freemind</code> theme that I am using provides extra Front-matter: <code>toc</code> and <code>top</code></li>
-<li>[YGMARK] in <code>_config.yml</code> setting, after <code>key:</code> a space must be used, otherwise all sorts of bugs.</li>
-</ol>
-
-<hr/>
-
-<h5 id="toc_4">Freemind Hexo theme</h5>
-
 <ul>
-<li><a href="https://github.com/wzpan/hexo-theme-freemind/">Installation Official</a></li>
-<li><a href="http://baoxiehao.com/2014/05/17/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/">非常好的一篇博客，详细说明了Freemind Hexo的优化。有时间再仔细看</a></li>
-<li><a href="http://masikkk.com/blog/hexo-4-usage-of-hexo-theme/">一篇中文的博客，更详细，并提到freemind search engine的设置</a></li>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_5">Mweb</h5>
-
-<p>Mweb is simply the Markdown writing program.<br/>
-It has a very good full <a href="http://www.mweb.im/markdown-syntax-guide-full-version.html">Markdown syntax guide</a>.<br/>
-打开MWeb, ​Command + E 切换到外部模式(使用cmd + L可以切回默认的library模式), 然后把hexo下的source目录拖到左边, 设置它的Display name为github blog(随意), 最重要一点是设置Media Save Path为Absolute, 这样就可以直接使用MWeb的粘贴图片功能.<br/><br/>
-<img src="/media/14731402424520.jpg" alt="screenshot"/></p>
 
 <hr/>
 
-<h5 id="toc_6">GoDaddy</h5>
+<h1 id="toc_0">Likelihood function is not a pdf</h1>
+
+<p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
+Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
+The likelihood is the other way around as: given the observation \(O\) that we have seen, the likelihood that the parameter is value \(\theta\).<br/>
+\[L(O|\theta)=p(O|\theta)\]<br/>
+If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
+<a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
+<a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
+
+<hr/>
 
 <ul>
-<li>Add a <code>CNAME</code> file in the <code>source</code> folder: <code>www.echo-ohce.com</code></li>
-<li>Go to GoDaddy and config the domain name
-
-<ul>
-<li>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code>
-<img src="/media/14731409478221.png" alt="screenshot"/></li>
-<li>Create a CNAME record<br/>
-<img src="/media/14731410865594.png" alt="screenshot"/></li>
-</ul></li>
-<li><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></li>
-<li><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></li>
-<li>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</li>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_7">Hexo works with MathJax / LaTex</h5>
-
-<ul>
-<li>install plugin <a href="https://github.com/akfish/hexo-math">hexo-math</a> at the root folder of the blog <code>npm install hexo-math --save</code></li>
-<li>Update the root <code>_config.xml</code> append the following:</li>
-</ul>
-
-<pre><code class="language-xml"># Math
-math:
-  engine: &#39;mathjax&#39;
-  mathjax:
-    src: &quot;//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;
-    config:
-      tex2jax:
-        inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ]
-        skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
-        processEscaps: true
-      TeX:
-        equationNumbers:
-          autoNumber: &quot;AMS&quot;
-</code></pre>
-
-<ul>
-<li>Inline LaTex <code>$...$</code>: \(x \rightarrow y\)</li>
-<li>Block <code>$$...$$</code>:  \[\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1\]</li>
-<li>Multiple lines <code>{% math %} ... {% endmath %}</code>:</li>
-</ul>
-
-<p>{% math %}<br/>
-\begin{aligned}<br/>
-\dot{x} &amp; = \sigma(y-x) \<br/>
-\dot{y} &amp; = \rho x - y - xz \<br/>
-\dot{z} &amp; = -\beta z + xy<br/>
-\end{aligned}<br/>
-{% endmath %}</p>
-
-<hr/>
-
-<h5 id="toc_8">Future work ( GitHub  \(\rightarrow\)  GitLab )</h5>
-
-<ol>
-<li><a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a></li>
-<li><a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></li>
-</ol>
 
 
     
@@ -260,16 +166,16 @@ math:
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380051.html" 
-          title="Previous Post: bayesian statistics">&laquo; bayesian statistics</a>
+          <a href="14742423250478.html" 
+          title="Previous Post: bash">&laquo; bash</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380115.html" 
-          title="Next Post: ---">--- &raquo;</a>
+          <a  href="14742423250557.html" 
+          title="Next Post: Github Page, Hexo, MWeb, GoDaddy setting">Github Page, Hexo, MWeb, GoDaddy setting &raquo;</a>
       
       </p>
         </div>
@@ -297,6 +203,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -344,6 +252,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -361,31 +271,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -426,6 +336,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

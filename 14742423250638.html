@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  bayesian statistics - Echo-ohcE
+  --- - Echo-ohcE
   
   </title>
   
@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -101,17 +103,17 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>bayesian statistics</h1>
+          <h1>---</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
-          <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='theory.html'>theory</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250638.html#disqus_thread">comments</a>
             
 
             
@@ -121,33 +123,92 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>This documents my personal understandings about bayesian, keep updating.</p>
+      <p>title: git<br/>
+categories:<br/>
+- tips<br/>
+tags:<br/>
+- git</p>
+
+<h2 id="toc_0">toc: true</h2>
+
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
 
 <span id="more"></span><!-- more -->
 
-<ul>
-<li>
-<a href="#toc_0">Likelihood function is not a pdf</a>
-</li>
-</ul>
+<h5 id="toc_1">Back to the unaltered HEAD</h5>
 
+<p>Run these two in order:  </p>
 
-<h1 id="toc_0">Likelihood function is not a pdf</h1>
+<pre><code class="language-bash">git reset --hard HEAD
+git clean -df
+</code></pre>
 
-<p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
-Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
-The likelihood is the other way around as: given the observation \(O\) that we have seen, the likelihood that the parameter is value \(\theta\).<br/>
-\[L(O|\theta)=p(O|\theta)\]<br/>
-If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
-<a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
-<a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
+<hr/>
 
-<ul>
-<li>
-<a href="#toc_0">Likelihood function is not a pdf</a>
-</li>
-</ul>
+<h5 id="toc_2">Messed up local master, come back to the origin/master</h5>
 
+<pre><code class="language-bash">git checkout -B master origin/master
+</code></pre>
+
+<p>If <code>-B</code> is given, the new branch is created if it doesn’t exist; otherwise, it is reset.  </p>
+
+<hr/>
+
+<h5 id="toc_3">Reset one file</h5>
+
+<pre><code class="language-bash">git checkout HEAD -- my-file.txt
+</code></pre>
+
+<p><a href="http://stackoverflow.com/questions/7147270/hard-reset-of-a-single-file">Reference post1</a><br/><br/>
+<a href="http://stackoverflow.com/questions/6561142/difference-between-git-checkout-filename-and-git-checkout-filename/6561160#####6561160">Reference post2</a></p>
+
+<hr/>
+
+<h5 id="toc_4">Save change in one branch and apply it (partially apply it) to another branch</h5>
+
+<pre><code class="language-bash">git stash
+git checkout branch2
+git stash list       ##### to check the various stash made in different branch
+git stash pop        ##### pop out the last stash, and it will be deleted from the stash
+git stash apply stash@{0}    ##### to select the stash and apply to branch2, the stash still saved in the list
+git stash -u   ##### to stash currenlty untracked (newly added) files
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_5">Add only modified changes and ignore untracked (newly added) files</h5>
+
+<pre><code class="language-bash">git add .   ##### stage all changed / untracked (newly added), but not includes deleted
+git add -u  ##### stage all changed / deleted, but not untracked (newly added)
+git add -A  ##### doing both of above
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_6">Syntax of <code>.gitignore</code></h5>
+
+<pre><code class="language-bash">**/foo # matches file or directory &quot;foo&quot; anywhere
+foo # the same as above  
+**/foo/bar # matches file or   directory &quot;bar&quot; anywhere that is directly under directory &quot;foo&quot;  
+abc/** # matches all files inside directory &quot;abc&quot;, infinite depth  
+abc/* # matches all files inside directory &quot;abc&quot;, but not its sub-directories.  
+a/**/b # match 0 or more directories in between  
+a/**/b # matches &quot;a/b&quot;, &quot;a/x/b&quot;, &quot;a/x/y/b&quot; and so on.
+</code></pre>
+
+<hr/>
+
+<h5 id="toc_7">Untracked directory and file</h5>
+
+<ol>
+<li><p>File previously tracked (in git repository) need remove it from the repo but keep it at local. <em>This is called as delete the cache</em><br/><br/>
+<code>git rm -r -f --cached mydirectory/myfile</code><br/><br/>
+the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tracked file has uncommitted change).  </p></li>
+<li><p>Only change the local repo&#39;s <code>.gitignore</code> without change the remote repo&#39;s tracking behavior. Add ignore into <code>.git/info/exclude</code> instead of the <code>.gitignore</code> file at root.<br/><br/>
+<a href="http://stackoverflow.com/questions/767147/ignore-the-gitignore-file-itself">reference post</a></p></li>
+</ol>
+
+<hr/>
 
 
     
@@ -158,15 +219,15 @@ If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380014.html" 
-          title="Previous Post: bash">&laquo; bash</a>
+          <a href="14742423250614.html" 
+          title="Previous Post: giraph">&laquo; giraph</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380085.html" 
+          <a  href="14742423250660.html" 
           title="Next Post: ---">--- &raquo;</a>
       
       </p>
@@ -195,6 +256,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -242,6 +305,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -259,31 +324,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -324,6 +389,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

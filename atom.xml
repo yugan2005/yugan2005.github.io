@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-18T16:35:27-07:00</updated>
+  <updated>2016-09-18T17:19:01-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,11 +14,11 @@
   
   <entry>
     <title type="html"><![CDATA[bash]]></title>
-    <link href="www.echo-ohce.com/14742154380014.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380014.html</id>
+    <link href="www.echo-ohce.com/14742423250478.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250478.html</id>
     <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
@@ -44,6 +44,8 @@
 </ul>
 
 
+<hr/>
+
 <h1 id="toc_0">Using curly braces in Bash substitution</h1>
 
 <p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
@@ -54,7 +56,7 @@
 <li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
 </ul>
 
-<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/><br/>
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
 <a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
 
 <h1 id="toc_1">nohup to a different file</h1>
@@ -110,13 +112,13 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 <pre><code class="language-bash">file -I filename
 </code></pre>
 
-<p>The output is in format of:<br/><br/>
-<code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>.<br/><br/>
-For example:  </p>
+<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
 
 <pre><code class="language-bash">file -I Base.pig
 Base.pig: application/octet-stream; charset=binary
 </code></pre>
+
+<hr/>
 
 <ul>
 <li>
@@ -145,9 +147,9 @@ Base.pig: application/octet-stream; charset=binary
   
   <entry>
     <title type="html"><![CDATA[bayesian statistics]]></title>
-    <link href="www.echo-ohce.com/14742154380051.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380051.html</id>
+    <link href="www.echo-ohce.com/14742423250523.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250523.html</id>
     <content type="html"><![CDATA[
 <p>This documents my personal understandings about bayesian, keep updating.</p>
 
@@ -160,6 +162,8 @@ Base.pig: application/octet-stream; charset=binary
 </ul>
 
 
+<hr/>
+
 <h1 id="toc_0">Likelihood function is not a pdf</h1>
 
 <p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
@@ -169,6 +173,8 @@ The likelihood is the other way around as: given the observation \(O\) that we h
 If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
 <a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
 <a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
+
+<hr/>
 
 <ul>
 <li>
@@ -181,28 +187,46 @@ If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380085.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380085.html</id>
+    <title type="html"><![CDATA[Github Page, Hexo, MWeb, GoDaddy setting]]></title>
+    <link href="www.echo-ohce.com/14742423250557.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250557.html</id>
     <content type="html"><![CDATA[
-<p>title: Github Page, Hexo, MWeb, GoDaddy setting<br/>
-categories:<br/>
-- documentation<br/>
-tags:<br/>
-- mweb<br/>
-- hexo<br/>
-- mac<br/>
-- godaddy<br/>
-- markdown</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>For the first post, I am documenting the setup of this blog site.</p>
+<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">Set two separate GitLab (Corp) and GitHub (Personal) account</h5>
+<ul>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
 
 <p>The most important steps are:<br/>
 1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
@@ -211,15 +235,11 @@ tags:<br/>
 
 <p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
 
-<hr/>
-
-<h5 id="toc_2">Github page</h5>
+<h1 id="toc_1">Github page</h1>
 
 <p>Nothing special, just first need first create an empty repository using the unique name required.</p>
 
-<hr/>
-
-<h5 id="toc_3">Hexo</h5>
+<h1 id="toc_2">Hexo</h1>
 
 <p>Hexo is used to build everything and managers everything. <br/>
 It sets the local folder structures, manages the style / theme / plugin, generates the sites, publish to the github pages. Some important things about hexo</p>
@@ -231,9 +251,7 @@ It sets the local folder structures, manages the style / theme / plugin, generat
 <li>[YGMARK] in <code>_config.yml</code> setting, after <code>key:</code> a space must be used, otherwise all sorts of bugs.</li>
 </ol>
 
-<hr/>
-
-<h5 id="toc_4">Freemind Hexo theme</h5>
+<h1 id="toc_3">Freemind Hexo theme</h1>
 
 <ul>
 <li><a href="https://github.com/wzpan/hexo-theme-freemind/">Installation Official</a></li>
@@ -241,37 +259,31 @@ It sets the local folder structures, manages the style / theme / plugin, generat
 <li><a href="http://masikkk.com/blog/hexo-4-usage-of-hexo-theme/">一篇中文的博客，更详细，并提到freemind search engine的设置</a></li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_5">Mweb</h5>
+<h1 id="toc_4">Mweb</h1>
 
 <p>Mweb is simply the Markdown writing program.<br/>
 It has a very good full <a href="http://www.mweb.im/markdown-syntax-guide-full-version.html">Markdown syntax guide</a>.<br/>
 打开MWeb, ​Command + E 切换到外部模式(使用cmd + L可以切回默认的library模式), 然后把hexo下的source目录拖到左边, 设置它的Display name为github blog(随意), 最重要一点是设置Media Save Path为Absolute, 这样就可以直接使用MWeb的粘贴图片功能.<br/><br/>
-<img src="/media/14731402424520.jpg" alt="screenshot"/></p>
+<img src="media/14742423250557/14742438643424.jpg" alt=""/></p>
 
-<hr/>
-
-<h5 id="toc_6">GoDaddy</h5>
+<h1 id="toc_5">GoDaddy</h1>
 
 <ul>
 <li>Add a <code>CNAME</code> file in the <code>source</code> folder: <code>www.echo-ohce.com</code></li>
-<li>Go to GoDaddy and config the domain name
+<li><p>Go to GoDaddy and config the domain name</p>
 
 <ul>
-<li>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code>
-<img src="/media/14731409478221.png" alt="screenshot"/></li>
-<li>Create a CNAME record<br/>
-<img src="/media/14731410865594.png" alt="screenshot"/></li>
+<li><p>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code><br/>
+<img src="media/14742423250557/14742439346348.png" alt=""/></p></li>
+<li><p>Create a CNAME record<br/><br/>
+<img src="media/14742423250557/14742439461628.png" alt=""/></p></li>
 </ul></li>
-<li><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></li>
-<li><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></li>
-<li>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</li>
+<li><p><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></p></li>
+<li><p><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></p></li>
+<li><p>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</p></li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_7">Hexo works with MathJax / LaTex</h5>
+<h1 id="toc_6">Hexo works with MathJax / LaTex</h1>
 
 <ul>
 <li>install plugin <a href="https://github.com/akfish/hexo-math">hexo-math</a> at the root folder of the blog <code>npm install hexo-math --save</code></li>
@@ -307,39 +319,78 @@ math:
 \end{aligned}<br/>
 {% endmath %}</p>
 
-<hr/>
-
-<h5 id="toc_8">Future work ( GitHub  \(\rightarrow\)  GitLab )</h5>
+<h1 id="toc_7">Future work ( GitHub  \(\rightarrow\)  GitLab )</h1>
 
 <ol>
 <li><a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a></li>
 <li><a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></li>
 </ol>
 
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+</li>
+</ul>
+
+
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380115.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380115.html</id>
+    <title type="html"><![CDATA[giraph with jython]]></title>
+    <link href="www.echo-ohce.com/14742423250588.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250588.html</id>
     <content type="html"><![CDATA[
-<p>title: giraph with jython<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- giraph<br/>
-- jython<br/>
-- hadoop</p>
-
-<h2 id="toc_0">toc: true  </h2>
-
 <p>This post specifically documents the key point of using giraph with jython. Once everything is done, I will write another post for a tutorial with giraph + jython</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">Hadoop version</h5>
+<ul>
+<li>
+<a href="#toc_0">Hadoop version</a>
+</li>
+<li>
+<a href="#toc_1">Use <code>jython-standalone</code> dependency not <code>jython</code></a>
+</li>
+<li>
+<a href="#toc_2">Run from jython REPL</a>
+</li>
+<li>
+<a href="#toc_3">Config intellij for Jython and Java</a>
+</li>
+<li>
+<a href="#toc_4">Run giraph jython from Hadoop Yarn</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Hadoop version</h1>
 
 <p>In order to use Jython, in the maven pom.xml setting up, do <font color='red'><strong>NOT</strong></font> include other hadoop dependencies, but use the below specific version of hadoop:  </p>
 
@@ -377,9 +428,7 @@ mvn -Phadoop_2 -fae -DskipTests clean install
 <p>Note: the reason <code>-Phadoop_2</code> works is because of the maven <code>profile hadoop_2</code>.<br/><br/>
 The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-for-<font color='red'><strong>hadoop-2.5.1</strong></font>-jar-with-dependencies.jar</p>
 
-<hr/>
-
-<h5 id="toc_2">Use <code>jython-standalone</code> dependency not <code>jython</code></h5>
+<h1 id="toc_1">Use <code>jython-standalone</code> dependency not <code>jython</code></h1>
 
 <p>Otherwise it will show error message like:  </p>
 
@@ -397,7 +446,7 @@ The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-
 
 <p>is also about the jar of jython. Using <a href="https://github.com/scijava/jython-shaded"><code>jython-shade</code></a> will solve this issue.   </p>
 
-<h5 id="toc_3">Run from jython REPL</h5>
+<h1 id="toc_2">Run from jython REPL</h1>
 
 <ul>
 <li>For installing the jython, remeber to add the following path to <code>.bashrc</code><br/></li>
@@ -418,9 +467,7 @@ sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/hadoop/hadoop-core/
 from org.apache.giraph.jython import JythonJob
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_4">Config intellij for Jython and Java</h5>
+<h1 id="toc_3">Config intellij for Jython and Java</h1>
 
 <ol>
 <li>using <code>command + ;</code> to call out the project setting.</li>
@@ -428,9 +475,7 @@ from org.apache.giraph.jython import JythonJob
 <li>In the <code>Facets</code>, add Python framework, and config <code>python interpreter</code> as <code>jython</code></li>
 </ol>
 
-<hr/>
-
-<h5 id="toc_5">Run giraph jython from Hadoop Yarn</h5>
+<h1 id="toc_4">Run giraph jython from Hadoop Yarn</h1>
 
 <p>Got a working version using the <code>count-edges.py</code> example.  </p>
 
@@ -441,8 +486,7 @@ In this python file, it builds the python class <code>CountEdges</code> which su
 <li>the input file is from:<br/>
 <code>giraph/giraph-core/src/test/java/org/apache/giraph/jython/TestJythonComputation.java</code><br/>
 I build the same text file as it showed in the <code>testCountEdges</code> method and put it on hdfs.<br/></li>
-<li>put the python file on the working folder</li>
-</ol>
+<li><p>put the python file on the working folder</p>
 
 <pre><code class="language-bash">yarn jar giraph-examples-1.2.0-SNAPSHOT-for-hadoop-2.5.1-jar-with-dependencies.jar \
 org.apache.giraph.GiraphRunner \
@@ -455,10 +499,8 @@ count-edges.py \
 -op /user/yugan20059778/giraph_output_3 \
 -w 1 \
 -ca giraph.SplitMasterWorker=false
-</code></pre>
-
-<ol>
-<li>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code><br/>
+</code></pre></li>
+<li><p>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code>   </p>
 
 <ul>
 <li>The first one is at <code>org.apache.giraph.conf.TypesHolder</code> - Interface for classes that are parameterized by all of the Giraph types.<br/></li>
@@ -467,20 +509,59 @@ count-edges.py \
 <li></li>
 </ol>
 
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Hadoop version</a>
+</li>
+<li>
+<a href="#toc_1">Use <code>jython-standalone</code> dependency not <code>jython</code></a>
+</li>
+<li>
+<a href="#toc_2">Run from jython REPL</a>
+</li>
+<li>
+<a href="#toc_3">Config intellij for Jython and Java</a>
+</li>
+<li>
+<a href="#toc_4">Run giraph jython from Hadoop Yarn</a>
+</li>
+</ul>
+
+
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[giraph]]></title>
-    <link href="www.echo-ohce.com/14742154380139.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380139.html</id>
+    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250614.html</id>
     <content type="html"><![CDATA[
 <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_0">Kill the background job</h5>
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">Giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Kill the background job</h1>
 
 <p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
 
@@ -498,25 +579,19 @@ hadoop job -list | grep yu
 <pre><code class="language-bash">yarn application -appStates RUNNING -list
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_1">Giraph Unit testing</h5>
+<h1 id="toc_1">Giraph Unit testing</h1>
 
 <ul>
 <li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
 <li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_2">giraph edge value not Mutable in place</h5>
+<h1 id="toc_2">giraph edge value not Mutable in place</h1>
 
 <p>edges are just a reference, it can not be changed in place.<br/>
 After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
 
-<hr/>
-
-<h5 id="toc_3">giraph shell runner / command line</h5>
+<h1 id="toc_3">giraph shell runner / command line</h1>
 
 <p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
 
@@ -567,14 +642,32 @@ hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
 <p>Couple important points:<br/>
 1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
 
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">Giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+</ul>
+
+
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380162.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380162.html</id>
+    <link href="www.echo-ohce.com/14742423250638.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250638.html</id>
     <content type="html"><![CDATA[
 <p>title: git<br/>
 categories:<br/>
@@ -668,9 +761,9 @@ the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tr
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380184.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380184.html</id>
+    <link href="www.echo-ohce.com/14742423250660.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250660.html</id>
     <content type="html"><![CDATA[
 <p>title: maven<br/>
 categories:<br/>
@@ -721,9 +814,9 @@ tags:<br/>
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380203.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380203.html</id>
+    <link href="www.echo-ohce.com/14742423250680.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250680.html</id>
     <content type="html"><![CDATA[
 <p>title: metrics<br/>
 categories:<br/>
@@ -747,9 +840,9 @@ tags:<br/>
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380222.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380222.html</id>
+    <link href="www.echo-ohce.com/14742423250700.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250700.html</id>
     <content type="html"><![CDATA[
 <p>title: pig<br/>
 categories:<br/>
@@ -981,9 +1074,9 @@ STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380241.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380241.html</id>
+    <link href="www.echo-ohce.com/14742423250719.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250719.html</id>
     <content type="html"><![CDATA[
 <p>title: python<br/>
 categories:<br/>
@@ -1037,9 +1130,9 @@ po.iplot(figure)
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380261.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380261.html</id>
+    <link href="www.echo-ohce.com/14742423250740.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250740.html</id>
     <content type="html"><![CDATA[
 <p>title: setting<br/>
 categories:<br/>
@@ -1127,9 +1220,9 @@ See the <a href="http://apple.stackexchange.com/a/234478">original post for this
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380283.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380283.html</id>
+    <link href="www.echo-ohce.com/14742423250761.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250761.html</id>
     <content type="html"><![CDATA[
 <p>title: technical analysis<br/>
 categories:<br/>
@@ -1172,9 +1265,9 @@ ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf
   
   <entry>
     <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742154380303.html"/>
-    <updated>2016-09-18T09:17:18-07:00</updated>
-    <id>www.echo-ohce.com/14742154380303.html</id>
+    <link href="www.echo-ohce.com/14742423250782.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250782.html</id>
     <content type="html"><![CDATA[
 <p>title: vim<br/>
 categories:<br/>

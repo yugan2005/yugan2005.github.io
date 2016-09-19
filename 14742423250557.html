@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  giraph - Echo-ohcE
+  Github Page, Hexo, MWeb, GoDaddy setting - Echo-ohcE
   
   </title>
   
@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -101,17 +103,19 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>giraph</h1>
+          <h1>Github Page, Hexo, MWeb, GoDaddy setting</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='tips.html'>tips</a></span>
+              <span class="posted-in"><a href='expired.html'>expired</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250557.html#disqus_thread">comments</a>
             
 
             
@@ -121,96 +125,169 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+      <p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_0">Kill the background job</h5>
-
-<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
-
-<pre><code class="language-bash">ps u
-hadoop job -list | grep yu
-</code></pre>
-
-<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
-
-<pre><code class="language-bash">ps --pid pid#
-</code></pre>
-
-<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
-
-<pre><code class="language-bash">yarn application -appStates RUNNING -list
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_1">Giraph Unit testing</h5>
-
 <ul>
-<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
-<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_2">giraph edge value not Mutable in place</h5>
-
-<p>edges are just a reference, it can not be changed in place.<br/>
-After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
 
 <hr/>
 
-<h5 id="toc_3">giraph shell runner / command line</h5>
+<h1 id="toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
 
-<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+<p>The most important steps are:<br/>
+1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
+2. Generate two separate ssh keys and put them in the folder <code>~/.ssh/</code><br/>
+3. The main account is set by <code>git config --global</code> and the other account is set by locally <code>git config</code> overridden. </p>
 
-<pre><code class="language-bash">WORKER=177
-MEM=5120
-HEAP=4352
-#zoo keeper
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+<p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
 
-hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
-        com.adsymp.dpp.giraph.lp.LPRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dmapreduce.map.memory.mb=$MEM \
-        -Dmapreduce.task.timeout=1800000 \
-        -Dmapred.task.timeout=1800000 \
-        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
-        -Dgiraph.zkList=$ZKLIST \
-        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
-        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
-        -ca giraph.textAggregatorWriter.frequency=1 \
-        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
-        -vip $ADJ \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op $OUT \
-        -w $WORKER -ca giraph.SplitMasterWorker=true \
-        -ca giraph.zkSessionMsecTimeout=360000 \
-        -ca giraph.zkOpsMaxAttempts=20 \
-        -ca giraph.zkOpsRetryWaitMsecs=10000 \
-        -ca mapred.job.tracker=sc2-rm1:8088 \
-        -ca mapreduce.job.tracker=sc2-rm1:8088 \
-        -ca com.adsymp.giraph.max.cd=8 \
-        -ca giraph.waitingRequestMsecs=300000 \
-        -ca com.adsymp.giraph.max.cc=100 \
-        -ca com.adsymp.giraph.max.dd=8 \
-        -ca com.adsymp.giraph.max.degree=80 \
-        -ca com.adsymp.giraph.ignore.dev.types=false \
-        -ca com.adsymp.giraph.weight.threshold=0.4 \
-        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
-        -ca mapred.job.queue.name=datascience \
-        -ca mapred.output.compress=true \
-        -ca mapred.task.timeout=1800004 \
-        -ca mapreduce.map.memory.mb=$MEM \
-        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+<h1 id="toc_1">Github page</h1>
+
+<p>Nothing special, just first need first create an empty repository using the unique name required.</p>
+
+<h1 id="toc_2">Hexo</h1>
+
+<p>Hexo is used to build everything and managers everything. <br/>
+It sets the local folder structures, manages the style / theme / plugin, generates the sites, publish to the github pages. Some important things about hexo</p>
+
+<ol>
+<li><a href="">hexo installation and integration with github pages</a></li>
+<li><a href="https://hexo.io/docs/index.html">Hexo basic commands</a></li>
+<li><a href="https://hexo.io/docs/front-matter.html">Hexo Front-matter</a>. The <code>freemind</code> theme that I am using provides extra Front-matter: <code>toc</code> and <code>top</code></li>
+<li>[YGMARK] in <code>_config.yml</code> setting, after <code>key:</code> a space must be used, otherwise all sorts of bugs.</li>
+</ol>
+
+<h1 id="toc_3">Freemind Hexo theme</h1>
+
+<ul>
+<li><a href="https://github.com/wzpan/hexo-theme-freemind/">Installation Official</a></li>
+<li><a href="http://baoxiehao.com/2014/05/17/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/">非常好的一篇博客，详细说明了Freemind Hexo的优化。有时间再仔细看</a></li>
+<li><a href="http://masikkk.com/blog/hexo-4-usage-of-hexo-theme/">一篇中文的博客，更详细，并提到freemind search engine的设置</a></li>
+</ul>
+
+<h1 id="toc_4">Mweb</h1>
+
+<p>Mweb is simply the Markdown writing program.<br/>
+It has a very good full <a href="http://www.mweb.im/markdown-syntax-guide-full-version.html">Markdown syntax guide</a>.<br/>
+打开MWeb, ​Command + E 切换到外部模式(使用cmd + L可以切回默认的library模式), 然后把hexo下的source目录拖到左边, 设置它的Display name为github blog(随意), 最重要一点是设置Media Save Path为Absolute, 这样就可以直接使用MWeb的粘贴图片功能.<br/><br/>
+<img src="media/14742423250557/14742438643424.jpg" alt=""/></p>
+
+<h1 id="toc_5">GoDaddy</h1>
+
+<ul>
+<li>Add a <code>CNAME</code> file in the <code>source</code> folder: <code>www.echo-ohce.com</code></li>
+<li><p>Go to GoDaddy and config the domain name</p>
+
+<ul>
+<li><p>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code><br/>
+<img src="media/14742423250557/14742439346348.png" alt=""/></p></li>
+<li><p>Create a CNAME record<br/><br/>
+<img src="media/14742423250557/14742439461628.png" alt=""/></p></li>
+</ul></li>
+<li><p><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></p></li>
+<li><p><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></p></li>
+<li><p>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</p></li>
+</ul>
+
+<h1 id="toc_6">Hexo works with MathJax / LaTex</h1>
+
+<ul>
+<li>install plugin <a href="https://github.com/akfish/hexo-math">hexo-math</a> at the root folder of the blog <code>npm install hexo-math --save</code></li>
+<li>Update the root <code>_config.xml</code> append the following:</li>
+</ul>
+
+<pre><code class="language-xml"># Math
+math:
+  engine: &#39;mathjax&#39;
+  mathjax:
+    src: &quot;//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;
+    config:
+      tex2jax:
+        inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ]
+        skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
+        processEscaps: true
+      TeX:
+        equationNumbers:
+          autoNumber: &quot;AMS&quot;
 </code></pre>
 
-<p>Couple important points:<br/>
-1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
+<ul>
+<li>Inline LaTex <code>$...$</code>: \(x \rightarrow y\)</li>
+<li>Block <code>$$...$$</code>:  \[\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1\]</li>
+<li>Multiple lines <code>{% math %} ... {% endmath %}</code>:</li>
+</ul>
+
+<p>{% math %}<br/>
+\begin{aligned}<br/>
+\dot{x} &amp; = \sigma(y-x) \<br/>
+\dot{y} &amp; = \rho x - y - xz \<br/>
+\dot{z} &amp; = -\beta z + xy<br/>
+\end{aligned}<br/>
+{% endmath %}</p>
+
+<h1 id="toc_7">Future work ( GitHub  \(\rightarrow\)  GitLab )</h1>
+
+<ol>
+<li><a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a></li>
+<li><a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></li>
+</ol>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+</li>
+</ul>
+
 
 
     
@@ -221,16 +298,16 @@ hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380115.html" 
-          title="Previous Post: ---">&laquo; ---</a>
+          <a href="14742423250523.html" 
+          title="Previous Post: bayesian statistics">&laquo; bayesian statistics</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380162.html" 
-          title="Next Post: ---">--- &raquo;</a>
+          <a  href="14742423250588.html" 
+          title="Next Post: giraph with jython">giraph with jython &raquo;</a>
       
       </p>
         </div>
@@ -258,6 +335,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -305,6 +384,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -322,31 +403,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -387,6 +468,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

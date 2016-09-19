@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -106,12 +108,12 @@
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
-          <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='tips.html'>tips</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250719.html#disqus_thread">comments</a>
             
 
             
@@ -121,147 +123,52 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>title: giraph with jython<br/>
+      <p>title: python<br/>
 categories:<br/>
 - tips<br/>
 tags:<br/>
-- giraph<br/>
-- jython<br/>
-- hadoop</p>
+- python</p>
 
-<h2 id="toc_0">toc: true  </h2>
+<h2 id="toc_0">toc: true</h2>
 
-<p>This post specifically documents the key point of using giraph with jython. Once everything is done, I will write another post for a tutorial with giraph + jython</p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">Hadoop version</h5>
-
-<p>In order to use Jython, in the maven pom.xml setting up, do <font color='red'><strong>NOT</strong></font> include other hadoop dependencies, but use the below specific version of hadoop:  </p>
-
-<pre><code class="language-xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
-    &lt;artifactId&gt;giraph-core&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
-    &lt;artifactId&gt;hadoop-core&lt;/artifactId&gt;
-    &lt;version&gt;1.2.1&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.python&lt;/groupId&gt;
-    &lt;artifactId&gt;jython-standalone&lt;/artifactId&gt;
-    &lt;version&gt;2.7.0&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p>Otherwise, there will be error message like:</p>
-
-<blockquote>
-<p>Exception in thread &quot;main&quot; java.lang.IncompatibleClassChangeError: Found interface org.apache.hadoop.mapreduce.JobContext, but class was expected`  </p>
-</blockquote>
-
-<p><a href="http://stackoverflow.com/questions/22630323/hadoop-java-lang-incompatibleclasschangeerror-found-interface-org-apache-hadoo">Because Hadoop 1.0.3: JobContext is a class, but in Hadoop 2.0.0: JobContext is an interface</a></p>
-
-<p>Another way of solving this Hadoop version issue is specify the hadoop version in maven build by <code>-Phadoop_2 -fae -DskipTests</code>:  </p>
-
-<pre><code class="language-bash">mvn package -Phadoop_2 -fae -DskipTests
-mvn -Phadoop_2 -fae -DskipTests clean install
-</code></pre>
-
-<p>Note: the reason <code>-Phadoop_2</code> works is because of the maven <code>profile hadoop_2</code>.<br/><br/>
-The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-for-<font color='red'><strong>hadoop-2.5.1</strong></font>-jar-with-dependencies.jar</p>
-
 <hr/>
 
-<h5 id="toc_2">Use <code>jython-standalone</code> dependency not <code>jython</code></h5>
+<h5 id="toc_1">shell expansion insdie python with  <code>subprocess.call</code></h5>
 
-<p>Otherwise it will show error message like:  </p>
+<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
+when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
+But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
 
-<blockquote>
-<p>Exception in thread &quot;main&quot; ImportError: Cannot import site module and its dependencies: No module named site`  </p>
-</blockquote>
-
-<p>This is because <code>jython-standalone-2.7.0.jar</code> has <code>Lib</code> folder but <code>jython-2.7.0.jar</code> does not have that folder.  </p>
-
-<p>Another possible issue about jython with error message like:  </p>
-
-<blockquote>
-<p>java.lang.IncompatibleClassChangeError: Found class com.kenai.jffi.InvocationBuffer, but interface was expected  </p>
-</blockquote>
-
-<p>is also about the jar of jython. Using <a href="https://github.com/scijava/jython-shaded"><code>jython-shade</code></a> will solve this issue.   </p>
-
-<h5 id="toc_3">Run from jython REPL</h5>
-
-<ul>
-<li>For installing the jython, remeber to add the following path to <code>.bashrc</code><br/></li>
-</ul>
-
-<pre><code class="language-bash">export PATH=/Users/yugan/jython2.7.0/bin:$PATH
-</code></pre>
-
-<ul>
-<li>Need import the following two pathes, in order to get the java <code>import</code> work.<br/></li>
-</ul>
-
-<pre><code class="language-python">import sys
-sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0-dependencies.jar&quot;)
-sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0.jar&quot;)
-sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/hadoop/hadoop-core/1.2.1/hadoop-core-1.2.1.jar&quot;)
-
-from org.apache.giraph.jython import JythonJob
+<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
 </code></pre>
 
 <hr/>
 
-<h5 id="toc_4">Config intellij for Jython and Java</h5>
+<h5 id="toc_2">plotly using LaTex</h5>
 
-<ol>
-<li>using <code>command + ;</code> to call out the project setting.</li>
-<li>project SDK should be java (to recognize java packages etc)</li>
-<li>In the <code>Facets</code>, add Python framework, and config <code>python interpreter</code> as <code>jython</code></li>
-</ol>
+<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
+It works when using the online mode.</p>
 
 <hr/>
 
-<h5 id="toc_5">Run giraph jython from Hadoop Yarn</h5>
-
-<p>Got a working version using the <code>count-edges.py</code> example.  </p>
+<h5 id="toc_3">plotly cufflinks pandas dataframe customize the plot</h5>
 
 <ol>
-<li>python file is at:<br/>
-<code>giraph/giraph-core/src/test/resources/org/apache/giraph/jython/count-edges.py</code><br/>
-In this python file, it builds the python class <code>CountEdges</code> which subclasses giraph&#39;s <code>JythonComputation</code><br/></li>
-<li>the input file is from:<br/>
-<code>giraph/giraph-core/src/test/java/org/apache/giraph/jython/TestJythonComputation.java</code><br/>
-I build the same text file as it showed in the <code>testCountEdges</code> method and put it on hdfs.<br/></li>
-<li>put the python file on the working folder</li>
+<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
+<li>using <code>update</code> method to update the layout python dictionary</li>
+<li>using <code>po.iplot()</code> to plot the figure</li>
 </ol>
 
-<pre><code class="language-bash">yarn jar giraph-examples-1.2.0-SNAPSHOT-for-hadoop-2.5.1-jar-with-dependencies.jar \
-org.apache.giraph.GiraphRunner \
-count-edges.py \
---jythonClass CountEdges \
---typesHolder org.apache.giraph.utils.IntIntNullNoOpComputation \
--eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
--eip /user/yugan20059778/giraph_input/edgeinput \
--vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
--op /user/yugan20059778/giraph_output_3 \
--w 1 \
--ca giraph.SplitMasterWorker=false
+<p>Example:  </p>
+
+<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
+figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
+po.iplot(figure)
 </code></pre>
-
-<ol>
-<li>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code><br/>
-
-<ul>
-<li>The first one is at <code>org.apache.giraph.conf.TypesHolder</code> - Interface for classes that are parameterized by all of the Giraph types.<br/></li>
-<li>The second one is an inner class at <code>org.apache.giraph.jython.JythonJob</code></li>
-</ul></li>
-<li></li>
-</ol>
 
 
     
@@ -272,7 +179,7 @@ count-edges.py \
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380085.html" 
+          <a href="14742423250700.html" 
           title="Previous Post: ---">&laquo; ---</a>
       
         </p>
@@ -280,8 +187,8 @@ count-edges.py \
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380139.html" 
-          title="Next Post: giraph">giraph &raquo;</a>
+          <a  href="14742423250740.html" 
+          title="Next Post: ---">--- &raquo;</a>
       
       </p>
         </div>
@@ -309,6 +216,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -356,6 +265,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -373,31 +284,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -438,6 +349,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

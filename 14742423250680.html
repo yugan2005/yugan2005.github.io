@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -106,12 +108,12 @@
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
-          <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='theory.html'>theory</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250680.html#disqus_thread">comments</a>
             
 
             
@@ -121,49 +123,22 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>title: maven<br/>
+      <p>title: metrics<br/>
 categories:<br/>
-- tips<br/>
+- theory<br/>
 tags:<br/>
-- maven</p>
+- statistics<br/>
+- metric</p>
 
-<h2 id="toc_0">toc: true  </h2>
+<h2 id="toc_0">toc: true</h2>
 
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+<p>This document collects statistics metrics used in my work.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">build jar include dependencies</h5>
+<h5 id="toc_1">precision</h5>
 
-<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
-
-<pre><code class="language-xml">&lt;build&gt;
-   &lt;plugins&gt;
-       &lt;plugin&gt;
-           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-           &lt;configuration&gt;
-               &lt;descriptorRefs&gt;
-                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-               &lt;/descriptorRefs&gt;
-           &lt;/configuration&gt;
-       &lt;/plugin&gt;
-   &lt;/plugins&gt;
-&lt;/build&gt;
-</code></pre>
-
-<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
-
-<p>the maven command to run is:  </p>
-
-<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">hadoop-common, hadoop-core, hadoop-client</h5>
-
-<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
+<p><img src="/media/14733822607506.jpg" alt="Get from Wiki"/></p>
 
 
     
@@ -174,7 +149,7 @@ tags:<br/>
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380162.html" 
+          <a href="14742423250660.html" 
           title="Previous Post: ---">&laquo; ---</a>
       
         </p>
@@ -182,7 +157,7 @@ tags:<br/>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380203.html" 
+          <a  href="14742423250700.html" 
           title="Next Post: ---">--- &raquo;</a>
       
       </p>
@@ -211,6 +186,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -258,6 +235,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -275,31 +254,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -340,6 +319,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -106,12 +108,12 @@
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
-          <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='theory.html'>theory</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250782.html#disqus_thread">comments</a>
             
 
             
@@ -121,86 +123,67 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>title: setting<br/>
+      <p>title: vim<br/>
 categories:<br/>
-- documentation<br/>
+- tips<br/>
 tags:<br/>
-- setting</p>
+- vim<br/>
+- shell</p>
 
-<h2 id="toc_0">toc: true</h2>
+<h2 id="toc_0">toc: true  </h2>
 
-<p>This documents various settings that I normally use. Keep updating.  </p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">python notebook imports and setting</h5>
+<h5 id="toc_1">move (jump) cursor to previous location or previous files</h5>
 
-<pre><code class="language-python">import os
-import pandas as pd
-import numpy as np
-import math
-import plotly.plotly as py
-import plotly.offline as po
-import plotly.graph_objs as go
-import plotly.tools as tls
-import colorlover as cl
-import cufflinks as cf
-import subprocess
-from ipywidgets import interact
-import glob # for shell expansion
-from IPython.display import display, HTML, Image
-import matplotlib.pyplot as plt
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
 
-%matplotlib inline
+<tbody>
+<tr>
+<td><code>ma</code></td>
+<td>set mark <font color='red'>a</font> at current cursor location</td>
+</tr>
+<tr>
+<td><code>&#39;a</code> - quotemark</td>
+<td>jump to line of mark <font color='red'>a</font> (first non-blank character in line)</td>
+</tr>
+<tr>
+<td><code>&#39;a</code> - backtick</td>
+<td>jump to position (line and column) of mark <font color='red'>a</font></td>
+</tr>
+<tr>
+<td><code>&#39;&#39;</code> - 2 quotemark</td>
+<td>jump to the head of the line of previous location</td>
+</tr>
+<tr>
+<td><code>``</code> -2 backtick</td>
+<td>jump to the previous location</td>
+</tr>
+<tr>
+<td><code>:marks</code></td>
+<td>list all current marks (including marks of <strong>other files</strong>)</td>
+</tr>
+<tr>
+<td><code>:help mark-motions</code></td>
+<td>help for mark related stuff</td>
+</tr>
+<tr>
+<td><code>:help jump-motions</code></td>
+<td>help for jump related stuff</td>
+</tr>
+</tbody>
+</table>
 
-po.init_notebook_mode()
-cf.set_config_file(theme=&#39;white&#39;)
-pd.set_option(&#39;precision&#39;, 3) # printing precision
-np.set_printoptions(precision=3) # printing precision 
-cf.go_offline() # using cufflinks at offline mode
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">Mac multiple desktop screen spaces setting.</h5>
-
-<p><a href="http://www.tweaking4all.com/os-tips-and-tricks/macosx-tips-and-tricks/mac-multiple-desktops-spaces/">Very good post</a><br/><br/>
-Using <code>SteerMouse</code> to set the mouse shortcut.</p>
-
-<hr/>
-
-<h5 id="toc_3">python conda virtual environment and jupyter notebook kernel</h5>
-
-<p>Need install a plugin <code>nb_conda_kernels</code></p>
-
-<ol>
-<li>switch to the desired virtual environment</li>
-<li>install plugin</li>
-<li>run jupyter notebook then pick the desired kernel from notebook</li>
-</ol>
-
-<pre><code class="language-bash">source activate environment_name
-conda install -c conda-forge nb_conda_kernels
-jupyter notebook
-
-source deactive
-</code></pre>
-
-<p><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">plugin&#39;s main page</a><br/>
-<a href="http://stackoverflow.com/a/38880722">stackoverflow post</a></p>
-
-<hr/>
-
-<h5 id="toc_4">Mac OS gets very busy on background process</h5>
-
-<ol>
-<li>It is because of <code>optimal Layout</code></li>
-<li>The app to check the system performance is <code>Activity Monitor</code></li>
-<li><p>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/><br/>
-See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a>  </p>
-
-<hr/></li>
-</ol>
+<p>reference <a href="http://vim.wikia.com/wiki/Using_marks">using marks</a><br/>
+reference <a href="http://stackoverflow.com/questions/5052079/move-cursor-to-its-last-position">stackoverflow</a></p>
 
 
     
@@ -211,16 +194,13 @@ See the <a href="http://apple.stackexchange.com/a/234478">original post for this
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380241.html" 
+          <a href="14742423250761.html" 
           title="Previous Post: ---">&laquo; ---</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
-      
-          <a  href="14742154380283.html" 
-          title="Next Post: ---">--- &raquo;</a>
       
       </p>
         </div>
@@ -248,6 +228,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -295,6 +277,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -312,31 +296,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -377,6 +361,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 

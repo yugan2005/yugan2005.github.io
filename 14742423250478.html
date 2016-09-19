@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  --- - Echo-ohcE
+  bash - Echo-ohcE
   
   </title>
   
@@ -78,6 +78,8 @@
         
             <li><a href="tips.html">tips</a></li>
         
+            <li><a href="expired.html">expired</a></li>
+        
             <li><a href="theory.html">theory</a></li>
          
 
@@ -101,17 +103,19 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>---</h1>
+          <h1>bash</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
 
           <span>posted in&nbsp;</span> 
           
-              <span class="posted-in"><a href='theory.html'>theory</a></span>
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
            
          
           <span class="comments">
+            
+              <a href="www.echo-ohce.com/14742423250478.html#disqus_thread">comments</a>
             
 
             
@@ -121,52 +125,129 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>title: python<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- python</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+</ul>
+
+
 <hr/>
 
-<h5 id="toc_1">shell expansion insdie python with  <code>subprocess.call</code></h5>
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
 
-<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
-when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
-But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
+<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
 
-<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
+<ul>
+<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
+<li>expanding arrays <code>${array[42]}</code></li>
+<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
+</ul>
+
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
+<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
+
+<h1 id="toc_1">nohup to a different file</h1>
+
+<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+
+<h1 id="toc_2">Append multiple lines to a file</h1>
+
+<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
+
+<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
+multiple lines
+input here
+EOI
+</code></pre>
+
+<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
+
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
+
+<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
+
+<pre><code class="language-bash">cat ~/.bashrc | pbcopy
+</code></pre>
+
+<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
+
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
+
+<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
+
+<pre><code class="language-bash">$ hls alibaba/ipstats/
+Found 8 items
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
+
+$ hdfs dfs -get alibaba/ipstats/[^I]*
+</code></pre>
+
+<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
+
+<h1 id="toc_5">check file encoding</h1>
+
+<pre><code class="language-bash">file -I filename
+</code></pre>
+
+<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
+
+<pre><code class="language-bash">file -I Base.pig
+Base.pig: application/octet-stream; charset=binary
 </code></pre>
 
 <hr/>
 
-<h5 id="toc_2">plotly using LaTex</h5>
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+</ul>
 
-<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
-It works when using the online mode.</p>
-
-<hr/>
-
-<h5 id="toc_3">plotly cufflinks pandas dataframe customize the plot</h5>
-
-<ol>
-<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
-<li>using <code>update</code> method to update the layout python dictionary</li>
-<li>using <code>po.iplot()</code> to plot the figure</li>
-</ol>
-
-<p>Example:  </p>
-
-<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
-figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
-po.iplot(figure)
-</code></pre>
 
 
     
@@ -177,16 +258,13 @@ po.iplot(figure)
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14742154380222.html" 
-          title="Previous Post: ---">&laquo; ---</a>
-      
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742154380261.html" 
-          title="Next Post: ---">--- &raquo;</a>
+          <a  href="14742423250523.html" 
+          title="Next Post: bayesian statistics">bayesian statistics &raquo;</a>
       
       </p>
         </div>
@@ -214,6 +292,8 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+          
+            <div id="disqus_thread"></div>
           
 
           
@@ -261,6 +341,8 @@ var disqus_config = function () {
         
             <a href="tips.html"><strong>tips</strong></a>
         
+            <a href="expired.html"><strong>expired</strong></a>
+        
             <a href="theory.html"><strong>theory</strong></a>
          
         </p>
@@ -278,31 +360,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742154380014.html">bash</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380051.html">bayesian statistics</a>
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380085.html">---</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380115.html">---</a>
+			        <a href="14742423250588.html">giraph with jython</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742154380139.html">giraph</a>
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -343,6 +425,27 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
       </div>
     </div>
 
+
+<script type="text/javascript">
+    var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<script type="text/javascript">
+var disqus_shortname = 'echo-ohce.disqus.com'; 
+
+(function () {
+var s = document.createElement('script'); s.async = true;
+s.type = 'text/javascript';
+s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
   
     
 
