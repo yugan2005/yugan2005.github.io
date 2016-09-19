@@ -131,6 +131,18 @@ $(document).ready(function(event) {
 
 <p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
 
+<p>To help provide some additional details regarding the differences between Hadoop-common, Hadoop-core and Hadoop-client, from a high-level perspective:</p>
+
+<ul>
+<li>Hadoop-common refers to the commonly used utilities and libraries that support the Hadoop modules.</li>
+<li>Hadoop-core is the same as Hadoop-common; It was renamed to Hadoop-common in July 2009.</li>
+<li>Hadoop-client refers to the client libraries used to communicate with Hadoop&#39;s common components (HDFS, MapReduce, YARN) including but not limited to logging and codecs for example.</li>
+</ul>
+
+<p>Generally speaking, for developers who build apps that submit to YARN, run a MR job, or access files from HDFS use Hadoop-client libraries.</p>
+
+<p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
+
 <hr/>
 
 <ul>
@@ -190,12 +202,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250680.html" 
-	        title="Previous Post: metrics">&laquo; metrics</a>
+	        <a class="basic-alignment left" href="14742423250588.html" 
+	        title="Previous Post: giraph with jython">&laquo; giraph with jython</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250638.html" 
-	        title="Next Post: git">git &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250614.html" 
+	        title="Next Post: giraph">giraph &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -250,31 +262,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250588.html">giraph with jython</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250782.html">vim</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  

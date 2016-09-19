@@ -105,6 +105,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_4">Run giraph jython from Hadoop Yarn</a>
 </li>
+<li>
+<a href="#toc_5">pitfall of <code>TypeHolder</code> and <code>TypesHolder</code></a>
+</li>
 </ul>
 
 
@@ -114,21 +117,35 @@ $(document).ready(function(event) {
 
 <p>In order to use Jython, in the maven pom.xml setting up, do <font color='red'><strong>NOT</strong></font> include other hadoop dependencies, but use the below specific version of hadoop:  </p>
 
-<pre><code class="language-xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
-    &lt;artifactId&gt;giraph-core&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
-    &lt;artifactId&gt;hadoop-core&lt;/artifactId&gt;
-    &lt;version&gt;1.2.1&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.python&lt;/groupId&gt;
-    &lt;artifactId&gt;jython-standalone&lt;/artifactId&gt;
-    &lt;version&gt;2.7.0&lt;/version&gt;
-&lt;/dependency&gt;
+<pre><code class="language-xml">&lt;dependencies&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
+       &lt;artifactId&gt;giraph-core&lt;/artifactId&gt;
+       &lt;version&gt;1.1.0-hadoop2&lt;/version&gt;
+   &lt;/dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+       &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+       &lt;version&gt;2.5.0&lt;/version&gt;
+   &lt;/dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.python&lt;/groupId&gt;
+       &lt;artifactId&gt;jython-standalone&lt;/artifactId&gt;
+       &lt;version&gt;2.7.0&lt;/version&gt;
+   &lt;/dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;junit&lt;/groupId&gt;
+       &lt;artifactId&gt;junit&lt;/artifactId&gt;
+       &lt;version&gt;4.11&lt;/version&gt;
+       &lt;scope&gt;test&lt;/scope&gt;
+   &lt;/dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+       &lt;artifactId&gt;mockito-core&lt;/artifactId&gt;
+       &lt;scope&gt;test&lt;/scope&gt;
+       &lt;version&gt;1.9.5&lt;/version&gt;
+   &lt;/dependency&gt;
+&lt;/dependencies&gt;
 </code></pre>
 
 <p>Otherwise, there will be error message like:</p>
@@ -139,14 +156,12 @@ $(document).ready(function(event) {
 
 <p><a href="http://stackoverflow.com/questions/22630323/hadoop-java-lang-incompatibleclasschangeerror-found-interface-org-apache-hadoo">Because Hadoop 1.0.3: JobContext is a class, but in Hadoop 2.0.0: JobContext is an interface</a></p>
 
-<p>Another way of solving this Hadoop version issue is specify the hadoop version in maven build by <code>-Phadoop_2 -fae -DskipTests</code>:  </p>
+<p>Most important points in this pom are:</p>
 
-<pre><code class="language-bash">mvn package -Phadoop_2 -fae -DskipTests
-mvn -Phadoop_2 -fae -DskipTests clean install
-</code></pre>
-
-<p>Note: the reason <code>-Phadoop_2</code> works is because of the maven <code>profile hadoop_2</code>.<br/><br/>
-The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-for-<font color='red'><strong>hadoop-2.5.1</strong></font>-jar-with-dependencies.jar</p>
+<ul>
+<li>use giraph version of <code>1.1.0-hadoop2</code> because nowadays we are all using hadoop 2.</li>
+<li>use <code>jython-standalone</code> not <code>jython</code> (see below)</li>
+</ul>
 
 <h1 id="toc_1">Use <code>jython-standalone</code> dependency not <code>jython</code></h1>
 
@@ -180,9 +195,9 @@ The generated jar&#39;s name is going to be &#39;giraph-examples-1.2.0-SNAPSHOT-
 </ul>
 
 <pre><code class="language-python">import sys
-sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0-dependencies.jar&quot;)
+sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0-hadoop_2_6_dependencies.jar&quot;)
 sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/giraph/giraph-core/1.1.0/giraph-core-1.1.0.jar&quot;)
-sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/hadoop/hadoop-core/1.2.1/hadoop-core-1.2.1.jar&quot;)
+sys.path.append(&quot;/Users/yugan/.m2/repository/org/apache/hadoop/hadoop-core/2.5.0/hadoop-core-2.5.0.jar&quot;)
 
 from org.apache.giraph.jython import JythonJob
 </code></pre>
@@ -197,37 +212,117 @@ from org.apache.giraph.jython import JythonJob
 
 <h1 id="toc_4">Run giraph jython from Hadoop Yarn</h1>
 
-<p>Got a working version using the <code>count-edges.py</code> example.  </p>
+<p>Got a working version using my own <code>graph-distance.py</code> example.  </p>
 
 <ol>
-<li>python file is at:<br/>
-<code>giraph/giraph-core/src/test/resources/org/apache/giraph/jython/count-edges.py</code><br/>
-In this python file, it builds the python class <code>CountEdges</code> which subclasses giraph&#39;s <code>JythonComputation</code><br/></li>
-<li>the input file is from:<br/>
-<code>giraph/giraph-core/src/test/java/org/apache/giraph/jython/TestJythonComputation.java</code><br/>
-I build the same text file as it showed in the <code>testCountEdges</code> method and put it on hdfs.<br/></li>
-<li><p>put the python file on the working folder</p>
+<li>python file can be put anywhere, but I put it under the <code>resources</code> folder at:<br/>
+<code>/src/main/resources/graph-distance.py</code><br/>
+In this python file, it builds the python class <code>GraphDistance</code> which subclasses giraph&#39;s <code>JythonComputation</code>. There is no way that we can give the type parameters (generics), but we are going to handle it in a different way later.<br/></li>
+<li>the graph input file can be anywhere, but I put it under the <code>resources</code> folder too.<br/>
+It is put on hdfs.<br/></li>
+<li>To specify the type parameters of <code>&lt;I, V, E, M, M&gt;</code>, I built the <code>JythonTypes</code> class which implements the <code>TypesHolder</code> interface.</li>
+<li>I also created the corresponding <code>I V E M</code> classes if it is necessary.</li>
+<li>Build the jar file which need include the custom build type classes, and also the original giraph classes. I used the <code>maven-assembly-plugin</code> to build the jar with all dependencies.</li>
+<li>In the working folder on the cluster, we have the <u>python</u> file and the <u>jar</u> file (<code>giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar</code>). Then run the shell script.</li>
+</ol>
 
-<pre><code class="language-bash">yarn jar giraph-examples-1.2.0-SNAPSHOT-for-hadoop-2.5.1-jar-with-dependencies.jar \
-org.apache.giraph.GiraphRunner \
-count-edges.py \
---jythonClass CountEdges \
---typesHolder org.apache.giraph.utils.IntIntNullNoOpComputation \
--eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
--eip /user/yugan20059778/giraph_input/edgeinput \
--vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
--op /user/yugan20059778/giraph_output_3 \
--w 1 \
--ca giraph.SplitMasterWorker=false
-</code></pre></li>
-<li><p>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code>   </p>
+<p>The pom.xml file and the shell runner file:</p>
+
+<pre><code class="language-xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.adsymp.dpp.giraph.jython&lt;/groupId&gt;
+    &lt;artifactId&gt;giraph-jython&lt;/artifactId&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;giraph-jython&lt;/name&gt;
+
+    &lt;parent&gt;
+        &lt;groupId&gt;com.adsymp&lt;/groupId&gt;
+        &lt;artifactId&gt;base-pom&lt;/artifactId&gt;
+        &lt;version&gt;0.0.1&lt;/version&gt;
+    &lt;/parent&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
+            &lt;artifactId&gt;giraph-core&lt;/artifactId&gt;
+            &lt;version&gt;1.1.0-hadoop2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+            &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+            &lt;version&gt;2.5.0&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.python&lt;/groupId&gt;
+            &lt;artifactId&gt;jython-standalone&lt;/artifactId&gt;
+            &lt;version&gt;2.7.0&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.11&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+            &lt;artifactId&gt;mockito-core&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+            &lt;version&gt;1.9.5&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+                &lt;configuration&gt;
+                    &lt;descriptorRefs&gt;
+                        &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+                    &lt;/descriptorRefs&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>Build the jar:</p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
+</code></pre>
+
+<p>run the shell script:</p>
+
+<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
+        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dgiraph.zkList=$ZKLIST \
+        graph-distance.py \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        --jythonClass GraphDistance \
+        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
+        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+        -eip giraph-jython/input/tiny_graph \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op giraph-jython/output \
+        -w 1 \
+        -ca giraph.SplitMasterWorker=false
+</code></pre>
+
+<h1 id="toc_5">pitfall of <code>TypeHolder</code> and <code>TypesHolder</code></h1>
+
+<p>Be careful, the <code>TypesHolder</code> interface (which is what we need supply to the cmd) is different than the <code>TypeHolder</code>.</p>
 
 <ul>
 <li>The first one is at <code>org.apache.giraph.conf.TypesHolder</code> - Interface for classes that are parameterized by all of the Giraph types.<br/></li>
 <li>The second one is an inner class at <code>org.apache.giraph.jython.JythonJob</code></li>
-</ul></li>
-<li></li>
-</ol>
+</ul>
 
 <hr/>
 
@@ -246,6 +341,9 @@ count-edges.py \
 </li>
 <li>
 <a href="#toc_4">Run giraph jython from Hadoop Yarn</a>
+</li>
+<li>
+<a href="#toc_5">pitfall of <code>TypeHolder</code> and <code>TypesHolder</code></a>
 </li>
 </ul>
 
@@ -297,12 +395,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250614.html" 
-	        title="Previous Post: giraph">&laquo; giraph</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250478.html" 
-	        title="Next Post: bash">bash &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250660.html" 
+	        title="Next Post: maven">maven &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -357,31 +452,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250588.html">giraph with jython</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250782.html">vim</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  

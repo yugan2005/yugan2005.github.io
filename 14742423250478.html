@@ -108,6 +108,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_5">check file encoding</a>
 </li>
+<li>
+<a href="#toc_6">du without recursion</a>
+</li>
 </ul>
 
 
@@ -185,6 +188,16 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 Base.pig: application/octet-stream; charset=binary
 </code></pre>
 
+<h1 id="toc_6">du without recursion</h1>
+
+<p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
+
+<pre><code class="language-bash">du -s -h *
+</code></pre>
+
+<p><code>-s</code>: no recursion<br/>
+<code>-h</code>: human readable</p>
+
 <hr/>
 
 <ul>
@@ -205,6 +218,9 @@ Base.pig: application/octet-stream; charset=binary
 </li>
 <li>
 <a href="#toc_5">check file encoding</a>
+</li>
+<li>
+<a href="#toc_6">du without recursion</a>
 </li>
 </ul>
 
@@ -256,12 +272,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250588.html" 
-	        title="Previous Post: giraph with jython">&laquo; giraph with jython</a>
+	        <a class="basic-alignment left" href="14742423250614.html" 
+	        title="Previous Post: giraph">&laquo; giraph</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250523.html" 
-	        title="Next Post: bayesian statistics">bayesian statistics &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250719.html" 
+	        title="Next Post: python">python &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -316,31 +332,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250588.html">giraph with jython</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250782.html">vim</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  

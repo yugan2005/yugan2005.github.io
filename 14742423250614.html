@@ -186,7 +186,30 @@ hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
 </code></pre>
 
 <p>Couple important points:<br/>
-1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
+1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
+2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
+3. The zookeeper list after the line of the Computation class is a must!  </p>
+
+<p>This one file is for running giraph with jython:  </p>
+
+<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
+        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dgiraph.zkList=$ZKLIST \
+        graph-distance.py \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        --jythonClass GraphDistance \
+        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
+        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+        -eip giraph-jython/input/tiny_graph \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op giraph-jython/output \
+        -w 1 \
+        -ca giraph.SplitMasterWorker=false
+</code></pre>
 
 <hr/>
 
@@ -253,12 +276,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250557.html" 
-	        title="Previous Post: Github Page, Hexo, MWeb, GoDaddy setting">&laquo; Github Page, Hexo, MWeb, GoDaddy setting</a>
+	        <a class="basic-alignment left" href="14742423250660.html" 
+	        title="Previous Post: maven">&laquo; maven</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250588.html" 
-	        title="Next Post: giraph with jython">giraph with jython &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250478.html" 
+	        title="Next Post: bash">bash &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -313,31 +336,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250588.html">giraph with jython</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250782.html">vim</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  
