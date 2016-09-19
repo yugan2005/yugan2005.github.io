@@ -4,13 +4,14 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-18T17:19:01-07:00</updated>
+  <updated>2016-09-18T17:23:51-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
-  <generator uri="http://www.mweb.im/">MWeb</generator>
+  <generator uri="http://www.coderforart.com/">CoderForArt</generator>
+
   
   <entry>
     <title type="html"><![CDATA[bash]]></title>
@@ -219,7 +220,7 @@ If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta
 <a href="#toc_6">Hexo works with MathJax / LaTex</a>
 </li>
 <li>
-<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+<a href="#toc_7">Future work</a>
 </li>
 </ul>
 
@@ -319,12 +320,11 @@ math:
 \end{aligned}<br/>
 {% endmath %}</p>
 
-<h1 id="toc_7">Future work ( GitHub  \(\rightarrow\)  GitLab )</h1>
+<h1 id="toc_7">Future work</h1>
 
-<ol>
-<li><a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a></li>
-<li><a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></li>
-</ol>
+<p>GitHub  \(\rightarrow\)  GitLab <br/>
+1. <a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a><br/>
+2. <a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></p>
 
 <hr/>
 
@@ -351,7 +351,7 @@ math:
 <a href="#toc_6">Hexo works with MathJax / LaTex</a>
 </li>
 <li>
-<a href="#toc_7">Future work ( GitHub  $rightarrow$  GitLab )</a>
+<a href="#toc_7">Future work</a>
 </li>
 </ul>
 
