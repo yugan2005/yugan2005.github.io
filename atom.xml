@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-18T17:47:33-07:00</updated>
+  <updated>2016-09-19T12:17:23-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[python]]></title>
+    <link href="www.echo-ohce.com/14742423250719.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250719.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+<li>
+<a href="#toc_3">timezone</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">shell expansion insdie python with  <code>subprocess.call</code></h1>
+
+<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
+when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
+But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
+
+<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
+</code></pre>
+
+<h1 id="toc_1">plotly using LaTex</h1>
+
+<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
+It works when using the online mode.</p>
+
+<h1 id="toc_2">plotly cufflinks pandas dataframe customize the plot</h1>
+
+<ol>
+<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
+<li>using <code>update</code> method to update the layout python dictionary</li>
+<li>using <code>po.iplot()</code> to plot the figure</li>
+</ol>
+
+<p>Example:  </p>
+
+<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
+figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
+po.iplot(figure)
+</code></pre>
+
+<h1 id="toc_3">timezone</h1>
+
+<p>A classical scenario is get timestamp in UTC, want to convert to local timezone. Panda can do it for time series</p>
+
+<pre><code class="language-python">ts2 = ts1.
+        tz_localize(&#39;UTC&#39;).
+        tz_convert(&#39;US/Pacific&#39;)
+</code></pre>
+
+<p>the <code>tz_localize(&#39;UTC&#39;)</code> make it timezone aware, the <code>tz_convert(&#39;US/Pacific&#39;)</code> convert it to local timezone.</p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+<li>
+<a href="#toc_3">timezone</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[technical analysis]]></title>
@@ -261,78 +350,6 @@ See the <a href="http://apple.stackexchange.com/a/234478">original post for this
 </li>
 <li>
 <a href="#toc_3">Mac OS gets very busy on background process</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[python]]></title>
-    <link href="www.echo-ohce.com/14742423250719.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250719.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
-</li>
-<li>
-<a href="#toc_1">plotly using LaTex</a>
-</li>
-<li>
-<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">shell expansion insdie python with  <code>subprocess.call</code></h1>
-
-<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
-when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
-But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
-
-<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
-</code></pre>
-
-<h1 id="toc_1">plotly using LaTex</h1>
-
-<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
-It works when using the online mode.</p>
-
-<h1 id="toc_2">plotly cufflinks pandas dataframe customize the plot</h1>
-
-<ol>
-<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
-<li>using <code>update</code> method to update the layout python dictionary</li>
-<li>using <code>po.iplot()</code> to plot the figure</li>
-</ol>
-
-<p>Example:  </p>
-
-<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
-figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
-po.iplot(figure)
-</code></pre>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
-</li>
-<li>
-<a href="#toc_1">plotly using LaTex</a>
-</li>
-<li>
-<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
 </li>
 </ul>
 

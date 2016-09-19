@@ -99,6 +99,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
 </li>
+<li>
+<a href="#toc_3">timezone</a>
+</li>
 </ul>
 
 
@@ -133,6 +136,17 @@ figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
 po.iplot(figure)
 </code></pre>
 
+<h1 id="toc_3">timezone</h1>
+
+<p>A classical scenario is get timestamp in UTC, want to convert to local timezone. Panda can do it for time series</p>
+
+<pre><code class="language-python">ts2 = ts1.
+        tz_localize(&#39;UTC&#39;).
+        tz_convert(&#39;US/Pacific&#39;)
+</code></pre>
+
+<p>the <code>tz_localize(&#39;UTC&#39;)</code> make it timezone aware, the <code>tz_convert(&#39;US/Pacific&#39;)</code> convert it to local timezone.</p>
+
 <hr/>
 
 <ul>
@@ -144,6 +158,9 @@ po.iplot(figure)
 </li>
 <li>
 <a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+<li>
+<a href="#toc_3">timezone</a>
 </li>
 </ul>
 
@@ -167,7 +184,26 @@ po.iplot(figure)
 		 </p>
 	    
 		<div class="sharing">
-		  
+		  <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
           
 
           
@@ -176,12 +212,9 @@ po.iplot(figure)
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250740.html" 
-	        title="Previous Post: setting">&laquo; setting</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250700.html" 
-	        title="Next Post: pig">pig &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250761.html" 
+	        title="Next Post: technical analysis">technical analysis &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -201,7 +234,7 @@ po.iplot(figure)
 	      </li>
 	  
 	      <li class="post">
-	        <a href="documentation.html"><strong>documentation&nbsp;(1)</strong></a>
+	        <a href="documentation.html"><strong>documentation&nbsp;(2)</strong></a>
 	        
 	        
 	        
@@ -236,6 +269,12 @@ po.iplot(figure)
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
@@ -249,12 +288,6 @@ po.iplot(figure)
 	      
 		      <li class="post">
 		        <a href="14742423250740.html">setting</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
