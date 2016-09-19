@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-18T17:23:51-07:00</updated>
+  <updated>2016-09-18T17:24:27-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,131 +14,63 @@
 
   
   <entry>
-    <title type="html"><![CDATA[bash]]></title>
-    <link href="www.echo-ohce.com/14742423250478.html"/>
+    <title type="html"><![CDATA[technical analysis]]></title>
+    <link href="www.echo-ohce.com/14742423250761.html"/>
     <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250478.html</id>
+    <id>www.echo-ohce.com/14742423250761.html</id>
     <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+<p>This documents my learning of stock technical analysis, keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
 <ul>
 <li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
+<a href="#toc_0">python packages to use</a>
 </li>
 <li>
-<a href="#toc_1">nohup to a different file</a>
+<a href="#toc_1">python notebook extra setting</a>
 </li>
 <li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">check file encoding</a>
+<a href="#toc_2">Some good blogs</a>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Using curly braces in Bash substitution</h1>
+<h1 id="toc_0">python packages to use</h1>
 
-<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
+<ol>
+<li>zipline - for testing framework</li>
+<li>tushare - for chinese stock market data</li>
+<li><a href="https://github.com/mrjbq7/ta-lib">talib</a> - for indicators and functions. </li>
+</ol>
 
-<ul>
-<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
-<li>expanding arrays <code>${array[42]}</code></li>
-<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
-</ul>
+<h1 id="toc_1">python notebook extra setting</h1>
 
-<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
-<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
-
-<h1 id="toc_1">nohup to a different file</h1>
-
-<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
+<pre><code class="language-python">import zipline as zp
+import tushare as ts
+ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf60&#39;) # use your own free api key
 </code></pre>
 
-<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+<h1 id="toc_2">Some good blogs</h1>
 
-<h1 id="toc_2">Append multiple lines to a file</h1>
-
-<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
-
-<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
-multiple lines
-input here
-EOI
-</code></pre>
-
-<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
-
-<h1 id="toc_3">copy from bash shell to clipboard</h1>
-
-<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
-
-<pre><code class="language-bash">cat ~/.bashrc | pbcopy
-</code></pre>
-
-<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
-
-<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
-
-<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
-
-<pre><code class="language-bash">$ hls alibaba/ipstats/
-Found 8 items
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
-
-$ hdfs dfs -get alibaba/ipstats/[^I]*
-</code></pre>
-
-<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
-
-<h1 id="toc_5">check file encoding</h1>
-
-<pre><code class="language-bash">file -I filename
-</code></pre>
-
-<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
-
-<pre><code class="language-bash">file -I Base.pig
-Base.pig: application/octet-stream; charset=binary
-</code></pre>
+<ol>
+<li><a href="http://pythontrader.blogspot.com">使用Python語言開發「程式交易」系統</a></li>
+<li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
+</ol>
 
 <hr/>
 
 <ul>
 <li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
+<a href="#toc_0">python packages to use</a>
 </li>
 <li>
-<a href="#toc_1">nohup to a different file</a>
+<a href="#toc_1">python notebook extra setting</a>
 </li>
 <li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">check file encoding</a>
+<a href="#toc_2">Some good blogs</a>
 </li>
 </ul>
 
@@ -147,39 +79,781 @@ Base.pig: application/octet-stream; charset=binary
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[bayesian statistics]]></title>
-    <link href="www.echo-ohce.com/14742423250523.html"/>
+    <title type="html"><![CDATA[vim]]></title>
+    <link href="www.echo-ohce.com/14742423250782.html"/>
     <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250523.html</id>
+    <id>www.echo-ohce.com/14742423250782.html</id>
     <content type="html"><![CDATA[
-<p>This documents my personal understandings about bayesian, keep updating.</p>
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
 <ul>
 <li>
-<a href="#toc_0">Likelihood function is not a pdf</a>
+<a href="#toc_0">move (jump) cursor to previous location or previous files</a>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Likelihood function is not a pdf</h1>
+<h1 id="toc_0">move (jump) cursor to previous location or previous files</h1>
 
-<p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
-Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
-The likelihood is the other way around as: given the observation \(O\) that we have seen, the likelihood that the parameter is value \(\theta\).<br/>
-\[L(O|\theta)=p(O|\theta)\]<br/>
-If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
-<a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
-<a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>ma</code></td>
+<td>set mark <font color='red'>a</font> at current cursor location</td>
+</tr>
+<tr>
+<td><code>&#39;a</code> - quotemark</td>
+<td>jump to line of mark <font color='red'>a</font> (first non-blank character in line)</td>
+</tr>
+<tr>
+<td><code>&#39;a</code> - backtick</td>
+<td>jump to position (line and column) of mark <font color='red'>a</font></td>
+</tr>
+<tr>
+<td><code>&#39;&#39;</code> - 2 quotemark</td>
+<td>jump to the head of the line of previous location</td>
+</tr>
+<tr>
+<td><code>``</code> -2 backtick</td>
+<td>jump to the previous location</td>
+</tr>
+<tr>
+<td><code>:marks</code></td>
+<td>list all current marks (including marks of <strong>other files</strong>)</td>
+</tr>
+<tr>
+<td><code>:help mark-motions</code></td>
+<td>help for mark related stuff</td>
+</tr>
+<tr>
+<td><code>:help jump-motions</code></td>
+<td>help for jump related stuff</td>
+</tr>
+</tbody>
+</table>
+
+<p>reference <a href="http://vim.wikia.com/wiki/Using_marks">using marks</a><br/>
+reference <a href="http://stackoverflow.com/questions/5052079/move-cursor-to-its-last-position">stackoverflow</a></p>
 
 <hr/>
 
 <ul>
 <li>
-<a href="#toc_0">Likelihood function is not a pdf</a>
+<a href="#toc_0">move (jump) cursor to previous location or previous files</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[setting]]></title>
+    <link href="www.echo-ohce.com/14742423250740.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250740.html</id>
+    <content type="html"><![CDATA[
+<p>This documents various settings that I normally use. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">python notebook imports and setting</a>
+</li>
+<li>
+<a href="#toc_1">Mac multiple desktop screen spaces setting.</a>
+</li>
+<li>
+<a href="#toc_2">python conda virtual environment and jupyter notebook kernel</a>
+</li>
+<li>
+<a href="#toc_3">Mac OS gets very busy on background process</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">python notebook imports and setting</h1>
+
+<pre><code class="language-python">import os
+import pandas as pd
+import numpy as np
+import math
+import plotly.plotly as py
+import plotly.offline as po
+import plotly.graph_objs as go
+import plotly.tools as tls
+import colorlover as cl
+import cufflinks as cf
+import subprocess
+from ipywidgets import interact
+import glob # for shell expansion
+from IPython.display import display, HTML, Image
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+
+po.init_notebook_mode()
+cf.set_config_file(theme=&#39;white&#39;)
+pd.set_option(&#39;precision&#39;, 3) # printing precision
+np.set_printoptions(precision=3) # printing precision 
+cf.go_offline() # using cufflinks at offline mode
+</code></pre>
+
+<h1 id="toc_1">Mac multiple desktop screen spaces setting.</h1>
+
+<p><a href="http://www.tweaking4all.com/os-tips-and-tricks/macosx-tips-and-tricks/mac-multiple-desktops-spaces/">Very good post</a><br/><br/>
+Using <code>SteerMouse</code> to set the mouse shortcut.</p>
+
+<h1 id="toc_2">python conda virtual environment and jupyter notebook kernel</h1>
+
+<p>Need install a plugin <code>nb_conda_kernels</code></p>
+
+<ol>
+<li>switch to the desired virtual environment</li>
+<li>install plugin</li>
+<li>run jupyter notebook then pick the desired kernel from notebook</li>
+</ol>
+
+<pre><code class="language-bash">source activate environment_name
+conda install -c conda-forge nb_conda_kernels
+jupyter notebook
+
+source deactive
+</code></pre>
+
+<p><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">plugin&#39;s main page</a><br/>
+<a href="http://stackoverflow.com/a/38880722">stackoverflow post</a></p>
+
+<h1 id="toc_3">Mac OS gets very busy on background process</h1>
+
+<ol>
+<li>It is because of <code>optimal Layout</code></li>
+<li>The app to check the system performance is <code>Activity Monitor</code></li>
+<li>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/>
+See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a><br/></li>
+</ol>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">python notebook imports and setting</a>
+</li>
+<li>
+<a href="#toc_1">Mac multiple desktop screen spaces setting.</a>
+</li>
+<li>
+<a href="#toc_2">python conda virtual environment and jupyter notebook kernel</a>
+</li>
+<li>
+<a href="#toc_3">Mac OS gets very busy on background process</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[python]]></title>
+    <link href="www.echo-ohce.com/14742423250719.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250719.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">shell expansion insdie python with  <code>subprocess.call</code></h1>
+
+<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
+when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
+But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
+
+<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
+</code></pre>
+
+<h1 id="toc_1">plotly using LaTex</h1>
+
+<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
+It works when using the online mode.</p>
+
+<h1 id="toc_2">plotly cufflinks pandas dataframe customize the plot</h1>
+
+<ol>
+<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
+<li>using <code>update</code> method to update the layout python dictionary</li>
+<li>using <code>po.iplot()</code> to plot the figure</li>
+</ol>
+
+<p>Example:  </p>
+
+<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
+figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
+po.iplot(figure)
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[pig]]></title>
+    <link href="www.echo-ohce.com/14742423250700.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250700.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">File Name Pattern Substitution</h1>
+
+<p>Pig is using hadoop file <code>glob</code> utilities to process the file name pattern. It is <font color=red>NOT</font> using shell&#39;s <code>glob</code>. Hadoop&#39;s <code>glob</code> are documented <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">here</a>. Specially, it does not support <code>..</code> operator for a range.</p>
+
+<p><a href="http://stackoverflow.com/questions/3515481/pig-latin-load-multiple-files-from-a-date-range-part-of-the-directory-structur">reference post</a></p>
+
+<h1 id="toc_1"><code>ToDate(milliseconds)</code> gives wrong date</h1>
+
+<p>Bug looks like always return date of some time at <code>1970-01-17</code>. This is because the input is 10 digits in seconds, and input should be in milliseconds. Need \( \times 1000\) on the input to get the correct DateTime.</p>
+
+<h1 id="toc_2">DateTime SimpleDateFormat</h1>
+
+<p>Pig&#39;s <code>DateTime</code> type conforms to the following format:</p>
+
+<pre><code class="language-java">SimpleDateFormat dateFormat = 
+    new SimpleDateFormat(&quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&quot;);
+</code></pre>
+
+<p>The string format is: <code>2001-07-04T12:08:56.235-07:00</code><br/>
+<a href="https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">Java official example table</a></p>
+
+<p>[YGMARK] <code>-07:00</code> timezone format is only supported after JDK 7.</p>
+
+<h1 id="toc_3">Parameter substitution Shell Runner subtle bug</h1>
+
+<p>I like to define <code>_</code> as the output file separator. I usually have parameter <code>SEP= &#39;_&#39;</code> in my pig script and shell runner. However, if this parameter is defined inside shell runner, <em>it has to be escaped</em>, like: <code>SEP=&#39;\_&#39;</code>. Otherwise, this mislead error message will show:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.Main - ERROR 1000: Error during parsing. Lexical error at line 1, column 6.  Encountered: <EOF> after : &quot;&quot;  </p>
+</blockquote>
+
+<p>It does not need be escaped if only defined inside pig script.<br/>
+Another side note for seeing the above message. It is very likely caused by unbalanced bracket, quote, <font color='red'>extra space between the bash line separator <code>\</code> and the new line</font> etc.</p>
+
+<h1 id="toc_4">Becareful of <code>DateTime</code> data type in pig</h1>
+
+<p>It is convenient to get the time duration of difference by using the <code>DateTime</code> data type. However, in pig it is a know bug that <a href="https://issues.apache.org/jira/browse/PIG-3953">it can not be compared correctly.</a> Therefore ordering, grouping type of work should use either <code>ToUnixTime()</code> or <code>ToString()</code> before ordering.</p>
+
+<blockquote>
+<p>Error: org.joda.time.DateTime.compareTo ...</p>
+</blockquote>
+
+<h1 id="toc_5">More pitfalls for <code>DateTime</code> data type</h1>
+
+<ul>
+<li>The 2nd argument of <code>ToString(datetime [, format string])</code> is not optional, but a must for pig 0.12 (<a href="https://issues.apache.org/jira/browse/PIG-3805">Bug fixed on 0.13</a>)</li>
+<li>For my case, <code>ToString(date, &#39;yyyyMMdd&#39;)</code> works.</li>
+<li>All capital function name is not accepted, like <code>TOSTRING()</code> fails.</li>
+<li>Also, there is no way to directly read in the <code>DateTime</code> type to pig. It still need be read in as <code>chararray</code>, otherwise it will be just null. (I tested it). <a href="http://stackoverflow.com/a/22052965">Stackoverflow post</a></li>
+<li><code>GetMilliSecond(DateTime datetime)</code> is not the function to get the millisecond from epoch. It ... en, as the name indicates ... just get the millisecond of the time. To get the <strong>second</strong> use <code>ToUnixTime(DateTime datetime)</code>. To get the <strong>millisecond</strong> use <code>ToMilliSeconds(DateTime datetime)</code>.</li>
+</ul>
+
+<h1 id="toc_6">Setting of memory</h1>
+
+<p>In side pig script or grunt:  </p>
+
+<pre><code class="language-bash">SET mapreduce.map.memory.mb 4096;
+SET mapreduce.reduce.memory.mb 8192;
+</code></pre>
+
+<h1 id="toc_7">Pig Unit Test <code>override()</code> method</h1>
+
+<p>Code normally like:  </p>
+
+<pre><code class="language-java">PigTest test = new PigTest(pigScript, parameters);
+test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
+</code></pre>
+
+<p>Inside the override, can not use variable substitution, otherwise will see error like:  </p>
+
+<blockquote>
+<p>org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1066: Unable to open iterator for alias  </p>
+</blockquote>
+
+<p>Wrong:  </p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;$INPUT&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<p>Should always use actual file path:</p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;input.txt&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<h1 id="toc_8">Error message for wrong reference operator</h1>
+
+<p>If receive following error message:  </p>
+
+<blockquote>
+<p>Error: Scalar has more than one row in the output.  </p>
+</blockquote>
+
+<p>It is very likely that I got a dot <code>Alias.field</code> where you need a double semi-colon <code>Alias::field</code>.<br/><br/>
+<a href="http://stackoverflow.com/questions/22522155/pig-scalar-has-more-than-one-row-in-the-output">stackoverflow post</a>  </p>
+
+<h1 id="toc_9">Pig Java UDF Unit Test</h1>
+
+<p>Find a good <a href="http://www.crackinghadoop.com/unit-test-java-udfs/">post</a> specifically for Java UDF unit test.<br/><br/>
+The main point is to use <code>DefaultTuple</code> to inject test cases into the UDF.  </p>
+
+<pre><code class="language-java">String inputText = &quot;09/15/2014&quot;;
+DefaultTuple input = new DefaultTuple();
+input.append(inputText);
+</code></pre>
+
+<h1 id="toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h1>
+
+<ol>
+<li><code>join</code> (more specifically, inner join) acts on more than two relations:<br/>
+<code>X = JOIN A BY fieldA, B BY fieldB, C BY fieldC;</code> </li>
+<li><p><code>join</code> on duplicates gives cross product on the two relations.  </p>
+
+<pre><code class="language-sql">A = LOAD &#39;data1&#39; AS (a1:int,a2:int,a3:int);
+DUMP A;   
+(1,2,3)
+(4,2,1)
+(4,3,3)
+
+B = LOAD &#39;data2&#39; AS (b1:int,b2:int);
+DUMP B;
+(4,6)
+(4,9)
+
+X = JOIN A BY a1, B BY b1;
+DUMP X;
+(4,2,1,4,6)
+(4,3,3,4,6)
+(4,2,1,4,9)
+(4,3,3,4,9)  
+</code></pre></li>
+<li><p><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.  </p></li>
+<li><p><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a>  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.  </p></li>
+<li><p><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</p></li>
+</ol>
+
+<h1 id="toc_11">specify function output data type</h1>
+
+<p>No matter whether it is builtin function or UDF, it is always better to specify this function&#39;s output data type.  </p>
+
+<p>This is wrong, because the CONCAT output type is <code>bytearray</code>:    </p>
+
+<pre><code class="language-sql">ip_db = FOREACH ip_db_m3 GENERATE MD5(CONCAT(ip_raw, &#39;umpdmp&#39;)) AS ip;   
+</code></pre>
+
+<p>This is right by specifying clearly that the output data type is <code>chararray</code>:  </p>
+
+<pre><code class="language-sql">ip_db_m3 = FOREACH ip_db_m2 GENERATE CONCAT(ip_raw, &#39;umpdmp&#39;) AS ip:chararray;
+ip_db = FOREACH ip_db_m3 GENERATE MD5(ip) AS ip;   
+</code></pre>
+
+<h1 id="toc_12">using <code>\u0001</code> as the delimiter</h1>
+
+<ul>
+<li>If want to use <code>LzoPigStorage</code> need be careful about in pig, to specify the parameter of the function, you cannot do it at the code where calls this function, but need do it in the <code>DEFINE</code> statement at the beginning, like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">DEFINE LzoPigStorage com.twitter.elephantbird.pig.store.LzoPigStorage(&#39;\u0001&#39;);   
+
+store OUT into &#39;$OUTPUT&#39; using LzoPigStorage();   
+</code></pre>
+
+<ul>
+<li>Note that <code>&#39;^A&#39;</code> will <strong>NOT</strong> work, Only <code>&#39;\u0001&#39;</code> works.<br/></li>
+<li>If use <code>PigStorage</code> just specify it inside the function like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">A = LOAD &#39;input.txt&#39; USING PigStorage(&#39;,&#39;);   
+STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);   
+</code></pre>
+
+<h1 id="toc_13">Error with SUBSTRING and SIZE function</h1>
+
+<p>I was trying to remove the leading <code>.</code> of a ip string, and used <code>SUBSTRING(ip, 1, SIZE(ip)) AS ip_fixed:chararray</code>. The error message reads:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1045: Could not infer the matching function for org.apache.pig.builtin.SUBSTRING as multiple or none of them fit. Please use an explicit cast  </p>
+</blockquote>
+
+<p>The reason is because <code>SIZE()</code> function returns <code>long</code> type, but <code>SUBSTRING()</code> function needs <code>int</code> type. The following code passes: <code>SUBSTRING(ip, 1, (int) SIZE(ip)) AS ip_fixed:chararray</code>  </p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[metrics]]></title>
+    <link href="www.echo-ohce.com/14742423250680.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250680.html</id>
+    <content type="html"><![CDATA[
+<p>This document collects statistics metrics used in my work.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">precision</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">precision</h1>
+
+<p><img src="media/14742423250680/14742450671711.jpg" alt=""/></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">precision</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[maven]]></title>
+    <link href="www.echo-ohce.com/14742423250660.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250660.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">build jar include dependencies</h1>
+
+<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
+
+<pre><code class="language-xml">&lt;build&gt;
+   &lt;plugins&gt;
+       &lt;plugin&gt;
+           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+           &lt;configuration&gt;
+               &lt;descriptorRefs&gt;
+                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+               &lt;/descriptorRefs&gt;
+           &lt;/configuration&gt;
+       &lt;/plugin&gt;
+   &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
+
+<p>the maven command to run is:  </p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
+</code></pre>
+
+<h1 id="toc_1">hadoop-common, hadoop-core, hadoop-client</h1>
+
+<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[git]]></title>
+    <link href="www.echo-ohce.com/14742423250638.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250638.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Back to the unaltered HEAD</a>
+</li>
+<li>
+<a href="#toc_1">Messed up local master, come back to the origin/master</a>
+</li>
+<li>
+<a href="#toc_2">Reset one file</a>
+</li>
+<li>
+<a href="#toc_3">Save change in one branch and apply it (partially apply it) to another branch</a>
+</li>
+<li>
+<a href="#toc_4">Add only modified changes and ignore untracked (newly added) files</a>
+</li>
+<li>
+<a href="#toc_5">Syntax of <code>.gitignore</code></a>
+</li>
+<li>
+<a href="#toc_6">Untracked directory and file</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Back to the unaltered HEAD</h1>
+
+<p>Run these two in order:  </p>
+
+<pre><code class="language-bash">git reset --hard HEAD
+git clean -df
+</code></pre>
+
+<h1 id="toc_1">Messed up local master, come back to the origin/master</h1>
+
+<pre><code class="language-bash">git checkout -B master origin/master
+</code></pre>
+
+<p>If <code>-B</code> is given, the new branch is created if it doesn’t exist; otherwise, it is reset.  </p>
+
+<h1 id="toc_2">Reset one file</h1>
+
+<pre><code class="language-bash">git checkout HEAD -- my-file.txt
+</code></pre>
+
+<p><a href="http://stackoverflow.com/questions/7147270/hard-reset-of-a-single-file">Reference post1</a><br/><br/>
+<a href="http://stackoverflow.com/questions/6561142/difference-between-git-checkout-filename-and-git-checkout-filename/6561160#6561160">Reference post2</a></p>
+
+<h1 id="toc_3">Save change in one branch and apply it (partially apply it) to another branch</h1>
+
+<pre><code class="language-bash">git stash
+git checkout branch2
+git stash list       # to check the various stash made in different branch
+git stash pop        # pop out the last stash, and it will be deleted from the stash
+git stash apply stash@{0}    # to select the stash and apply to branch2, the stash still saved in the list
+git stash -u   # to stash currenlty untracked (newly added) files
+</code></pre>
+
+<h1 id="toc_4">Add only modified changes and ignore untracked (newly added) files</h1>
+
+<pre><code class="language-bash">git add .   # stage all changed / untracked (newly added), but not includes deleted
+git add -u  # stage all changed / deleted, but not untracked (newly added)
+git add -A  # doing both of above
+</code></pre>
+
+<h1 id="toc_5">Syntax of <code>.gitignore</code></h1>
+
+<pre><code class="language-bash">**/foo # matches file or directory &quot;foo&quot; anywhere
+foo # the same as above  
+**/foo/bar # matches file or   directory &quot;bar&quot; anywhere that is directly under directory &quot;foo&quot;  
+abc/** # matches all files inside directory &quot;abc&quot;, infinite depth  
+abc/* # matches all files inside directory &quot;abc&quot;, but not its sub-directories.  
+a/**/b # match 0 or more directories in between  
+a/**/b # matches &quot;a/b&quot;, &quot;a/x/b&quot;, &quot;a/x/y/b&quot; and so on.
+</code></pre>
+
+<h1 id="toc_6">Untracked directory and file</h1>
+
+<ol>
+<li><p>File previously tracked (in git repository) need remove it from the repo but keep it at local. <em>This is called as delete the cache</em><br/><br/>
+<code>git rm -r -f --cached mydirectory/myfile</code><br/><br/>
+the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tracked file has uncommitted change).  </p></li>
+<li><p>Only change the local repo&#39;s <code>.gitignore</code> without change the remote repo&#39;s tracking behavior. Add ignore into <code>.git/info/exclude</code> instead of the <code>.gitignore</code> file at root.<br/><br/>
+<a href="http://stackoverflow.com/questions/767147/ignore-the-gitignore-file-itself">reference post</a></p></li>
+</ol>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Back to the unaltered HEAD</a>
+</li>
+<li>
+<a href="#toc_1">Messed up local master, come back to the origin/master</a>
+</li>
+<li>
+<a href="#toc_2">Reset one file</a>
+</li>
+<li>
+<a href="#toc_3">Save change in one branch and apply it (partially apply it) to another branch</a>
+</li>
+<li>
+<a href="#toc_4">Add only modified changes and ignore untracked (newly added) files</a>
+</li>
+<li>
+<a href="#toc_5">Syntax of <code>.gitignore</code></a>
+</li>
+<li>
+<a href="#toc_6">Untracked directory and file</a>
 </li>
 </ul>
 
@@ -352,6 +1026,136 @@ math:
 </li>
 <li>
 <a href="#toc_7">Future work</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[giraph]]></title>
+    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250614.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">Giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Kill the background job</h1>
+
+<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+
+<pre><code class="language-bash">ps u
+hadoop job -list | grep yu
+</code></pre>
+
+<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+
+<pre><code class="language-bash">ps --pid pid#
+</code></pre>
+
+<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
+
+<pre><code class="language-bash">yarn application -appStates RUNNING -list
+</code></pre>
+
+<h1 id="toc_1">Giraph Unit testing</h1>
+
+<ul>
+<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
+<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+</ul>
+
+<h1 id="toc_2">giraph edge value not Mutable in place</h1>
+
+<p>edges are just a reference, it can not be changed in place.<br/>
+After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+
+<h1 id="toc_3">giraph shell runner / command line</h1>
+
+<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+
+<pre><code class="language-bash">WORKER=177
+MEM=5120
+HEAP=4352
+#zoo keeper
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
+        com.adsymp.dpp.giraph.lp.LPRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dmapreduce.map.memory.mb=$MEM \
+        -Dmapreduce.task.timeout=1800000 \
+        -Dmapred.task.timeout=1800000 \
+        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
+        -Dgiraph.zkList=$ZKLIST \
+        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
+        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
+        -ca giraph.textAggregatorWriter.frequency=1 \
+        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
+        -vip $ADJ \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op $OUT \
+        -w $WORKER -ca giraph.SplitMasterWorker=true \
+        -ca giraph.zkSessionMsecTimeout=360000 \
+        -ca giraph.zkOpsMaxAttempts=20 \
+        -ca giraph.zkOpsRetryWaitMsecs=10000 \
+        -ca mapred.job.tracker=sc2-rm1:8088 \
+        -ca mapreduce.job.tracker=sc2-rm1:8088 \
+        -ca com.adsymp.giraph.max.cd=8 \
+        -ca giraph.waitingRequestMsecs=300000 \
+        -ca com.adsymp.giraph.max.cc=100 \
+        -ca com.adsymp.giraph.max.dd=8 \
+        -ca com.adsymp.giraph.max.degree=80 \
+        -ca com.adsymp.giraph.ignore.dev.types=false \
+        -ca com.adsymp.giraph.weight.threshold=0.4 \
+        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
+        -ca mapred.job.queue.name=datascience \
+        -ca mapred.output.compress=true \
+        -ca mapred.task.timeout=1800004 \
+        -ca mapreduce.map.memory.mb=$MEM \
+        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+</code></pre>
+
+<p>Couple important points:<br/>
+1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">Giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
 </li>
 </ul>
 
@@ -534,10 +1338,10 @@ count-edges.py \
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[giraph]]></title>
-    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <title type="html"><![CDATA[bash]]></title>
+    <link href="www.echo-ohce.com/14742423250478.html"/>
     <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250614.html</id>
+    <id>www.echo-ohce.com/14742423250478.html</id>
     <content type="html"><![CDATA[
 <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
@@ -545,117 +1349,120 @@ count-edges.py \
 
 <ul>
 <li>
-<a href="#toc_0">Kill the background job</a>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
 </li>
 <li>
-<a href="#toc_1">Giraph Unit testing</a>
+<a href="#toc_1">nohup to a different file</a>
 </li>
 <li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
+<a href="#toc_2">Append multiple lines to a file</a>
 </li>
 <li>
-<a href="#toc_3">giraph shell runner / command line</a>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Kill the background job</h1>
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
 
-<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
-
-<pre><code class="language-bash">ps u
-hadoop job -list | grep yu
-</code></pre>
-
-<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
-
-<pre><code class="language-bash">ps --pid pid#
-</code></pre>
-
-<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
-
-<pre><code class="language-bash">yarn application -appStates RUNNING -list
-</code></pre>
-
-<h1 id="toc_1">Giraph Unit testing</h1>
+<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
 
 <ul>
-<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
-<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
+<li>expanding arrays <code>${array[42]}</code></li>
+<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
 </ul>
 
-<h1 id="toc_2">giraph edge value not Mutable in place</h1>
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
+<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
 
-<p>edges are just a reference, it can not be changed in place.<br/>
-After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+<h1 id="toc_1">nohup to a different file</h1>
 
-<h1 id="toc_3">giraph shell runner / command line</h1>
-
-<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
-
-<pre><code class="language-bash">WORKER=177
-MEM=5120
-HEAP=4352
-#zoo keeper
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
-
-hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
-        com.adsymp.dpp.giraph.lp.LPRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dmapreduce.map.memory.mb=$MEM \
-        -Dmapreduce.task.timeout=1800000 \
-        -Dmapred.task.timeout=1800000 \
-        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
-        -Dgiraph.zkList=$ZKLIST \
-        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
-        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
-        -ca giraph.textAggregatorWriter.frequency=1 \
-        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
-        -vip $ADJ \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op $OUT \
-        -w $WORKER -ca giraph.SplitMasterWorker=true \
-        -ca giraph.zkSessionMsecTimeout=360000 \
-        -ca giraph.zkOpsMaxAttempts=20 \
-        -ca giraph.zkOpsRetryWaitMsecs=10000 \
-        -ca mapred.job.tracker=sc2-rm1:8088 \
-        -ca mapreduce.job.tracker=sc2-rm1:8088 \
-        -ca com.adsymp.giraph.max.cd=8 \
-        -ca giraph.waitingRequestMsecs=300000 \
-        -ca com.adsymp.giraph.max.cc=100 \
-        -ca com.adsymp.giraph.max.dd=8 \
-        -ca com.adsymp.giraph.max.degree=80 \
-        -ca com.adsymp.giraph.ignore.dev.types=false \
-        -ca com.adsymp.giraph.weight.threshold=0.4 \
-        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
-        -ca mapred.job.queue.name=datascience \
-        -ca mapred.output.compress=true \
-        -ca mapred.task.timeout=1800004 \
-        -ca mapreduce.map.memory.mb=$MEM \
-        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
 </code></pre>
 
-<p>Couple important points:<br/>
-1: the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and </p>
+<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+
+<h1 id="toc_2">Append multiple lines to a file</h1>
+
+<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
+
+<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
+multiple lines
+input here
+EOI
+</code></pre>
+
+<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
+
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
+
+<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
+
+<pre><code class="language-bash">cat ~/.bashrc | pbcopy
+</code></pre>
+
+<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
+
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
+
+<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
+
+<pre><code class="language-bash">$ hls alibaba/ipstats/
+Found 8 items
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
+
+$ hdfs dfs -get alibaba/ipstats/[^I]*
+</code></pre>
+
+<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
+
+<h1 id="toc_5">check file encoding</h1>
+
+<pre><code class="language-bash">file -I filename
+</code></pre>
+
+<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
+
+<pre><code class="language-bash">file -I Base.pig
+Base.pig: application/octet-stream; charset=binary
+</code></pre>
 
 <hr/>
 
 <ul>
 <li>
-<a href="#toc_0">Kill the background job</a>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
 </li>
 <li>
-<a href="#toc_1">Giraph Unit testing</a>
+<a href="#toc_1">nohup to a different file</a>
 </li>
 <li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
+<a href="#toc_2">Append multiple lines to a file</a>
 </li>
 <li>
-<a href="#toc_3">giraph shell runner / command line</a>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
 </li>
 </ul>
 
@@ -664,672 +1471,42 @@ hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250638.html"/>
+    <title type="html"><![CDATA[bayesian statistics]]></title>
+    <link href="www.echo-ohce.com/14742423250523.html"/>
     <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250638.html</id>
+    <id>www.echo-ohce.com/14742423250523.html</id>
     <content type="html"><![CDATA[
-<p>title: git<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- git</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+<p>This documents my personal understandings about bayesian, keep updating.</p>
 
 <span id="more"></span><!-- more -->
-
-<h5 id="toc_1">Back to the unaltered HEAD</h5>
-
-<p>Run these two in order:  </p>
-
-<pre><code class="language-bash">git reset --hard HEAD
-git clean -df
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">Messed up local master, come back to the origin/master</h5>
-
-<pre><code class="language-bash">git checkout -B master origin/master
-</code></pre>
-
-<p>If <code>-B</code> is given, the new branch is created if it doesn’t exist; otherwise, it is reset.  </p>
-
-<hr/>
-
-<h5 id="toc_3">Reset one file</h5>
-
-<pre><code class="language-bash">git checkout HEAD -- my-file.txt
-</code></pre>
-
-<p><a href="http://stackoverflow.com/questions/7147270/hard-reset-of-a-single-file">Reference post1</a><br/><br/>
-<a href="http://stackoverflow.com/questions/6561142/difference-between-git-checkout-filename-and-git-checkout-filename/6561160#####6561160">Reference post2</a></p>
-
-<hr/>
-
-<h5 id="toc_4">Save change in one branch and apply it (partially apply it) to another branch</h5>
-
-<pre><code class="language-bash">git stash
-git checkout branch2
-git stash list       ##### to check the various stash made in different branch
-git stash pop        ##### pop out the last stash, and it will be deleted from the stash
-git stash apply stash@{0}    ##### to select the stash and apply to branch2, the stash still saved in the list
-git stash -u   ##### to stash currenlty untracked (newly added) files
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_5">Add only modified changes and ignore untracked (newly added) files</h5>
-
-<pre><code class="language-bash">git add .   ##### stage all changed / untracked (newly added), but not includes deleted
-git add -u  ##### stage all changed / deleted, but not untracked (newly added)
-git add -A  ##### doing both of above
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_6">Syntax of <code>.gitignore</code></h5>
-
-<pre><code class="language-bash">**/foo # matches file or directory &quot;foo&quot; anywhere
-foo # the same as above  
-**/foo/bar # matches file or   directory &quot;bar&quot; anywhere that is directly under directory &quot;foo&quot;  
-abc/** # matches all files inside directory &quot;abc&quot;, infinite depth  
-abc/* # matches all files inside directory &quot;abc&quot;, but not its sub-directories.  
-a/**/b # match 0 or more directories in between  
-a/**/b # matches &quot;a/b&quot;, &quot;a/x/b&quot;, &quot;a/x/y/b&quot; and so on.
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_7">Untracked directory and file</h5>
-
-<ol>
-<li><p>File previously tracked (in git repository) need remove it from the repo but keep it at local. <em>This is called as delete the cache</em><br/><br/>
-<code>git rm -r -f --cached mydirectory/myfile</code><br/><br/>
-the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tracked file has uncommitted change).  </p></li>
-<li><p>Only change the local repo&#39;s <code>.gitignore</code> without change the remote repo&#39;s tracking behavior. Add ignore into <code>.git/info/exclude</code> instead of the <code>.gitignore</code> file at root.<br/><br/>
-<a href="http://stackoverflow.com/questions/767147/ignore-the-gitignore-file-itself">reference post</a></p></li>
-</ol>
-
-<hr/>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250660.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250660.html</id>
-    <content type="html"><![CDATA[
-<p>title: maven<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- maven</p>
-
-<h2 id="toc_0">toc: true  </h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">build jar include dependencies</h5>
-
-<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
-
-<pre><code class="language-xml">&lt;build&gt;
-   &lt;plugins&gt;
-       &lt;plugin&gt;
-           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-           &lt;configuration&gt;
-               &lt;descriptorRefs&gt;
-                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-               &lt;/descriptorRefs&gt;
-           &lt;/configuration&gt;
-       &lt;/plugin&gt;
-   &lt;/plugins&gt;
-&lt;/build&gt;
-</code></pre>
-
-<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
-
-<p>the maven command to run is:  </p>
-
-<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">hadoop-common, hadoop-core, hadoop-client</h5>
-
-<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250680.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250680.html</id>
-    <content type="html"><![CDATA[
-<p>title: metrics<br/>
-categories:<br/>
-- theory<br/>
-tags:<br/>
-- statistics<br/>
-- metric</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This document collects statistics metrics used in my work.</p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">precision</h5>
-
-<p><img src="/media/14733822607506.jpg" alt="Get from Wiki"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250700.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250700.html</id>
-    <content type="html"><![CDATA[
-<p>title: pig<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- pig</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">File Name Pattern Substitution</h5>
-
-<p>Pig is using hadoop file <code>glob</code> utilities to process the file name pattern. It is <font color=red>NOT</font> using shell&#39;s <code>glob</code>. Hadoop&#39;s <code>glob</code> are documented <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">here</a>. Specially, it does not support <code>..</code> operator for a range.</p>
-
-<p><a href="http://stackoverflow.com/questions/3515481/pig-latin-load-multiple-files-from-a-date-range-part-of-the-directory-structur">reference post</a></p>
-
-<hr/>
-
-<h5 id="toc_2"><code>ToDate(milliseconds)</code> gives wrong date</h5>
-
-<p>Bug looks like always return date of some time at <code>1970-01-17</code>. This is because the input is 10 digits in seconds, and input should be in milliseconds. Need \( \times 1000\) on the input to get the correct DateTime.</p>
-
-<hr/>
-
-<h5 id="toc_3">DateTime SimpleDateFormat</h5>
-
-<p>Pig&#39;s <code>DateTime</code> type conforms to the following format:</p>
-
-<pre><code class="language-java">SimpleDateFormat dateFormat = 
-    new SimpleDateFormat(&quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&quot;);
-</code></pre>
-
-<p>The string format is: <code>2001-07-04T12:08:56.235-07:00</code><br/>
-<a href="https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">Java official example table</a></p>
-
-<p>[YGMARK] <code>-07:00</code> timezone format is only supported after JDK 7.</p>
-
-<hr/>
-
-<h5 id="toc_4">Parameter substitution Shell Runner subtle bug</h5>
-
-<p>I like to define <code>_</code> as the output file separator. I usually have parameter <code>SEP= &#39;_&#39;</code> in my pig script and shell runner. However, if this parameter is defined inside shell runner, <em>it has to be escaped</em>, like: <code>SEP=&#39;\_&#39;</code>. Otherwise, this mislead error message will show:  </p>
-
-<blockquote>
-<p>ERROR org.apache.pig.Main - ERROR 1000: Error during parsing. Lexical error at line 1, column 6.  Encountered: <EOF> after : &quot;&quot;  </p>
-</blockquote>
-
-<p>It does not need be escaped if only defined inside pig script.<br/>
-Another side note for seeing the above message. It is very likely caused by unbalanced bracket, quote, <font color='red'>extra space between the bash line separator <code>\</code> and the new line</font> etc.</p>
-
-<hr/>
-
-<h5 id="toc_5">Becareful of <code>DateTime</code> data type in pig</h5>
-
-<p>It is convenient to get the time duration of difference by using the <code>DateTime</code> data type. However, in pig it is a know bug that <a href="https://issues.apache.org/jira/browse/PIG-3953">it can not be compared correctly.</a> Therefore ordering, grouping type of work should use either <code>ToUnixTime()</code> or <code>ToString()</code> before ordering.</p>
-
-<blockquote>
-<p>Error: org.joda.time.DateTime.compareTo ...</p>
-</blockquote>
-
-<hr/>
-
-<h5 id="toc_6">More pitfalls for <code>DateTime</code> data type</h5>
 
 <ul>
-<li>The 2nd argument of <code>ToString(datetime [, format string])</code> is not optional, but a must for pig 0.12 (<a href="https://issues.apache.org/jira/browse/PIG-3805">Bug fixed on 0.13</a>)</li>
-<li>For my case, <code>ToString(date, &#39;yyyyMMdd&#39;)</code> works.</li>
-<li>All capital function name is not accepted, like <code>TOSTRING()</code> fails.</li>
-<li>Also, there is no way to directly read in the <code>DateTime</code> type to pig. It still need be read in as <code>chararray</code>, otherwise it will be just null. (I tested it). <a href="http://stackoverflow.com/a/22052965">Stackoverflow post</a></li>
-<li><code>GetMilliSecond(DateTime datetime)</code> is not the function to get the millisecond from epoch. It ... en, as the name indicates ... just get the millisecond of the time. To get the <strong>second</strong> use <code>ToUnixTime(DateTime datetime)</code>. To get the <strong>millisecond</strong> use <code>ToMilliSeconds(DateTime datetime)</code>.</li>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_7">Setting of memory</h5>
-
-<p>In side pig script or grunt:  </p>
-
-<pre><code class="language-bash">SET mapreduce.map.memory.mb 4096;
-SET mapreduce.reduce.memory.mb 8192;
-</code></pre>
 
 <hr/>
 
-<h5 id="toc_8">Pig Unit Test <code>override()</code> method</h5>
+<h1 id="toc_0">Likelihood function is not a pdf</h1>
 
-<p>Code normally like:  </p>
-
-<pre><code class="language-java">PigTest test = new PigTest(pigScript, parameters);
-test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
-</code></pre>
-
-<p>Inside the override, can not use variable substitution, otherwise will see error like:  </p>
-
-<blockquote>
-<p>org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1066: Unable to open iterator for alias  </p>
-</blockquote>
-
-<p>Wrong:  </p>
-
-<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;$INPUT&#39; USING PigStorage() AS (...);&quot;);
-</code></pre>
-
-<p>Should always use actual file path:</p>
-
-<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;input.txt&#39; USING PigStorage() AS (...);&quot;);
-</code></pre>
+<p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
+Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
+The likelihood is the other way around as: given the observation \(O\) that we have seen, the likelihood that the parameter is value \(\theta\).<br/>
+\[L(O|\theta)=p(O|\theta)\]<br/>
+If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
+<a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
+<a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
 
 <hr/>
-
-<h5 id="toc_9">Error message for wrong reference operator</h5>
-
-<p>If receive following error message:  </p>
-
-<blockquote>
-<p>Error: Scalar has more than one row in the output.  </p>
-</blockquote>
-
-<p>It is very likely that I got a dot <code>Alias.field</code> where you need a double semi-colon <code>Alias::field</code>.<br/><br/>
-<a href="http://stackoverflow.com/questions/22522155/pig-scalar-has-more-than-one-row-in-the-output">stackoverflow post</a>  </p>
-
-<hr/>
-
-<h5 id="toc_10">Pig Java UDF Unit Test</h5>
-
-<p>Find a good <a href="http://www.crackinghadoop.com/unit-test-java-udfs/">post</a> specifically for Java UDF unit test.<br/><br/>
-The main point is to use <code>DefaultTuple</code> to inject test cases into the UDF.  </p>
-
-<pre><code class="language-java">String inputText = &quot;09/15/2014&quot;;
-DefaultTuple input = new DefaultTuple();
-input.append(inputText);
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_11">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h5>
 
 <ul>
-<li><code>join</code> (more specifically, inner join) acts on more than two relations:<br/>
-<code>X = JOIN A BY fieldA, B BY fieldB, C BY fieldC;</code> </li>
-<li><code>join</code> on duplicates gives cross product on the two relations.<br/></li>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
 </ul>
 
-<pre><code class="language-sql">A = LOAD &#39;data1&#39; AS (a1:int,a2:int,a3:int);
-DUMP A;   
-(1,2,3)
-(4,2,1)
-(4,3,3)
-   
-B = LOAD &#39;data2&#39; AS (b1:int,b2:int);
-DUMP B;
-(4,6)
-(4,9)
-   
-X = JOIN A BY a1, B BY b1;
-DUMP X;
-(4,2,1,4,6)
-(4,3,3,4,6)
-(4,2,1,4,9)
-(4,3,3,4,9)  
-</code></pre>
-
-<ul>
-<li><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.<br/></li>
-<li><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.<br/></li>
-<li><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a><br/></li>
-<li><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.<br/></li>
-<li><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</li>
-</ul>
-
-<hr/>
-
-<h5 id="toc_12">specify function output data type</h5>
-
-<p>No matter whether it is builtin function or UDF, it is always better to specify this function&#39;s output data type.  </p>
-
-<p>This is wrong, because the CONCAT output type is <code>bytearray</code>:    </p>
-
-<pre><code class="language-sql">ip_db = FOREACH ip_db_m3 GENERATE MD5(CONCAT(ip_raw, &#39;umpdmp&#39;)) AS ip;   
-</code></pre>
-
-<p>This is right by specifying clearly that the output data type is <code>chararray</code>:  </p>
-
-<pre><code class="language-sql">ip_db_m3 = FOREACH ip_db_m2 GENERATE CONCAT(ip_raw, &#39;umpdmp&#39;) AS ip:chararray;
-ip_db = FOREACH ip_db_m3 GENERATE MD5(ip) AS ip;   
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_13">using <code>\u0001</code> as the delimiter</h5>
-
-<ul>
-<li>If want to use <code>LzoPigStorage</code> need be careful about in pig, to specify the parameter of the function, you cannot do it at the code where calls this function, but need do it in the <code>DEFINE</code> statement at the beginning, like below:<br/></li>
-</ul>
-
-<pre><code class="language-sql">DEFINE LzoPigStorage com.twitter.elephantbird.pig.store.LzoPigStorage(&#39;\u0001&#39;);   
-
-store OUT into &#39;$OUTPUT&#39; using LzoPigStorage();   
-</code></pre>
-
-<ul>
-<li>Note that <code>&#39;^A&#39;</code> will <strong>NOT</strong> work, Only <code>&#39;\u0001&#39;</code> works.<br/></li>
-<li>If use <code>PigStorage</code> just specify it inside the function like below:<br/></li>
-</ul>
-
-<pre><code class="language-sql">A = LOAD &#39;input.txt&#39; USING PigStorage(&#39;,&#39;);   
-STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);   
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_14">Error with SUBSTRING AND SIZE FUNCTION</h5>
-
-<p>I was trying to remove the leading <code>.</code> of a ip string, and used <code>SUBSTRING(ip, 1, SIZE(ip)) AS ip_fixed:chararray</code>. The error message reads:  </p>
-
-<blockquote>
-<p>ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1045: Could not infer the matching function for org.apache.pig.builtin.SUBSTRING as multiple or none of them fit. Please use an explicit cast  </p>
-</blockquote>
-
-<p>The reason is because <code>SIZE()</code> function returns <code>long</code> type, but <code>SUBSTRING()</code> function needs <code>int</code> type. The following code passes: <code>SUBSTRING(ip, 1, (int) SIZE(ip)) AS ip_fixed:chararray</code>  </p>
-
-<hr/>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250719.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250719.html</id>
-    <content type="html"><![CDATA[
-<p>title: python<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- python</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h5 id="toc_1">shell expansion insdie python with  <code>subprocess.call</code></h5>
-
-<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
-when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
-But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
-
-<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">plotly using LaTex</h5>
-
-<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
-It works when using the online mode.</p>
-
-<hr/>
-
-<h5 id="toc_3">plotly cufflinks pandas dataframe customize the plot</h5>
-
-<ol>
-<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
-<li>using <code>update</code> method to update the layout python dictionary</li>
-<li>using <code>po.iplot()</code> to plot the figure</li>
-</ol>
-
-<p>Example:  </p>
-
-<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
-figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
-po.iplot(figure)
-</code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250740.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250740.html</id>
-    <content type="html"><![CDATA[
-<p>title: setting<br/>
-categories:<br/>
-- documentation<br/>
-tags:<br/>
-- setting</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents various settings that I normally use. Keep updating.  </p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">python notebook imports and setting</h5>
-
-<pre><code class="language-python">import os
-import pandas as pd
-import numpy as np
-import math
-import plotly.plotly as py
-import plotly.offline as po
-import plotly.graph_objs as go
-import plotly.tools as tls
-import colorlover as cl
-import cufflinks as cf
-import subprocess
-from ipywidgets import interact
-import glob # for shell expansion
-from IPython.display import display, HTML, Image
-import matplotlib.pyplot as plt
-
-%matplotlib inline
-
-po.init_notebook_mode()
-cf.set_config_file(theme=&#39;white&#39;)
-pd.set_option(&#39;precision&#39;, 3) # printing precision
-np.set_printoptions(precision=3) # printing precision 
-cf.go_offline() # using cufflinks at offline mode
-</code></pre>
-
-<hr/>
-
-<h5 id="toc_2">Mac multiple desktop screen spaces setting.</h5>
-
-<p><a href="http://www.tweaking4all.com/os-tips-and-tricks/macosx-tips-and-tricks/mac-multiple-desktops-spaces/">Very good post</a><br/><br/>
-Using <code>SteerMouse</code> to set the mouse shortcut.</p>
-
-<hr/>
-
-<h5 id="toc_3">python conda virtual environment and jupyter notebook kernel</h5>
-
-<p>Need install a plugin <code>nb_conda_kernels</code></p>
-
-<ol>
-<li>switch to the desired virtual environment</li>
-<li>install plugin</li>
-<li>run jupyter notebook then pick the desired kernel from notebook</li>
-</ol>
-
-<pre><code class="language-bash">source activate environment_name
-conda install -c conda-forge nb_conda_kernels
-jupyter notebook
-
-source deactive
-</code></pre>
-
-<p><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">plugin&#39;s main page</a><br/>
-<a href="http://stackoverflow.com/a/38880722">stackoverflow post</a></p>
-
-<hr/>
-
-<h5 id="toc_4">Mac OS gets very busy on background process</h5>
-
-<ol>
-<li>It is because of <code>optimal Layout</code></li>
-<li>The app to check the system performance is <code>Activity Monitor</code></li>
-<li><p>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/><br/>
-See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a>  </p>
-
-<hr/></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250761.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250761.html</id>
-    <content type="html"><![CDATA[
-<p>title: technical analysis<br/>
-categories:<br/>
-- stock<br/>
-tags:<br/>
-- stock</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents my learning of stock technical analysis, keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">python packages to use</h5>
-
-<ol>
-<li>zipline - for testing framework</li>
-<li>tushare - for chinese stock market data</li>
-<li><a href="https://github.com/mrjbq7/ta-lib">talib</a> - for indicators and functions. </li>
-</ol>
-
-<h5 id="toc_2">python notebook extra setting</h5>
-
-<pre><code class="language-python">import zipline as zp
-import tushare as ts
-ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf60&#39;) # use your own free api key
-</code></pre>
-
-<h5 id="toc_3">Some good blogs</h5>
-
-<ol>
-<li><a href="http://pythontrader.blogspot.com">使用Python語言開發「程式交易」系統</a></li>
-<li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
-</ol>
-
-<hr/>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[---]]></title>
-    <link href="www.echo-ohce.com/14742423250782.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250782.html</id>
-    <content type="html"><![CDATA[
-<p>title: vim<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- vim<br/>
-- shell</p>
-
-<h2 id="toc_0">toc: true  </h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h5 id="toc_1">move (jump) cursor to previous location or previous files</h5>
-
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>ma</code></td>
-<td>set mark <font color='red'>a</font> at current cursor location</td>
-</tr>
-<tr>
-<td><code>&#39;a</code> - quotemark</td>
-<td>jump to line of mark <font color='red'>a</font> (first non-blank character in line)</td>
-</tr>
-<tr>
-<td><code>&#39;a</code> - backtick</td>
-<td>jump to position (line and column) of mark <font color='red'>a</font></td>
-</tr>
-<tr>
-<td><code>&#39;&#39;</code> - 2 quotemark</td>
-<td>jump to the head of the line of previous location</td>
-</tr>
-<tr>
-<td><code>``</code> -2 backtick</td>
-<td>jump to the previous location</td>
-</tr>
-<tr>
-<td><code>:marks</code></td>
-<td>list all current marks (including marks of <strong>other files</strong>)</td>
-</tr>
-<tr>
-<td><code>:help mark-motions</code></td>
-<td>help for mark related stuff</td>
-</tr>
-<tr>
-<td><code>:help jump-motions</code></td>
-<td>help for jump related stuff</td>
-</tr>
-</tbody>
-</table>
-
-<p>reference <a href="http://vim.wikia.com/wiki/Using_marks">using marks</a><br/>
-reference <a href="http://stackoverflow.com/questions/5052079/move-cursor-to-its-last-position">stackoverflow</a></p>
 
 ]]></content>
   </entry>

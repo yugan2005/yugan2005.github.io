@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <title>
     
-  --- - Echo-ohcE
+  setting - Echo-ohcE
   
 
   </title>
@@ -81,23 +81,33 @@ $(document).ready(function(event) {
 <div>
 	<article class="hentry" role="article">
 	<header>
-			  	<h1 class="entry-title">---</h1>
+			  	<h1 class="entry-title">setting</h1>
 				<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" pubdate data-updated="true">2016/9/18</time></p>
 			 </header>
 		  	<div class="entry-content">
-			  	<p>title: setting<br/>
-categories:<br/>
-- documentation<br/>
-tags:<br/>
-- setting</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents various settings that I normally use. Keep updating.  </p>
+			  	<p>This documents various settings that I normally use. Keep updating.  </p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">python notebook imports and setting</h5>
+<ul>
+<li>
+<a href="#toc_0">python notebook imports and setting</a>
+</li>
+<li>
+<a href="#toc_1">Mac multiple desktop screen spaces setting.</a>
+</li>
+<li>
+<a href="#toc_2">python conda virtual environment and jupyter notebook kernel</a>
+</li>
+<li>
+<a href="#toc_3">Mac OS gets very busy on background process</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">python notebook imports and setting</h1>
 
 <pre><code class="language-python">import os
 import pandas as pd
@@ -124,16 +134,12 @@ np.set_printoptions(precision=3) # printing precision
 cf.go_offline() # using cufflinks at offline mode
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_2">Mac multiple desktop screen spaces setting.</h5>
+<h1 id="toc_1">Mac multiple desktop screen spaces setting.</h1>
 
 <p><a href="http://www.tweaking4all.com/os-tips-and-tricks/macosx-tips-and-tricks/mac-multiple-desktops-spaces/">Very good post</a><br/><br/>
 Using <code>SteerMouse</code> to set the mouse shortcut.</p>
 
-<hr/>
-
-<h5 id="toc_3">python conda virtual environment and jupyter notebook kernel</h5>
+<h1 id="toc_2">python conda virtual environment and jupyter notebook kernel</h1>
 
 <p>Need install a plugin <code>nb_conda_kernels</code></p>
 
@@ -153,18 +159,32 @@ source deactive
 <p><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">plugin&#39;s main page</a><br/>
 <a href="http://stackoverflow.com/a/38880722">stackoverflow post</a></p>
 
-<hr/>
-
-<h5 id="toc_4">Mac OS gets very busy on background process</h5>
+<h1 id="toc_3">Mac OS gets very busy on background process</h1>
 
 <ol>
 <li>It is because of <code>optimal Layout</code></li>
 <li>The app to check the system performance is <code>Activity Monitor</code></li>
-<li><p>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/><br/>
-See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a>  </p>
-
-<hr/></li>
+<li>There is another process named <code>distnoted</code> taking a lot of CPU resources. This is Apple&#39;s kernel process, but it is safely to be removed. Using the script (saved as <code>install_checkdistnoted.sh</code> add a cron job to kill this process when it takes too much resources.<br/>
+See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a><br/></li>
 </ol>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">python notebook imports and setting</a>
+</li>
+<li>
+<a href="#toc_1">Mac multiple desktop screen spaces setting.</a>
+</li>
+<li>
+<a href="#toc_2">python conda virtual environment and jupyter notebook kernel</a>
+</li>
+<li>
+<a href="#toc_3">Mac OS gets very busy on background process</a>
+</li>
+</ul>
+
 
 			</div>
 
@@ -173,8 +193,10 @@ See the <a href="http://apple.stackexchange.com/a/234478">original post for this
 		<footer>
 		 <p class="meta">
 
-			
+			<strong>Categories:</strong>&nbsp; 
 			<span class="categories">
+			
+			    <a class='category' href='documentation.html'>documentation</a>&nbsp;
 			 
 			</span>
 		    </p>
@@ -213,12 +235,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250719.html" 
-	        title="Previous Post: ---">&laquo; ---</a>
+	        <a class="basic-alignment left" href="14742423250782.html" 
+	        title="Previous Post: vim">&laquo; vim</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250761.html" 
-	        title="Next Post: ---">--- &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250719.html" 
+	        title="Next Post: python">python &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -231,7 +253,14 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(3)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(8)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="documentation.html"><strong>documentation&nbsp;(1)</strong></a>
 	        
 	        
 	        
@@ -245,7 +274,14 @@ var disqus_config = function () {
 	      </li>
 	  
 	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(1)</strong></a>
+	        <a href="stock.html"><strong>stock&nbsp;(1)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="theory.html"><strong>theory&nbsp;(2)</strong></a>
 	        
 	        
 	        
@@ -259,31 +295,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250523.html">bayesian statistics</a>
+		        <a href="14742423250782.html">vim</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250588.html">giraph with jython</a>
+		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  

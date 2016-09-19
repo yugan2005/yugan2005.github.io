@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <title>
     
-  --- - Echo-ohcE
+  pig - Echo-ohcE
   
 
   </title>
@@ -81,37 +81,73 @@ $(document).ready(function(event) {
 <div>
 	<article class="hentry" role="article">
 	<header>
-			  	<h1 class="entry-title">---</h1>
+			  	<h1 class="entry-title">pig</h1>
 				<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" pubdate data-updated="true">2016/9/18</time></p>
 			 </header>
 		  	<div class="entry-content">
-			  	<p>title: pig<br/>
-categories:<br/>
-- tips<br/>
-tags:<br/>
-- pig</p>
-
-<h2 id="toc_0">toc: true</h2>
-
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+			  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
-<h5 id="toc_1">File Name Pattern Substitution</h5>
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">File Name Pattern Substitution</h1>
 
 <p>Pig is using hadoop file <code>glob</code> utilities to process the file name pattern. It is <font color=red>NOT</font> using shell&#39;s <code>glob</code>. Hadoop&#39;s <code>glob</code> are documented <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">here</a>. Specially, it does not support <code>..</code> operator for a range.</p>
 
 <p><a href="http://stackoverflow.com/questions/3515481/pig-latin-load-multiple-files-from-a-date-range-part-of-the-directory-structur">reference post</a></p>
 
-<hr/>
-
-<h5 id="toc_2"><code>ToDate(milliseconds)</code> gives wrong date</h5>
+<h1 id="toc_1"><code>ToDate(milliseconds)</code> gives wrong date</h1>
 
 <p>Bug looks like always return date of some time at <code>1970-01-17</code>. This is because the input is 10 digits in seconds, and input should be in milliseconds. Need \( \times 1000\) on the input to get the correct DateTime.</p>
 
-<hr/>
-
-<h5 id="toc_3">DateTime SimpleDateFormat</h5>
+<h1 id="toc_2">DateTime SimpleDateFormat</h1>
 
 <p>Pig&#39;s <code>DateTime</code> type conforms to the following format:</p>
 
@@ -124,9 +160,7 @@ tags:<br/>
 
 <p>[YGMARK] <code>-07:00</code> timezone format is only supported after JDK 7.</p>
 
-<hr/>
-
-<h5 id="toc_4">Parameter substitution Shell Runner subtle bug</h5>
+<h1 id="toc_3">Parameter substitution Shell Runner subtle bug</h1>
 
 <p>I like to define <code>_</code> as the output file separator. I usually have parameter <code>SEP= &#39;_&#39;</code> in my pig script and shell runner. However, if this parameter is defined inside shell runner, <em>it has to be escaped</em>, like: <code>SEP=&#39;\_&#39;</code>. Otherwise, this mislead error message will show:  </p>
 
@@ -137,9 +171,7 @@ tags:<br/>
 <p>It does not need be escaped if only defined inside pig script.<br/>
 Another side note for seeing the above message. It is very likely caused by unbalanced bracket, quote, <font color='red'>extra space between the bash line separator <code>\</code> and the new line</font> etc.</p>
 
-<hr/>
-
-<h5 id="toc_5">Becareful of <code>DateTime</code> data type in pig</h5>
+<h1 id="toc_4">Becareful of <code>DateTime</code> data type in pig</h1>
 
 <p>It is convenient to get the time duration of difference by using the <code>DateTime</code> data type. However, in pig it is a know bug that <a href="https://issues.apache.org/jira/browse/PIG-3953">it can not be compared correctly.</a> Therefore ordering, grouping type of work should use either <code>ToUnixTime()</code> or <code>ToString()</code> before ordering.</p>
 
@@ -147,9 +179,7 @@ Another side note for seeing the above message. It is very likely caused by unba
 <p>Error: org.joda.time.DateTime.compareTo ...</p>
 </blockquote>
 
-<hr/>
-
-<h5 id="toc_6">More pitfalls for <code>DateTime</code> data type</h5>
+<h1 id="toc_5">More pitfalls for <code>DateTime</code> data type</h1>
 
 <ul>
 <li>The 2nd argument of <code>ToString(datetime [, format string])</code> is not optional, but a must for pig 0.12 (<a href="https://issues.apache.org/jira/browse/PIG-3805">Bug fixed on 0.13</a>)</li>
@@ -159,9 +189,7 @@ Another side note for seeing the above message. It is very likely caused by unba
 <li><code>GetMilliSecond(DateTime datetime)</code> is not the function to get the millisecond from epoch. It ... en, as the name indicates ... just get the millisecond of the time. To get the <strong>second</strong> use <code>ToUnixTime(DateTime datetime)</code>. To get the <strong>millisecond</strong> use <code>ToMilliSeconds(DateTime datetime)</code>.</li>
 </ul>
 
-<hr/>
-
-<h5 id="toc_7">Setting of memory</h5>
+<h1 id="toc_6">Setting of memory</h1>
 
 <p>In side pig script or grunt:  </p>
 
@@ -169,9 +197,7 @@ Another side note for seeing the above message. It is very likely caused by unba
 SET mapreduce.reduce.memory.mb 8192;
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_8">Pig Unit Test <code>override()</code> method</h5>
+<h1 id="toc_7">Pig Unit Test <code>override()</code> method</h1>
 
 <p>Code normally like:  </p>
 
@@ -195,9 +221,7 @@ test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
 <pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;input.txt&#39; USING PigStorage() AS (...);&quot;);
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_9">Error message for wrong reference operator</h5>
+<h1 id="toc_8">Error message for wrong reference operator</h1>
 
 <p>If receive following error message:  </p>
 
@@ -208,9 +232,7 @@ test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
 <p>It is very likely that I got a dot <code>Alias.field</code> where you need a double semi-colon <code>Alias::field</code>.<br/><br/>
 <a href="http://stackoverflow.com/questions/22522155/pig-scalar-has-more-than-one-row-in-the-output">stackoverflow post</a>  </p>
 
-<hr/>
-
-<h5 id="toc_10">Pig Java UDF Unit Test</h5>
+<h1 id="toc_9">Pig Java UDF Unit Test</h1>
 
 <p>Find a good <a href="http://www.crackinghadoop.com/unit-test-java-udfs/">post</a> specifically for Java UDF unit test.<br/><br/>
 The main point is to use <code>DefaultTuple</code> to inject test cases into the UDF.  </p>
@@ -220,46 +242,39 @@ DefaultTuple input = new DefaultTuple();
 input.append(inputText);
 </code></pre>
 
-<hr/>
+<h1 id="toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h1>
 
-<h5 id="toc_11">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h5>
-
-<ul>
+<ol>
 <li><code>join</code> (more specifically, inner join) acts on more than two relations:<br/>
 <code>X = JOIN A BY fieldA, B BY fieldB, C BY fieldC;</code> </li>
-<li><code>join</code> on duplicates gives cross product on the two relations.<br/></li>
-</ul>
+<li><p><code>join</code> on duplicates gives cross product on the two relations.  </p>
 
 <pre><code class="language-sql">A = LOAD &#39;data1&#39; AS (a1:int,a2:int,a3:int);
 DUMP A;   
 (1,2,3)
 (4,2,1)
 (4,3,3)
-   
+
 B = LOAD &#39;data2&#39; AS (b1:int,b2:int);
 DUMP B;
 (4,6)
 (4,9)
-   
+
 X = JOIN A BY a1, B BY b1;
 DUMP X;
 (4,2,1,4,6)
 (4,3,3,4,6)
 (4,2,1,4,9)
 (4,3,3,4,9)  
-</code></pre>
+</code></pre></li>
+<li><p><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.  </p></li>
+<li><p><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a>  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.  </p></li>
+<li><p><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</p></li>
+</ol>
 
-<ul>
-<li><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.<br/></li>
-<li><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.<br/></li>
-<li><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a><br/></li>
-<li><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.<br/></li>
-<li><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</li>
-</ul>
-
-<hr/>
-
-<h5 id="toc_12">specify function output data type</h5>
+<h1 id="toc_11">specify function output data type</h1>
 
 <p>No matter whether it is builtin function or UDF, it is always better to specify this function&#39;s output data type.  </p>
 
@@ -274,9 +289,7 @@ DUMP X;
 ip_db = FOREACH ip_db_m3 GENERATE MD5(ip) AS ip;   
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_13">using <code>\u0001</code> as the delimiter</h5>
+<h1 id="toc_12">using <code>\u0001</code> as the delimiter</h1>
 
 <ul>
 <li>If want to use <code>LzoPigStorage</code> need be careful about in pig, to specify the parameter of the function, you cannot do it at the code where calls this function, but need do it in the <code>DEFINE</code> statement at the beginning, like below:<br/></li>
@@ -296,9 +309,7 @@ store OUT into &#39;$OUTPUT&#39; using LzoPigStorage();
 STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);   
 </code></pre>
 
-<hr/>
-
-<h5 id="toc_14">Error with SUBSTRING AND SIZE FUNCTION</h5>
+<h1 id="toc_13">Error with SUBSTRING and SIZE function</h1>
 
 <p>I was trying to remove the leading <code>.</code> of a ip string, and used <code>SUBSTRING(ip, 1, SIZE(ip)) AS ip_fixed:chararray</code>. The error message reads:  </p>
 
@@ -310,6 +321,52 @@ STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);
 
 <hr/>
 
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+</ul>
+
+
 			</div>
 
 		
@@ -317,8 +374,10 @@ STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);
 		<footer>
 		 <p class="meta">
 
-			
+			<strong>Categories:</strong>&nbsp; 
 			<span class="categories">
+			
+			    <a class='category' href='tips.html'>tips</a>&nbsp;
 			 
 			</span>
 		    </p>
@@ -357,12 +416,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250680.html" 
-	        title="Previous Post: ---">&laquo; ---</a>
+	        <a class="basic-alignment left" href="14742423250719.html" 
+	        title="Previous Post: python">&laquo; python</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250719.html" 
-	        title="Next Post: ---">--- &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250680.html" 
+	        title="Next Post: metrics">metrics &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -375,7 +434,14 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(3)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(8)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="documentation.html"><strong>documentation&nbsp;(1)</strong></a>
 	        
 	        
 	        
@@ -389,7 +455,14 @@ var disqus_config = function () {
 	      </li>
 	  
 	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(1)</strong></a>
+	        <a href="stock.html"><strong>stock&nbsp;(1)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="theory.html"><strong>theory&nbsp;(2)</strong></a>
 	        
 	        
 	        
@@ -403,31 +476,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250523.html">bayesian statistics</a>
+		        <a href="14742423250782.html">vim</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250588.html">giraph with jython</a>
+		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250700.html">pig</a>
 		      </li>
 	     
 	  
