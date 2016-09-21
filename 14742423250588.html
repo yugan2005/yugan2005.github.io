@@ -108,6 +108,15 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_5">pitfall of <code>TypeHolder</code> and <code>TypesHolder</code></a>
 </li>
+<li>
+<a href="#toc_6">python and java data type</a>
+</li>
+<li>
+<a href="#toc_7">debug print statement inside python file</a>
+</li>
+<li>
+<a href="#toc_8">Jython type to java pitfall</a>
+</li>
 </ul>
 
 
@@ -324,6 +333,49 @@ yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
 <li>The second one is an inner class at <code>org.apache.giraph.jython.JythonJob</code></li>
 </ul>
 
+<h1 id="toc_6">python and java data type</h1>
+
+<p>Converting python data type to java data type has a lot of limitations.</p>
+
+<p>For now, data come from and come into java are all in the type of array(). To use it in python, convert it to list using array.tolist() method.<br/>
+To pass it to java, convert it to list then use array(list, <code>typecode</code>) <a href="http://www.jython.org/jythonbook/en/1.0/DataTypes.html#jython-specific-collections">Typecode</a> refers to Table 2-8</p>
+
+<pre><code class="language-python">from org.python.modules.jarray import array
+
+</code></pre>
+
+<h1 id="toc_7">debug print statement inside python file</h1>
+
+<p>Very tricky that the standard python way of print will not work in the python file.</p>
+
+<p><strong>Wrong</strong>:  </p>
+
+<pre><code class="language-python">print &#39;vertext_id: {0:d} received {1:d} messages&#39;.format(int(v_id), count)
+</code></pre>
+
+<p><strong>Correct</strong></p>
+
+<pre><code class="language-python">print &#39;vertext_id: %d received %d messages&#39; % (int(v_id), count)
+</code></pre>
+
+<h1 id="toc_8">Jython type to java pitfall</h1>
+
+<p>One subtle bug (very hard to debug) is the <code>Writable</code> type. When directly calling giraph&#39;s java method, such as <code>sendMessage(vertexID, MessageOut)</code>, the type of <code>vertexID</code> should be <code>LongWritable</code>, but inside jython, the default type is just <code>long</code>, and the framework will not automatically wrap it for you.</p>
+
+<p><strong>Wrong</strong>  </p>
+
+<pre><code class="language-python">self.sendMessage(id, outgoing_Message)
+</code></pre>
+
+<p><strong>Correct</strong>  </p>
+
+<pre><code class="language-python">from org.apache.hadoop.io import LongWritable
+
+self.sendMessage(LongWritable(id), outgoing_Message)
+</code></pre>
+
+<p>Why it is so hard to debug? Because there is <strong>NO</strong> error message! try add some print statement inside python file to check the type.</p>
+
 <hr/>
 
 <ul>
@@ -344,6 +396,15 @@ yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
 </li>
 <li>
 <a href="#toc_5">pitfall of <code>TypeHolder</code> and <code>TypesHolder</code></a>
+</li>
+<li>
+<a href="#toc_6">python and java data type</a>
+</li>
+<li>
+<a href="#toc_7">debug print statement inside python file</a>
+</li>
+<li>
+<a href="#toc_8">Jython type to java pitfall</a>
 </li>
 </ul>
 
@@ -396,8 +457,8 @@ var disqus_config = function () {
 	    <p class="meta">
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250660.html" 
-	        title="Next Post: maven">maven &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250638.html" 
+	        title="Next Post: git">git &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -458,6 +519,12 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250638.html">git</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250660.html">maven</a>
 		      </li>
 	     
@@ -471,12 +538,6 @@ var disqus_config = function () {
 	      
 		      <li class="post">
 		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
