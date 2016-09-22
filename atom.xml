@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-21T12:16:33-07:00</updated>
+  <updated>2016-09-21T12:45:11-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,351 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[bash]]></title>
+    <link href="www.echo-ohce.com/14742423250478.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250478.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+<li>
+<a href="#toc_6">du without recursion</a>
+</li>
+<li>
+<a href="#toc_7">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_8">grep find negate</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
+
+<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
+
+<ul>
+<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
+<li>expanding arrays <code>${array[42]}</code></li>
+<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
+</ul>
+
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
+<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
+
+<h1 id="toc_1">nohup to a different file</h1>
+
+<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+
+<h1 id="toc_2">Append multiple lines to a file</h1>
+
+<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
+
+<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
+multiple lines
+input here
+EOI
+</code></pre>
+
+<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
+
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
+
+<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
+
+<pre><code class="language-bash">cat ~/.bashrc | pbcopy
+</code></pre>
+
+<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
+
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
+
+<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
+
+<pre><code class="language-bash">$ hls alibaba/ipstats/
+Found 8 items
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
+
+$ hdfs dfs -get alibaba/ipstats/[^I]*
+</code></pre>
+
+<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
+
+<h1 id="toc_5">check file encoding</h1>
+
+<pre><code class="language-bash">file -I filename
+</code></pre>
+
+<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
+
+<pre><code class="language-bash">file -I Base.pig
+Base.pig: application/octet-stream; charset=binary
+</code></pre>
+
+<h1 id="toc_6">du without recursion</h1>
+
+<p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
+
+<pre><code class="language-bash">du -s -h *
+</code></pre>
+
+<p><code>-s</code>: no recursion<br/>
+<code>-h</code>: human readable</p>
+
+<h1 id="toc_7">checking running job and argument</h1>
+
+<p>the following commands works well:</p>
+
+<pre><code class="language-bash">top -U [username]
+ps -u [username] # My most used one
+ps -efl | grep &lt;username&gt; # get all the arguments
+ps -efl | grep &lt;command name&gt;  
+</code></pre>
+
+<h1 id="toc_8">grep find negate</h1>
+
+<p>negative matching, i.e. match lines that do not contain pattern</p>
+
+<pre><code class="language-bash">grep -v [pattern] 
+# -v, --invert-match select non-matching lines
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">check file encoding</a>
+</li>
+<li>
+<a href="#toc_6">du without recursion</a>
+</li>
+<li>
+<a href="#toc_7">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_8">grep find negate</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[giraph]]></title>
+    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250614.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Kill the background job</h1>
+
+<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+
+<pre><code class="language-bash">ps -u yu
+hadoop job -list | grep yu
+</code></pre>
+
+<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+
+<pre><code class="language-bash">ps --pid pid#
+</code></pre>
+
+<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
+
+<pre><code class="language-bash">yarn application -appStates RUNNING -list
+</code></pre>
+
+<h1 id="toc_1">giraph Unit testing</h1>
+
+<ul>
+<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
+<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+<li>the testing string input delimiter should always be <code>space</code> even in reality we can use all kinds of delimiter like <code>\t</code> etc.</li>
+</ul>
+
+<p><strong>wrong</strong></p>
+
+<pre><code class="language-java">// tab &#39;\t&#39; delimited
+String[] edges = new String[] { &quot;0  1&quot;, &quot;0  3&quot;, &quot;1  0&quot;, &quot;1  3&quot;, &quot;1  2&quot;};
+</code></pre>
+
+<p><strong>correct</strong></p>
+
+<pre><code class="language-java">// space delimited
+String[] edges = new String[] { &quot;0 1&quot;, &quot;0 3&quot;, &quot;1 0&quot;, &quot;1 3&quot;, &quot;1 2&quot;};
+</code></pre>
+
+<h1 id="toc_2">giraph edge value not Mutable in place</h1>
+
+<p>edges are just a reference, it can not be changed in place.<br/>
+After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+
+<h1 id="toc_3">giraph shell runner / command line</h1>
+
+<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+
+<pre><code class="language-bash">WORKER=177
+MEM=5120
+HEAP=4352
+#zoo keeper
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
+        com.adsymp.dpp.giraph.lp.LPRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dmapreduce.map.memory.mb=$MEM \
+        -Dmapreduce.task.timeout=1800000 \
+        -Dmapred.task.timeout=1800000 \
+        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
+        -Dgiraph.zkList=$ZKLIST \
+        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
+        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
+        -ca giraph.textAggregatorWriter.frequency=1 \
+        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
+        -vip $ADJ \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op $OUT \
+        -w $WORKER -ca giraph.SplitMasterWorker=true \
+        -ca giraph.zkSessionMsecTimeout=360000 \
+        -ca giraph.zkOpsMaxAttempts=20 \
+        -ca giraph.zkOpsRetryWaitMsecs=10000 \
+        -ca mapred.job.tracker=sc2-rm1:8088 \
+        -ca mapreduce.job.tracker=sc2-rm1:8088 \
+        -ca com.adsymp.giraph.max.cd=8 \
+        -ca giraph.waitingRequestMsecs=300000 \
+        -ca com.adsymp.giraph.max.cc=100 \
+        -ca com.adsymp.giraph.max.dd=8 \
+        -ca com.adsymp.giraph.max.degree=80 \
+        -ca com.adsymp.giraph.ignore.dev.types=false \
+        -ca com.adsymp.giraph.weight.threshold=0.4 \
+        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
+        -ca mapred.job.queue.name=datascience \
+        -ca mapred.output.compress=true \
+        -ca mapred.task.timeout=1800004 \
+        -ca mapreduce.map.memory.mb=$MEM \
+        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+</code></pre>
+
+<p>Couple important points:<br/>
+1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
+2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
+3. The zookeeper list after the line of the Computation class is a must!  </p>
+
+<p>This one file is for running giraph with jython:  </p>
+
+<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
+        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dgiraph.zkList=$ZKLIST \
+        graph-distance.py \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        --jythonClass GraphDistance \
+        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
+        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+        -eip giraph-jython/input/tiny_graph \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op giraph-jython/output \
+        -w 1 \
+        -ca giraph.SplitMasterWorker=false
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[giraph with jython]]></title>
@@ -50,6 +395,9 @@
 </li>
 <li>
 <a href="#toc_8">Jython type to java pitfall</a>
+</li>
+<li>
+<a href="#toc_9">import python package or jython package</a>
 </li>
 </ul>
 
@@ -310,6 +658,46 @@ self.sendMessage(LongWritable(id), outgoing_Message)
 
 <p>Why it is so hard to debug? Because there is <strong>NO</strong> error message! try add some print statement inside python file to check the type.</p>
 
+<h1 id="toc_9">import python package or jython package</h1>
+
+<p>At least for my project setting (intellij with jython facets), import from python does not work well.</p>
+
+<p><strong>Work</strong>  </p>
+
+<pre><code class="language-python">from org.python.modules.itertools import itertools
+
+for id1, id2 in itertools.combinations(newSeenIds, 2):
+</code></pre>
+
+<p><strong>Not work</strong>  </p>
+
+<pre><code class="language-python">import itertools
+
+for id1, id2 in itertools.combinations(newSeenIds, 2):
+</code></pre>
+
+<p><strong>Work</strong>  </p>
+
+<pre><code class="language-python">from java.util import Random
+
+@staticmethod
+    def isSampledID(id):
+        random = Random(id)
+        return random.nextInt(GraphDistance.sample) == 0
+</code></pre>
+
+<p><strong>Not work</strong>  </p>
+
+<pre><code class="language-python">import random
+
+@staticmethod
+    def isSampledID(id):
+        
+        return random.randint(1, GraphDistance.sample) == 1
+</code></pre>
+
+<p>In favor of import java modules. some python extended libraries is not included in jython. <a href="http://forums.parasoft.com/index.php?showtopic=2302#">refer to this post</a> A side note is that java&#39;s random is exclusive, but jython&#39;s random is inclusive.</p>
+
 <hr/>
 
 <ul>
@@ -339,6 +727,9 @@ self.sendMessage(LongWritable(id), outgoing_Message)
 </li>
 <li>
 <a href="#toc_8">Jython type to java pitfall</a>
+</li>
+<li>
+<a href="#toc_9">import python package or jython package</a>
 </li>
 </ul>
 
@@ -559,308 +950,6 @@ the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tr
 </li>
 <li>
 <a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[giraph]]></title>
-    <link href="www.echo-ohce.com/14742423250614.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250614.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">Kill the background job</a>
-</li>
-<li>
-<a href="#toc_1">Giraph Unit testing</a>
-</li>
-<li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
-</li>
-<li>
-<a href="#toc_3">giraph shell runner / command line</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">Kill the background job</h1>
-
-<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
-
-<pre><code class="language-bash">ps u
-hadoop job -list | grep yu
-</code></pre>
-
-<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
-
-<pre><code class="language-bash">ps --pid pid#
-</code></pre>
-
-<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
-
-<pre><code class="language-bash">yarn application -appStates RUNNING -list
-</code></pre>
-
-<h1 id="toc_1">Giraph Unit testing</h1>
-
-<ul>
-<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
-<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
-</ul>
-
-<h1 id="toc_2">giraph edge value not Mutable in place</h1>
-
-<p>edges are just a reference, it can not be changed in place.<br/>
-After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
-
-<h1 id="toc_3">giraph shell runner / command line</h1>
-
-<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
-
-<pre><code class="language-bash">WORKER=177
-MEM=5120
-HEAP=4352
-#zoo keeper
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
-
-hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
-        com.adsymp.dpp.giraph.lp.LPRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dmapreduce.map.memory.mb=$MEM \
-        -Dmapreduce.task.timeout=1800000 \
-        -Dmapred.task.timeout=1800000 \
-        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
-        -Dgiraph.zkList=$ZKLIST \
-        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
-        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
-        -ca giraph.textAggregatorWriter.frequency=1 \
-        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
-        -vip $ADJ \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op $OUT \
-        -w $WORKER -ca giraph.SplitMasterWorker=true \
-        -ca giraph.zkSessionMsecTimeout=360000 \
-        -ca giraph.zkOpsMaxAttempts=20 \
-        -ca giraph.zkOpsRetryWaitMsecs=10000 \
-        -ca mapred.job.tracker=sc2-rm1:8088 \
-        -ca mapreduce.job.tracker=sc2-rm1:8088 \
-        -ca com.adsymp.giraph.max.cd=8 \
-        -ca giraph.waitingRequestMsecs=300000 \
-        -ca com.adsymp.giraph.max.cc=100 \
-        -ca com.adsymp.giraph.max.dd=8 \
-        -ca com.adsymp.giraph.max.degree=80 \
-        -ca com.adsymp.giraph.ignore.dev.types=false \
-        -ca com.adsymp.giraph.weight.threshold=0.4 \
-        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
-        -ca mapred.job.queue.name=datascience \
-        -ca mapred.output.compress=true \
-        -ca mapred.task.timeout=1800004 \
-        -ca mapreduce.map.memory.mb=$MEM \
-        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
-</code></pre>
-
-<p>Couple important points:<br/>
-1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
-2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
-3. The zookeeper list after the line of the Computation class is a must!  </p>
-
-<p>This one file is for running giraph with jython:  </p>
-
-<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
-
-yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
-        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dgiraph.zkList=$ZKLIST \
-        graph-distance.py \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        --jythonClass GraphDistance \
-        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
-        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
-        -eip giraph-jython/input/tiny_graph \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op giraph-jython/output \
-        -w 1 \
-        -ca giraph.SplitMasterWorker=false
-</code></pre>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">Kill the background job</a>
-</li>
-<li>
-<a href="#toc_1">Giraph Unit testing</a>
-</li>
-<li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
-</li>
-<li>
-<a href="#toc_3">giraph shell runner / command line</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[bash]]></title>
-    <link href="www.echo-ohce.com/14742423250478.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250478.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
-</li>
-<li>
-<a href="#toc_1">nohup to a different file</a>
-</li>
-<li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">check file encoding</a>
-</li>
-<li>
-<a href="#toc_6">du without recursion</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">Using curly braces in Bash substitution</h1>
-
-<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
-
-<ul>
-<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
-<li>expanding arrays <code>${array[42]}</code></li>
-<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
-</ul>
-
-<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
-<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
-
-<h1 id="toc_1">nohup to a different file</h1>
-
-<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
-</code></pre>
-
-<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
-
-<h1 id="toc_2">Append multiple lines to a file</h1>
-
-<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
-
-<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
-multiple lines
-input here
-EOI
-</code></pre>
-
-<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
-
-<h1 id="toc_3">copy from bash shell to clipboard</h1>
-
-<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
-
-<pre><code class="language-bash">cat ~/.bashrc | pbcopy
-</code></pre>
-
-<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
-
-<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
-
-<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
-
-<pre><code class="language-bash">$ hls alibaba/ipstats/
-Found 8 items
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
-
-$ hdfs dfs -get alibaba/ipstats/[^I]*
-</code></pre>
-
-<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
-
-<h1 id="toc_5">check file encoding</h1>
-
-<pre><code class="language-bash">file -I filename
-</code></pre>
-
-<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
-
-<pre><code class="language-bash">file -I Base.pig
-Base.pig: application/octet-stream; charset=binary
-</code></pre>
-
-<h1 id="toc_6">du without recursion</h1>
-
-<p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
-
-<pre><code class="language-bash">du -s -h *
-</code></pre>
-
-<p><code>-s</code>: no recursion<br/>
-<code>-h</code>: human readable</p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
-</li>
-<li>
-<a href="#toc_1">nohup to a different file</a>
-</li>
-<li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">check file encoding</a>
-</li>
-<li>
-<a href="#toc_6">du without recursion</a>
 </li>
 </ul>
 

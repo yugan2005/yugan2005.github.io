@@ -111,6 +111,12 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_6">du without recursion</a>
 </li>
+<li>
+<a href="#toc_7">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_8">grep find negate</a>
+</li>
 </ul>
 
 
@@ -198,6 +204,24 @@ Base.pig: application/octet-stream; charset=binary
 <p><code>-s</code>: no recursion<br/>
 <code>-h</code>: human readable</p>
 
+<h1 id="toc_7">checking running job and argument</h1>
+
+<p>the following commands works well:</p>
+
+<pre><code class="language-bash">top -U [username]
+ps -u [username] # My most used one
+ps -efl | grep &lt;username&gt; # get all the arguments
+ps -efl | grep &lt;command name&gt;  
+</code></pre>
+
+<h1 id="toc_8">grep find negate</h1>
+
+<p>negative matching, i.e. match lines that do not contain pattern</p>
+
+<pre><code class="language-bash">grep -v [pattern] 
+# -v, --invert-match select non-matching lines
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -221,6 +245,12 @@ Base.pig: application/octet-stream; charset=binary
 </li>
 <li>
 <a href="#toc_6">du without recursion</a>
+</li>
+<li>
+<a href="#toc_7">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_8">grep find negate</a>
 </li>
 </ul>
 
@@ -272,12 +302,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250614.html" 
-	        title="Previous Post: giraph">&laquo; giraph</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250719.html" 
-	        title="Next Post: python">python &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250614.html" 
+	        title="Next Post: giraph">giraph &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -332,6 +359,18 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250588.html">giraph with jython</a>
 		      </li>
 	     
@@ -345,18 +384,6 @@ var disqus_config = function () {
 	      
 		      <li class="post">
 		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  

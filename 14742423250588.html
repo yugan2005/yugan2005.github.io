@@ -117,6 +117,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_8">Jython type to java pitfall</a>
 </li>
+<li>
+<a href="#toc_9">import python package or jython package</a>
+</li>
 </ul>
 
 
@@ -376,6 +379,46 @@ self.sendMessage(LongWritable(id), outgoing_Message)
 
 <p>Why it is so hard to debug? Because there is <strong>NO</strong> error message! try add some print statement inside python file to check the type.</p>
 
+<h1 id="toc_9">import python package or jython package</h1>
+
+<p>At least for my project setting (intellij with jython facets), import from python does not work well.</p>
+
+<p><strong>Work</strong>  </p>
+
+<pre><code class="language-python">from org.python.modules.itertools import itertools
+
+for id1, id2 in itertools.combinations(newSeenIds, 2):
+</code></pre>
+
+<p><strong>Not work</strong>  </p>
+
+<pre><code class="language-python">import itertools
+
+for id1, id2 in itertools.combinations(newSeenIds, 2):
+</code></pre>
+
+<p><strong>Work</strong>  </p>
+
+<pre><code class="language-python">from java.util import Random
+
+@staticmethod
+    def isSampledID(id):
+        random = Random(id)
+        return random.nextInt(GraphDistance.sample) == 0
+</code></pre>
+
+<p><strong>Not work</strong>  </p>
+
+<pre><code class="language-python">import random
+
+@staticmethod
+    def isSampledID(id):
+        
+        return random.randint(1, GraphDistance.sample) == 1
+</code></pre>
+
+<p>In favor of import java modules. some python extended libraries is not included in jython. <a href="http://forums.parasoft.com/index.php?showtopic=2302#">refer to this post</a> A side note is that java&#39;s random is exclusive, but jython&#39;s random is inclusive.</p>
+
 <hr/>
 
 <ul>
@@ -405,6 +448,9 @@ self.sendMessage(LongWritable(id), outgoing_Message)
 </li>
 <li>
 <a href="#toc_8">Jython type to java pitfall</a>
+</li>
+<li>
+<a href="#toc_9">import python package or jython package</a>
 </li>
 </ul>
 
@@ -455,6 +501,9 @@ var disqus_config = function () {
 		</div>
 
 	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="14742423250614.html" 
+	        title="Previous Post: giraph">&laquo; giraph</a>
 	    
 	    
 	        <a class="basic-alignment right" href="14742423250638.html" 
@@ -513,6 +562,18 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250588.html">giraph with jython</a>
 		      </li>
 	     
@@ -526,18 +587,6 @@ var disqus_config = function () {
 	      
 		      <li class="post">
 		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
