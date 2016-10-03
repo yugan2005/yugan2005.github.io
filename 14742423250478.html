@@ -106,16 +106,22 @@ $(document).ready(function(event) {
 <a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
 </li>
 <li>
-<a href="#toc_5">check file encoding</a>
+<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
 </li>
 <li>
-<a href="#toc_6">du without recursion</a>
+<a href="#toc_6">check file encoding</a>
 </li>
 <li>
-<a href="#toc_7">checking running job and argument</a>
+<a href="#toc_7">du without recursion</a>
 </li>
 <li>
-<a href="#toc_8">grep find negate</a>
+<a href="#toc_8">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_9">grep find negate</a>
+</li>
+<li>
+<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
 </li>
 </ul>
 
@@ -183,7 +189,42 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 
 <p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
 
-<h1 id="toc_5">check file encoding</h1>
+<h1 id="toc_5">Hadoop hdfs / bash get matched folders</h1>
+
+<p>This works both on bash and hadoop hdfs</p>
+
+<p>Below is the HDFS folder:</p>
+
+<pre><code class="language-bash">Found 6 items
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/FP
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/TP
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/UNKNOWN
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/cluster-size-histo
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/coverage
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:45 alibaba/graph/stats/stats
+</code></pre>
+
+<p>Need get the folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code></p>
+
+<pre><code class="language-bash">hdfs dfs -get alibaba/graph/stats/[cs]*
+</code></pre>
+
+<p>Now local folder:</p>
+
+<pre><code class="language-bash">total 8
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 cluster-size-histo
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 coverage
+-rw-rw-r-- 1 yu yu  9 Sep 30 19:28 FP_cnt
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 stats
+-rw-rw-r-- 1 yu yu  7 Sep 30 19:29 TP_cnt
+</code></pre>
+
+<p>Need delete folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code>:</p>
+
+<pre><code class="language-bash">rm -rf [cs]*
+</code></pre>
+
+<h1 id="toc_6">check file encoding</h1>
 
 <pre><code class="language-bash">file -I filename
 </code></pre>
@@ -194,7 +235,7 @@ $ hdfs dfs -get alibaba/ipstats/[^I]*
 Base.pig: application/octet-stream; charset=binary
 </code></pre>
 
-<h1 id="toc_6">du without recursion</h1>
+<h1 id="toc_7">du without recursion</h1>
 
 <p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
 
@@ -204,7 +245,7 @@ Base.pig: application/octet-stream; charset=binary
 <p><code>-s</code>: no recursion<br/>
 <code>-h</code>: human readable</p>
 
-<h1 id="toc_7">checking running job and argument</h1>
+<h1 id="toc_8">checking running job and argument</h1>
 
 <p>the following commands works well:</p>
 
@@ -212,15 +253,32 @@ Base.pig: application/octet-stream; charset=binary
 ps -u [username] # My most used one
 ps -efl | grep &lt;username&gt; # get all the arguments
 ps -efl | grep &lt;command name&gt;  
+
+ps -efl | egrep &#39;\s+yu\s+&#39;
 </code></pre>
 
-<h1 id="toc_8">grep find negate</h1>
+<h1 id="toc_9">grep find negate</h1>
 
 <p>negative matching, i.e. match lines that do not contain pattern</p>
 
 <pre><code class="language-bash">grep -v [pattern] 
 # -v, --invert-match select non-matching lines
 </code></pre>
+
+<h1 id="toc_10">grep find text in all files under a folder and all of its subfolders</h1>
+
+<pre><code class="language-bash">grep -r -l -F -n -i -I &quot;string&quot; /path
+</code></pre>
+
+<p>in which:<br/>
+<code>-r</code> is for recursive<br/>
+<code>-l</code> is for showing the file name only (stop reading the file as soon as the string is find)<br/>
+<code>-F</code> is searching for literal &quot;fixed string&quot;, not regexp<br/>
+<code>-n</code> is printing the line number<br/>
+<code>-i</code> is case-insensitive<br/>
+<code>-I</code> is ignore binary files<br/>
+Also there are:<br/>
+<code>--exclude-dir=dir</code> is useful for excluding directories like .svn and .git</p>
 
 <hr/>
 
@@ -241,16 +299,22 @@ ps -efl | grep &lt;command name&gt;
 <a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
 </li>
 <li>
-<a href="#toc_5">check file encoding</a>
+<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
 </li>
 <li>
-<a href="#toc_6">du without recursion</a>
+<a href="#toc_6">check file encoding</a>
 </li>
 <li>
-<a href="#toc_7">checking running job and argument</a>
+<a href="#toc_7">du without recursion</a>
 </li>
 <li>
-<a href="#toc_8">grep find negate</a>
+<a href="#toc_8">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_9">grep find negate</a>
+</li>
+<li>
+<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
 </li>
 </ul>
 
@@ -302,9 +366,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
+	        <a class="basic-alignment left" href="14742423250761.html" 
+	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
 	    
-	        <a class="basic-alignment right" href="14742423250614.html" 
-	        title="Next Post: giraph">giraph &raquo;</a>
+	    
+	        <a class="basic-alignment right" href="14742423250700.html" 
+	        title="Next Post: pig">pig &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -359,31 +426,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250761.html">technical analysis</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250588.html">giraph with jython</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250638.html">git</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
 		      </li>
 	     
 	  

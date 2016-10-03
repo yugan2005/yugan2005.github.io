@@ -102,6 +102,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_3">giraph shell runner / command line</a>
 </li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+</li>
 </ul>
 
 
@@ -224,6 +227,12 @@ yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
         -ca giraph.SplitMasterWorker=false
 </code></pre>
 
+<h1 id="toc_4">Unsolved problem with the input string split in InputFormat class</h1>
+
+<p>My input file is delimited by <code>^A</code> (i.e.<code>\u0001</code>). Tried to change the <code>LongNullTextEdgeInputFormat.LongNullTextEdgeReader#preprocessLine</code> for splitting by <code>\u0001</code>. Failed.</p>
+
+<p>Temporary workaround is wrote another pig script to convert the input file schema.</p>
+
 <hr/>
 
 <ul>
@@ -238,6 +247,9 @@ yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
 </li>
 <li>
 <a href="#toc_3">giraph shell runner / command line</a>
+</li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
 </li>
 </ul>
 
@@ -289,8 +301,8 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250478.html" 
-	        title="Previous Post: bash">&laquo; bash</a>
+	        <a class="basic-alignment left" href="14742423250700.html" 
+	        title="Previous Post: pig">&laquo; pig</a>
 	    
 	    
 	        <a class="basic-alignment right" href="14742423250588.html" 
@@ -349,31 +361,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250761.html">technical analysis</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250588.html">giraph with jython</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250638.html">git</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
 		      </li>
 	     
 	  

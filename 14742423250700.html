@@ -132,6 +132,27 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_13">Error with SUBSTRING and SIZE function</a>
 </li>
+<li>
+<a href="#toc_14">oneline to order two fields</a>
+</li>
+<li>
+<a href="#toc_15">sort with duplicates</a>
+</li>
+<li>
+<a href="#toc_16">input and output are reserved keyword in pig</a>
+</li>
+<li>
+<a href="#toc_17">Mystery ERROR 2999</a>
+</li>
+<li>
+<a href="#toc_18">Cumsum</a>
+</li>
+<li>
+<a href="#toc_19">A pretty good graph cluster to pair Pig example code</a>
+</li>
+<li>
+<a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
+</li>
 </ul>
 
 
@@ -319,6 +340,94 @@ STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);
 
 <p>The reason is because <code>SIZE()</code> function returns <code>long</code> type, but <code>SUBSTRING()</code> function needs <code>int</code> type. The following code passes: <code>SUBSTRING(ip, 1, (int) SIZE(ip)) AS ip_fixed:chararray</code>  </p>
 
+<h1 id="toc_14">oneline to order two fields</h1>
+
+<pre><code class="language-sql">CC_raw = LOAD &#39;$INPUT_CC&#39; USING PigStorage()
+                   AS (id1:chararray, id2:chararray, score:double);
+CC_m0 = FOREACH CC_raw GENERATE 
+            FLATTEN(((id1 &lt; id2) ? (id1, id2) : (id2, id1))) AS (smallID, largeID),
+            score AS score;
+</code></pre>
+
+<p>order the two fields <code>id1</code> and <code>id2</code>.</p>
+
+<h1 id="toc_15">sort with duplicates</h1>
+
+<p>sort with heavily duplicated field sometimes generate highly skewed partitions (they are partitioned based on bins, records with the same value of the sorting field will be inside the same bin). This will reduce the performance dramatically.</p>
+
+<p>Solution is to sort with combined fields like <code>BY (f1, f2)</code> in which, <code>f1</code> is the actual field that need be sorted but with a lot of duplicates, <code>f2</code> is another field that is much more evenly distributed to help reduce the skew.</p>
+
+<p>Thanks for MingYan :)  </p>
+
+<h1 id="toc_16">input and output are reserved keyword in pig</h1>
+
+<p>Do not use <code>input</code> or <code>output</code> as relations name, because they are reserved keyword. Error message is like:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.PigServer - exception during parsing: Error during parsing. <file clean_vertex_result.pig, line 3, column 0>  mismatched input &#39;input&#39; expecting EOF</p>
+</blockquote>
+
+<h1 id="toc_17">Mystery ERROR 2999</h1>
+
+<blockquote>
+<p>ERROR 2999: Unexpected internal error. null</p>
+</blockquote>
+
+<p>One case (I wasted one full day on this!) is I used the same name for both a relation and a field!</p>
+
+<p>Solution: add <code>_r</code> for all relation names</p>
+
+<h1 id="toc_18">Cumsum</h1>
+
+<p>use <code>Over, Stitch, ORDER BY</code></p>
+
+<pre><code class="language-sql">REGISTER /home/adsymp/lib/piggybank.jar;
+
+DEFINE OVER org.apache.pig.piggybank.evaluation.Over(&#39;long&#39;);
+DEFINE STITCH org.apache.pig.piggybank.evaluation.Stitch();
+
+output_to_LP_m0 = FOREACH (GROUP pairs_bucketized ALL) {
+                        sorted = ORDER pairs_bucketized BY score_bucket DESC;
+                        GENERATE FLATTEN(STITCH(sorted, OVER(sorted.tp_inbucket, &#39;sum(long)&#39;), OVER(sorted.fp_inbucket, &#39;sum(long)&#39;)));};
+</code></pre>
+
+<ul>
+<li><code>STITCH</code> take bags as input, and its output cannot be directly assigned to a relation, i.e. it has to be inside a <code>FOREACH</code> statement <a href="http://stackoverflow.com/a/27798007">Stackoverflow post</a> </li>
+<li><code>ORDER</code> makes the rows sorted for the <code>cumsum</code></li>
+<li><code>OVER</code> does the <code>cumsum</code> <a href="https://pig.apache.org/docs/r0.12.0/api/org/apache/pig/piggybank/evaluation/Over.html">Official document</a></li>
+<li><code>STITCH</code> make the <code>cumsum</code> one-on-one appending with the correct row.</li>
+<li>When I tried <code>OVER</code> through <code>grunt</code>, I checked the output schema is <code>null</code>. This is not a bug! In fact, if we didn&#39;t input the string of type in the <code>Over()</code> constructor, this <code>piggybank</code> function does not know what is the output schema.</li>
+</ul>
+
+<p>One lesson learned: If it is the logic planning stage error, checking the alias.</p>
+
+<h1 id="toc_19">A pretty good graph cluster to pair Pig example code</h1>
+
+<p><code>/Users/yugan/repo/drawbridge/dpp/workflow-new/miaozhen-scripts/graph/Stats.pig</code></p>
+
+<p>In this code:</p>
+
+<ul>
+<li>use of <code>TOKENIZE</code>, <code>LAST_INDEX_OF</code></li>
+<li>The way of exploding graph <code>cluster</code> into pairs and get the TP/FP with label data is pretty clean and neat.</li>
+<li>use <code>HashString</code> to sample</li>
+</ul>
+
+<h1 id="toc_20">A pretty good Score bucketize and cumsum precision Pig example code</h1>
+
+<p><code>/Users/yugan/repo/drawbridge/dpp/workflow-new/miaozhen-scripts/rank/ToPrec2.pig</code></p>
+
+<p>In this code:</p>
+
+<ul>
+<li>use <code>$SCORE_FACTOR</code> converting double to long for bucketize.</li>
+<li>use of three UDF <code>GetScoreBuckets</code>, <code>AnalyzeScoreBucket</code>, and <code>GetPrecision</code>.</li>
+<li>use <code>HashString</code> to sample</li>
+<li>use <code>replicated</code> mode for the JOIN</li>
+</ul>
+
+<p>But I have also pretty good code using <code>Over</code>, <code>Stitch</code>, <code>ORDER BY</code> to implement cumsum as shown above.</p>
+
 <hr/>
 
 <ul>
@@ -363,6 +472,27 @@ STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);
 </li>
 <li>
 <a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+<li>
+<a href="#toc_14">oneline to order two fields</a>
+</li>
+<li>
+<a href="#toc_15">sort with duplicates</a>
+</li>
+<li>
+<a href="#toc_16">input and output are reserved keyword in pig</a>
+</li>
+<li>
+<a href="#toc_17">Mystery ERROR 2999</a>
+</li>
+<li>
+<a href="#toc_18">Cumsum</a>
+</li>
+<li>
+<a href="#toc_19">A pretty good graph cluster to pair Pig example code</a>
+</li>
+<li>
+<a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
 </li>
 </ul>
 
@@ -414,12 +544,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250740.html" 
-	        title="Previous Post: setting">&laquo; setting</a>
+	        <a class="basic-alignment left" href="14742423250478.html" 
+	        title="Previous Post: bash">&laquo; bash</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250680.html" 
-	        title="Next Post: metrics">metrics &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250614.html" 
+	        title="Next Post: giraph">giraph &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -474,31 +604,31 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250761.html">technical analysis</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250588.html">giraph with jython</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250638.html">git</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
 		      </li>
 	     
 	  
