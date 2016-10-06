@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-09-21T19:02:47-07:00</updated>
+  <updated>2016-10-03T16:58:21-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -56,6 +56,18 @@
 </li>
 <li>
 <a href="#toc_10">plotly bar chart, use whether value is negative or positive to determine its color</a>
+</li>
+<li>
+<a href="#toc_11">plotly subplot shared axis setting</a>
+</li>
+<li>
+<a href="#toc_12">plotly remove missed dates from time series plot</a>
+</li>
+<li>
+<a href="#toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+</li>
+<li>
+<a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
 </li>
 </ul>
 
@@ -232,6 +244,57 @@ trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
 * use values to get np.ndarray not pd.Series (because plotly need np.ndarray)<br/>
 * use <code>marker</code> filed</p>
 
+<h1 id="toc_11">plotly subplot shared axis setting</h1>
+
+<p>For example, if the subplot is 2 row 1 col, with shared x axis, the axis&#39; names are: [(1,1) x1,y1 ], [(2,1) x1,y2 ]. To set the axis properties in the <code>layout</code> dictionary, using <code>xaxis1</code> instead of <code>xaxis</code>.</p>
+
+<p>The following example is from <code>01-Project/01-Study/PersonalProject/EDA.ipynb</code></p>
+
+<pre><code class="language-python">overlay_plot[&#39;layout&#39;].update(xaxis1=dict(type=&#39;category&#39;))
+</code></pre>
+
+<h1 id="toc_12">plotly remove missed dates from time series plot</h1>
+
+<p>change the xaxis&#39; type to <code>category</code>. (refer to the example above)</p>
+
+<h1 id="toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</h1>
+
+<pre><code>In [65]: df
+Out[65]: 
+                     A         B         C
+first second                              
+bar   one     0.895717  0.410835 -1.413681
+      two     0.805244  0.813850  1.607920
+baz   one    -1.206412  0.132003  1.024180
+      two     2.565646 -0.827317  0.569605
+foo   one     1.431256 -0.076467  0.875906
+      two     1.340309 -1.187678 -2.211372
+qux   one    -1.170299  1.130127  0.974466
+      two    -0.226169 -1.436737 -2.006747
+</code></pre>
+
+<p>select all <code>two</code> data. Two methods:</p>
+
+<ul>
+<li>MultiIndex is tuple, using <code>loc</code> and tuple to select, and use <code>slice(None)</code> inside tuple to represent <code>:</code> that we normally use (because <code>:</code> is not recognized inside tuple). <font color='red'> The dataframe MultiIndex must be sorted first.</font></li>
+</ul>
+
+<pre><code class="language-python">df=df.sort_index()
+selection = df.loc[(slice(None), &#39;two&#39;), :]
+</code></pre>
+
+<ul>
+<li>Use <code>xs</code> method and use <code>level</code> argument to specify the level. (note that <code>xs</code> by default works on rows, if want to use it on columns, use the <code>axis=1</code> argument)<br/></li>
+</ul>
+
+<pre><code class="language-python">selection = df.xs(&#39;two&#39;, level=&#39;second&#39;)
+</code></pre>
+
+<h1 id="toc_14">Use <code>:</code> or <code>slice(None)</code></h1>
+
+<p>They mean the same thing, normally in <code>[ ]</code>, we just use <code>:</code>, like <code>[5, :]</code><br/>
+However, inside tuple, <code>:</code> is not recognized, we have to use <code>slice(None)</code> instead.</p>
+
 <hr/>
 
 <ul>
@@ -268,6 +331,18 @@ trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
 <li>
 <a href="#toc_10">plotly bar chart, use whether value is negative or positive to determine its color</a>
 </li>
+<li>
+<a href="#toc_11">plotly subplot shared axis setting</a>
+</li>
+<li>
+<a href="#toc_12">plotly remove missed dates from time series plot</a>
+</li>
+<li>
+<a href="#toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+</li>
+<li>
+<a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
+</li>
 </ul>
 
 
@@ -293,6 +368,9 @@ trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
 </li>
 <li>
 <a href="#toc_2">Some good blogs</a>
+</li>
+<li>
+<a href="#toc_3">Using tushare to get historical data</a>
 </li>
 </ul>
 
@@ -321,6 +399,18 @@ ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf
 <li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
 </ol>
 
+<h1 id="toc_3">Using tushare to get historical data</h1>
+
+<ul>
+<li>A good <a href="http://www.360doc.com/content/16/0213/20/7249274_534357168.shtml">post</a> to quick check.</li>
+<li>The stock codename in ts may be different than normal stock software.</li>
+<li>to get the shanghai and shenzhen index use the following code example</li>
+</ul>
+
+<pre><code class="language-python">sh_index=ts.get_hist_data(&#39;sh&#39;)
+sz_index=ts.get_hist_data(&#39;sz&#39;)
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -332,6 +422,9 @@ ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf
 </li>
 <li>
 <a href="#toc_2">Some good blogs</a>
+</li>
+<li>
+<a href="#toc_3">Using tushare to get historical data</a>
 </li>
 </ul>
 
