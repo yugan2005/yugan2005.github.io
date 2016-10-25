@@ -123,6 +123,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
 </li>
+<li>
+<a href="#toc_11">Keep the REPL across sessions</a>
+</li>
 </ul>
 
 
@@ -250,7 +253,7 @@ Base.pig: application/octet-stream; charset=binary
 <p>the following commands works well:</p>
 
 <pre><code class="language-bash">top -U [username]
-ps -u [username] # My most used one
+ps -fu [username] # My most used one
 ps -efl | grep &lt;username&gt; # get all the arguments
 ps -efl | grep &lt;command name&gt;  
 
@@ -279,6 +282,26 @@ ps -efl | egrep &#39;\s+yu\s+&#39;
 <code>-I</code> is ignore binary files<br/>
 Also there are:<br/>
 <code>--exclude-dir=dir</code> is useful for excluding directories like .svn and .git</p>
+
+<h1 id="toc_11">Keep the REPL across sessions</h1>
+
+<p>This is very useful when running a Spark REPL on a remote ssh cluster, after logging out and close the terminal, next time connect and logging in the ssh cluster, we can pick up the same REPL session!</p>
+
+<pre><code class="language-bash"># before running the REPL
+screen
+# start the REPL
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+
+# Do not leave the REPL but leave the screen
+Ctrl-a d
+
+# leave the ssh session
+
+# re-log in the ssh session
+screen -r
+</code></pre>
+
+<p><a href="http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/">Detailed post for the <code>screen</code> command</a></p>
 
 <hr/>
 
@@ -315,6 +338,9 @@ Also there are:<br/>
 </li>
 <li>
 <a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
+</li>
+<li>
+<a href="#toc_11">Keep the REPL across sessions</a>
 </li>
 </ul>
 
@@ -366,12 +392,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250761.html" 
-	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
+	        <a class="basic-alignment left" href="14770727250961.html" 
+	        title="Previous Post: Advanced Analytics with Spark Reading Notes">&laquo; Advanced Analytics with Spark Reading Notes</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250700.html" 
-	        title="Next Post: pig">pig &raquo;</a>
+	        <a class="basic-alignment right" href="14767220898143.html" 
+	        title="Next Post: Scala">Scala &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -384,14 +410,14 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(8)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
 	        
 	        
 	        
 	      </li>
 	  
 	      <li class="post">
-	        <a href="documentation.html"><strong>documentation&nbsp;(2)</strong></a>
+	        <a href="documentation.html"><strong>documentation&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -426,13 +452,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14773416332741.html">Graphviz Dot</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
 		      </li>
 	     
 	  
@@ -444,15 +476,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  
 	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
+	  
+	      
+	  
+	      
+	  
+	      
 	  
 	      
 	  

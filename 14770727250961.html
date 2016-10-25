@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <title>
     
-  vim - Echo-ohcE
+  Advanced Analytics with Spark Reading Notes - Echo-ohcE
   
 
   </title>
@@ -81,80 +81,102 @@ $(document).ready(function(event) {
 <div>
 	<article class="hentry" role="article">
 	<header>
-			  	<h1 class="entry-title">vim</h1>
-				<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" pubdate data-updated="true">2016/9/18</time></p>
+			  	<h1 class="entry-title">Advanced Analytics with Spark Reading Notes</h1>
+				<p class="meta"><time datetime="2016-10-21T10:58:45-07:00" pubdate data-updated="true">2016/10/21</time></p>
 			 </header>
 		  	<div class="entry-content">
-			  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+			  	<p>This documents the reading notes of this book. Keep updating.  </p>
 
 <span id="more"></span><!-- more -->
 
 <ul>
 <li>
-<a href="#toc_0">move (jump) cursor to previous location or previous files</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">move (jump) cursor to previous location or previous files</h1>
-
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>ma</code></td>
-<td>set mark <font color='red'>a</font> at current cursor location</td>
-</tr>
-<tr>
-<td><code>&#39;a</code> - quotemark</td>
-<td>jump to line of mark <font color='red'>a</font> (first non-blank character in line)</td>
-</tr>
-<tr>
-<td><code>&#39;a</code> - backtick</td>
-<td>jump to position (line and column) of mark <font color='red'>a</font></td>
-</tr>
-<tr>
-<td><code>&#39;&#39;</code> - 2 quotemark</td>
-<td>jump to the head of the line of previous location</td>
-</tr>
-<tr>
-<td><code>``</code> -2 backtick</td>
-<td>jump to the previous location</td>
-</tr>
-<tr>
-<td><code>:marks</code></td>
-<td>list all current marks (including marks of <strong>other files</strong>)</td>
-</tr>
-<tr>
-<td><code>:help mark-motions</code></td>
-<td>help for mark related stuff</td>
-</tr>
-<tr>
-<td><code>:help jump-motions</code></td>
-<td>help for jump related stuff</td>
-</tr>
-</tbody>
-</table>
-
-<p>reference <a href="http://vim.wikia.com/wiki/Using_marks">using marks</a><br/>
-reference <a href="http://stackoverflow.com/questions/5052079/move-cursor-to-its-last-position">stackoverflow</a></p>
-
-<hr/>
-
+<a href="#toc_0">Chapter 1</a>
 <ul>
 <li>
-<a href="#toc_0">move (jump) cursor to previous location or previous files</a>
+<a href="#toc_1">Start REPL</a>
+</li>
+<li>
+<a href="#toc_2">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_3">Inside REPL Follow along</a>
+</li>
+</ul>
 </li>
 </ul>
 
+
+<hr/>
+
+<h1 id="toc_0">Chapter 1</h1>
+
+<h2 id="toc_1">Start REPL</h2>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client
+
+# this works on dblab
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+</code></pre>
+
+<h2 id="toc_2">Quick tricks to use</h2>
+
+<ol>
+<li>help: <code>:help</code></li>
+<li>history / find the variable or function name: <code>:history</code> or <code>:h?</code></li>
+<li>paste code: <code>:paste</code></li>
+</ol>
+
+<h2 id="toc_3">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
+rawblocks.first
+val head = rawblocks.take(10)
+head.length
+head foreach println
+
+def isHeader(line:String):Boolean =
+    line.contains(&quot;id_1&quot;)
+
+head filterNot isHeader foreach println
+head filter (ele =&gt; ! isHeader(ele)) foreach println
+head filter (!isHeader(_)) foreach println
+
+// Note that spark RDD does not have filterNot method
+val noheader = rawblocks filter (!isHeader(_))
+
+def toDouble(token:String):Double = {
+    if (token.equals(&quot;?&quot;)) Double.NaN;
+    else token.toDouble;}
+    
+val line = head(5)
+
+def parse(line:String):(Int, Int, Array[Double], Boolean) = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    (id1, id2, scores, matched)}
+
+val tup = parse(line)
+
+case class MatchData(id1:Int, id2:Int, scores:Array[Double], matched:Boolean);
+
+def parse(line:String):MatchData = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    MatchData(id1, id2, scores, matched)}
+    
+
+val parsed = rawblocks filter (!isHeader(_)) map parse;
+parsed.cache()
+
+</code></pre>
 
 			</div>
 
@@ -166,7 +188,7 @@ reference <a href="http://stackoverflow.com/questions/5052079/move-cursor-to-its
 			<strong>Categories:</strong>&nbsp; 
 			<span class="categories">
 			
-			    <a class='category' href='tips.html'>tips</a>&nbsp;
+			    <a class='category' href='documentation.html'>documentation</a>&nbsp;
 			 
 			</span>
 		    </p>
@@ -203,12 +225,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250638.html" 
-	        title="Previous Post: git">&laquo; git</a>
+	        <a class="basic-alignment left" href="14742423250660.html" 
+	        title="Previous Post: maven">&laquo; maven</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250740.html" 
-	        title="Next Post: setting">setting &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250478.html" 
+	        title="Next Post: bash">bash &raquo;</a>
 	    
 	    </p>
 	  </footer>

@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-10-03T16:58:21-07:00</updated>
+  <updated>2016-10-06T15:42:17-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,869 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Graphviz Dot]]></title>
+    <link href="www.echo-ohce.com/14773416332741.html"/>
+    <updated>2016-10-24T13:40:33-07:00</updated>
+    <id>www.echo-ohce.com/14773416332741.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Good Resources</a>
+</li>
+<li>
+<a href="#toc_1">Fix the node locations after adding new edges</a>
+</li>
+<li>
+<a href="#toc_2">Layout</a>
+</li>
+<li>
+<a href="#toc_3">command line of dot</a>
+</li>
+<li>
+<a href="#toc_4">Using of color</a>
+</li>
+<li>
+<a href="#toc_5">Maybe better alternative</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Good Resources</h1>
+
+<ol>
+<li><a href="http://www.graphviz.org/doc/info/attrs.html">Node, Edge and Graph Attributes - API doc to find parameters to use</a></li>
+<li><a href="http://www.tonyballantyne.com/graphs.html#sec-5-2">A good tutorial, very simple and easy</a></li>
+<li><a href="http://graphs.grevian.org/reference">Another very quick reference site</a> Some graph showing on the website are not using the default <code>-Kdot</code> engine.</li>
+</ol>
+
+<h1 id="toc_1">Fix the node locations after adding new edges</h1>
+
+<p>For example, I made a graph G1, and I want to show that after some steps new edges are added to the graph G2.</p>
+
+<p>Use neato layout engine as following steps </p>
+
+<ol>
+<li>Using normal way to generate the graph G1 (normal .dot file)</li>
+<li>Output the G1 in <code>gv</code> format<br/>
+<code>dot -Tgv -Kdot tinygraphOriginal.dot -o original.gv</code> </li>
+<li>Open the <code>gv</code> file and adding edges</li>
+<li>Generate the new graph G2 by<br/>
+<code>dot -Tpng -Kneato -n original.gv -o C3.png</code></li>
+</ol>
+
+<h1 id="toc_2">Layout</h1>
+
+<p>Couple tricks to use: </p>
+
+<ol>
+<li>Using subgrap:
+<code>clusterrank=local</code>
+<code>subgraph cluster_***</code><br/></li>
+<li>Using <code>[style=invis]</code> for invisible nodes and edges to align</li>
+<li>Using <code>rank=same</code>, <code>group</code> etc</li>
+<li>Using <code>weight</code> properties of edges</li>
+</ol>
+
+<h1 id="toc_3">command line of dot</h1>
+
+<p>The <a href="http://graphviz.org/content/command-line-invocation">complete arguments</a> are listed here. But the most frequently used one is:</p>
+
+<pre><code class="language-bash">dot -Tpng -Kdot tinygraphOriginal.dot -o original.png
+</code></pre>
+
+<h1 id="toc_4">Using of color</h1>
+
+<ul>
+<li>In the graph top level specify the color scheme</li>
+</ul>
+
+<pre><code class="language-dot">strict graph {
+    label=&quot;Original C1 graph&quot;;
+    nodesep=2.0
+    splines=line;
+    colorscheme=&quot;Brewer&quot;;
+    ...
+    
+</code></pre>
+
+<ul>
+<li>use color and fontcolor, also use the form <code>/xxx/#</code> to specify the detailed palette and color.</li>
+</ul>
+
+<pre><code class="language-dot">1 -- 2 [ label=&quot;0.1&quot;, dir=both, color=&quot;/set312/1&quot;, fontcolor=&quot;/set312/1&quot;];
+</code></pre>
+
+<ul>
+<li><a href="http://www.graphviz.org/doc/info/colors.html">List of available colors are here</a></li>
+</ul>
+
+<h1 id="toc_5">Maybe better alternative</h1>
+
+<p>For small one time use graph, maybe use <code>Omnigraffle</code> is a much better choice.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[maven]]></title>
+    <link href="www.echo-ohce.com/14742423250660.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250660.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">build jar include dependencies</h1>
+
+<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
+
+<pre><code class="language-xml">&lt;build&gt;
+   &lt;plugins&gt;
+       &lt;plugin&gt;
+           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+           &lt;configuration&gt;
+               &lt;descriptorRefs&gt;
+                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+               &lt;/descriptorRefs&gt;
+           &lt;/configuration&gt;
+       &lt;/plugin&gt;
+   &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
+
+<p>the maven command to run is:  </p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
+</code></pre>
+
+<h1 id="toc_1">hadoop-common, hadoop-core, hadoop-client</h1>
+
+<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
+
+<p>To help provide some additional details regarding the differences between Hadoop-common, Hadoop-core and Hadoop-client, from a high-level perspective:</p>
+
+<ul>
+<li>Hadoop-common refers to the commonly used utilities and libraries that support the Hadoop modules.</li>
+<li>Hadoop-core is the same as Hadoop-common; It was renamed to Hadoop-common in July 2009.</li>
+<li>Hadoop-client refers to the client libraries used to communicate with Hadoop&#39;s common components (HDFS, MapReduce, YARN) including but not limited to logging and codecs for example.</li>
+</ul>
+
+<p>Generally speaking, for developers who build apps that submit to YARN, run a MR job, or access files from HDFS use Hadoop-client libraries.</p>
+
+<p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_2">Maven build skip Test compilation</h1>
+
+<p><code>-DskipTests</code> just skips the test execution: the tests are still compiled.<br/>
+<code>-Dmaven.test.skip</code> skips both compilation and execution of the tests.</p>
+
+<p>I need this because I have .gitignore of all the test folders.</p>
+
+<p>This is the command to be used:</p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -Dmaven.test.skip
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/2593834/4229125">stackoverflow post</a></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Advanced Analytics with Spark Reading Notes]]></title>
+    <link href="www.echo-ohce.com/14770727250961.html"/>
+    <updated>2016-10-21T10:58:45-07:00</updated>
+    <id>www.echo-ohce.com/14770727250961.html</id>
+    <content type="html"><![CDATA[
+<p>This documents the reading notes of this book. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Chapter 1</a>
+<ul>
+<li>
+<a href="#toc_1">Start REPL</a>
+</li>
+<li>
+<a href="#toc_2">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_3">Inside REPL Follow along</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Chapter 1</h1>
+
+<h2 id="toc_1">Start REPL</h2>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client
+
+# this works on dblab
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+</code></pre>
+
+<h2 id="toc_2">Quick tricks to use</h2>
+
+<ol>
+<li>help: <code>:help</code></li>
+<li>history / find the variable or function name: <code>:history</code> or <code>:h?</code></li>
+<li>paste code: <code>:paste</code></li>
+</ol>
+
+<h2 id="toc_3">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
+rawblocks.first
+val head = rawblocks.take(10)
+head.length
+head foreach println
+
+def isHeader(line:String):Boolean =
+    line.contains(&quot;id_1&quot;)
+
+head filterNot isHeader foreach println
+head filter (ele =&gt; ! isHeader(ele)) foreach println
+head filter (!isHeader(_)) foreach println
+
+// Note that spark RDD does not have filterNot method
+val noheader = rawblocks filter (!isHeader(_))
+
+def toDouble(token:String):Double = {
+    if (token.equals(&quot;?&quot;)) Double.NaN;
+    else token.toDouble;}
+    
+val line = head(5)
+
+def parse(line:String):(Int, Int, Array[Double], Boolean) = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    (id1, id2, scores, matched)}
+
+val tup = parse(line)
+
+case class MatchData(id1:Int, id2:Int, scores:Array[Double], matched:Boolean);
+
+def parse(line:String):MatchData = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    MatchData(id1, id2, scores, matched)}
+    
+
+val parsed = rawblocks filter (!isHeader(_)) map parse;
+parsed.cache()
+
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[bash]]></title>
+    <link href="www.echo-ohce.com/14742423250478.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250478.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
+</li>
+<li>
+<a href="#toc_6">check file encoding</a>
+</li>
+<li>
+<a href="#toc_7">du without recursion</a>
+</li>
+<li>
+<a href="#toc_8">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_9">grep find negate</a>
+</li>
+<li>
+<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
+</li>
+<li>
+<a href="#toc_11">Keep the REPL across sessions</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Using curly braces in Bash substitution</h1>
+
+<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
+
+<ul>
+<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
+<li>expanding arrays <code>${array[42]}</code></li>
+<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
+</ul>
+
+<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
+<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
+
+<h1 id="toc_1">nohup to a different file</h1>
+
+<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
+
+<h1 id="toc_2">Append multiple lines to a file</h1>
+
+<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
+
+<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
+multiple lines
+input here
+EOI
+</code></pre>
+
+<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
+
+<h1 id="toc_3">copy from bash shell to clipboard</h1>
+
+<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
+
+<pre><code class="language-bash">cat ~/.bashrc | pbcopy
+</code></pre>
+
+<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
+
+<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
+
+<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
+
+<pre><code class="language-bash">$ hls alibaba/ipstats/
+Found 8 items
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
+drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
+
+$ hdfs dfs -get alibaba/ipstats/[^I]*
+</code></pre>
+
+<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
+
+<h1 id="toc_5">Hadoop hdfs / bash get matched folders</h1>
+
+<p>This works both on bash and hadoop hdfs</p>
+
+<p>Below is the HDFS folder:</p>
+
+<pre><code class="language-bash">Found 6 items
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/FP
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/TP
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/UNKNOWN
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/cluster-size-histo
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/coverage
+drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:45 alibaba/graph/stats/stats
+</code></pre>
+
+<p>Need get the folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code></p>
+
+<pre><code class="language-bash">hdfs dfs -get alibaba/graph/stats/[cs]*
+</code></pre>
+
+<p>Now local folder:</p>
+
+<pre><code class="language-bash">total 8
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 cluster-size-histo
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 coverage
+-rw-rw-r-- 1 yu yu  9 Sep 30 19:28 FP_cnt
+drwxrwxr-x 2 yu yu 43 Sep 30 19:37 stats
+-rw-rw-r-- 1 yu yu  7 Sep 30 19:29 TP_cnt
+</code></pre>
+
+<p>Need delete folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code>:</p>
+
+<pre><code class="language-bash">rm -rf [cs]*
+</code></pre>
+
+<h1 id="toc_6">check file encoding</h1>
+
+<pre><code class="language-bash">file -I filename
+</code></pre>
+
+<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
+
+<pre><code class="language-bash">file -I Base.pig
+Base.pig: application/octet-stream; charset=binary
+</code></pre>
+
+<h1 id="toc_7">du without recursion</h1>
+
+<p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
+
+<pre><code class="language-bash">du -s -h *
+</code></pre>
+
+<p><code>-s</code>: no recursion<br/>
+<code>-h</code>: human readable</p>
+
+<h1 id="toc_8">checking running job and argument</h1>
+
+<p>the following commands works well:</p>
+
+<pre><code class="language-bash">top -U [username]
+ps -fu [username] # My most used one
+ps -efl | grep &lt;username&gt; # get all the arguments
+ps -efl | grep &lt;command name&gt;  
+
+ps -efl | egrep &#39;\s+yu\s+&#39;
+</code></pre>
+
+<h1 id="toc_9">grep find negate</h1>
+
+<p>negative matching, i.e. match lines that do not contain pattern</p>
+
+<pre><code class="language-bash">grep -v [pattern] 
+# -v, --invert-match select non-matching lines
+</code></pre>
+
+<h1 id="toc_10">grep find text in all files under a folder and all of its subfolders</h1>
+
+<pre><code class="language-bash">grep -r -l -F -n -i -I &quot;string&quot; /path
+</code></pre>
+
+<p>in which:<br/>
+<code>-r</code> is for recursive<br/>
+<code>-l</code> is for showing the file name only (stop reading the file as soon as the string is find)<br/>
+<code>-F</code> is searching for literal &quot;fixed string&quot;, not regexp<br/>
+<code>-n</code> is printing the line number<br/>
+<code>-i</code> is case-insensitive<br/>
+<code>-I</code> is ignore binary files<br/>
+Also there are:<br/>
+<code>--exclude-dir=dir</code> is useful for excluding directories like .svn and .git</p>
+
+<h1 id="toc_11">Keep the REPL across sessions</h1>
+
+<p>This is very useful when running a Spark REPL on a remote ssh cluster, after logging out and close the terminal, next time connect and logging in the ssh cluster, we can pick up the same REPL session!</p>
+
+<pre><code class="language-bash"># before running the REPL
+screen
+# start the REPL
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+
+# Do not leave the REPL but leave the screen
+Ctrl-a d
+
+# leave the ssh session
+
+# re-log in the ssh session
+screen -r
+</code></pre>
+
+<p><a href="http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/">Detailed post for the <code>screen</code> command</a></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Using curly braces in Bash substitution</a>
+</li>
+<li>
+<a href="#toc_1">nohup to a different file</a>
+</li>
+<li>
+<a href="#toc_2">Append multiple lines to a file</a>
+</li>
+<li>
+<a href="#toc_3">copy from bash shell to clipboard</a>
+</li>
+<li>
+<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
+</li>
+<li>
+<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
+</li>
+<li>
+<a href="#toc_6">check file encoding</a>
+</li>
+<li>
+<a href="#toc_7">du without recursion</a>
+</li>
+<li>
+<a href="#toc_8">checking running job and argument</a>
+</li>
+<li>
+<a href="#toc_9">grep find negate</a>
+</li>
+<li>
+<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
+</li>
+<li>
+<a href="#toc_11">Keep the REPL across sessions</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scala]]></title>
+    <link href="www.echo-ohce.com/14767220898143.html"/>
+    <updated>2016-10-17T09:34:49-07:00</updated>
+    <id>www.echo-ohce.com/14767220898143.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Convert between regular collection and parallel collection</a>
+</li>
+<li>
+<a href="#toc_1">function / method handler</a>
+</li>
+<li>
+<a href="#toc_2">Get the type of variable in REPL</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Convert between regular collection and parallel collection</h1>
+
+<p>Using Seq as example. Use <code>.par</code> to convert from regular to parallel, and use <code>.seq</code> to convert back from parallel to regular.</p>
+
+<p>Special note that <code>.toSeq</code>, <code>toMap</code> or <code>toSet</code> are converting between various collection but stay in the same parallel or regular domain.</p>
+
+<p><a href="http://stackoverflow.com/a/12023096/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_1">function / method handler</h1>
+
+<p>look at the following example:</p>
+
+<pre><code class="language-scala">val test = Array(&quot;1.0&quot;, &quot;2.5&quot;, &quot;3.14159&quot;)
+
+//Wrong
+test map toDouble
+// Because this is wrong
+toDouble(test(2))
+//correct
+test map (_.toDouble)
+// Because this is correct
+test(2).toDouble
+
+//Wrong
+test map parseDouble
+//correct
+test map java.lang.Double.parseDouble
+// Because this is correct
+java.lang.Double.parseDouble(test(2))
+</code></pre>
+
+<h1 id="toc_2">Get the type of variable in REPL</h1>
+
+<p><code>variableName.getClass.getSimpleName</code></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Convert between regular collection and parallel collection</a>
+</li>
+<li>
+<a href="#toc_1">function / method handler</a>
+</li>
+<li>
+<a href="#toc_2">Get the type of variable in REPL</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[giraph]]></title>
+    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250614.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+</li>
+<li>
+<a href="#toc_5">giraph log file memory info free/total/max</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Kill the background job</h1>
+
+<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+
+<pre><code class="language-bash">ps -u yu
+hadoop job -list | grep yu
+</code></pre>
+
+<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+
+<pre><code class="language-bash">ps --pid pid#
+</code></pre>
+
+<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
+
+<pre><code class="language-bash">yarn application -appStates RUNNING -list
+</code></pre>
+
+<h1 id="toc_1">giraph Unit testing</h1>
+
+<ul>
+<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
+<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+<li>the testing string input delimiter should always be <code>space</code> even in reality we can use all kinds of delimiter like <code>\t</code> etc.</li>
+</ul>
+
+<p><strong>wrong</strong></p>
+
+<pre><code class="language-java">// tab &#39;\t&#39; delimited
+String[] edges = new String[] { &quot;0  1&quot;, &quot;0  3&quot;, &quot;1  0&quot;, &quot;1  3&quot;, &quot;1  2&quot;};
+</code></pre>
+
+<p><strong>correct</strong></p>
+
+<pre><code class="language-java">// space delimited
+String[] edges = new String[] { &quot;0 1&quot;, &quot;0 3&quot;, &quot;1 0&quot;, &quot;1 3&quot;, &quot;1 2&quot;};
+</code></pre>
+
+<h1 id="toc_2">giraph edge value not Mutable in place</h1>
+
+<p>edges are just a reference, it can not be changed in place.<br/>
+After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+
+<h1 id="toc_3">giraph shell runner / command line</h1>
+
+<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+
+<pre><code class="language-bash">WORKER=177
+MEM=5120
+HEAP=4352
+#zoo keeper
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
+        com.adsymp.dpp.giraph.lp.LPRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dmapreduce.map.memory.mb=$MEM \
+        -Dmapreduce.task.timeout=1800000 \
+        -Dmapred.task.timeout=1800000 \
+        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
+        -Dgiraph.zkList=$ZKLIST \
+        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
+        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
+        -ca giraph.textAggregatorWriter.frequency=1 \
+        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
+        -vip $ADJ \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op $OUT \
+        -w $WORKER -ca giraph.SplitMasterWorker=true \
+        -ca giraph.zkSessionMsecTimeout=360000 \
+        -ca giraph.zkOpsMaxAttempts=20 \
+        -ca giraph.zkOpsRetryWaitMsecs=10000 \
+        -ca mapred.job.tracker=sc2-rm1:8088 \
+        -ca mapreduce.job.tracker=sc2-rm1:8088 \
+        -ca com.adsymp.giraph.max.cd=8 \
+        -ca giraph.waitingRequestMsecs=300000 \
+        -ca com.adsymp.giraph.max.cc=100 \
+        -ca com.adsymp.giraph.max.dd=8 \
+        -ca com.adsymp.giraph.max.degree=80 \
+        -ca com.adsymp.giraph.ignore.dev.types=false \
+        -ca com.adsymp.giraph.weight.threshold=0.4 \
+        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
+        -ca mapred.job.queue.name=datascience \
+        -ca mapred.output.compress=true \
+        -ca mapred.task.timeout=1800004 \
+        -ca mapreduce.map.memory.mb=$MEM \
+        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+</code></pre>
+
+<p>Couple important points:<br/>
+1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
+2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
+3. The zookeeper list after the line of the Computation class is a must!  </p>
+
+<p>This one file is for running giraph with jython:  </p>
+
+<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
+        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dgiraph.zkList=$ZKLIST \
+        graph-distance.py \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        --jythonClass GraphDistance \
+        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
+        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+        -eip giraph-jython/input/tiny_graph \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op giraph-jython/output \
+        -w 1 \
+        -ca giraph.SplitMasterWorker=false
+</code></pre>
+
+<h1 id="toc_4">Unsolved problem with the input string split in InputFormat class</h1>
+
+<p>My input file is delimited by <code>^A</code> (i.e.<code>\u0001</code>). Tried to change the <code>LongNullTextEdgeInputFormat.LongNullTextEdgeReader#preprocessLine</code> for splitting by <code>\u0001</code>. Failed.</p>
+
+<p>Temporary workaround is wrote another pig script to convert the input file schema.</p>
+
+<h1 id="toc_5">giraph log file memory info free/total/max</h1>
+
+<p>In the log file of each individual worker, we see the following lines about the real time memory usage: </p>
+
+<blockquote>
+<p>2016-10-21 21:35:44,615 INFO [compute-0] org.apache.giraph.graph.ComputeCallable: call: Completed 18 partitions, 159 remaining Memory (free/total/max) = 6154.37M / 16748.50M / 27079.00M.  </p>
+</blockquote>
+
+<p>This log is generated by the class: <code>org.apache.giraph.utils.MemoryUtils</code> <a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/utils/MemoryUtils.java">source code here</a></p>
+
+<p>this class calls <code>java.lang.Runtime</code> class and use the method <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#freeMemory()"><code>freeMemory()</code></a>, <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#maxMemory()"><code>maxMemory()</code></a>, <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#totalMemory()"><code>totalMemory()</code></a> to get the real time memory usage stats</p>
+
+<ul>
+<li>free<br/>
+the amount of free memory in the Java Virtual Machine. Calling the <code>gc</code> method may result in increasing the value returned by freeMemory. <strong>an approximation to the total amount of memory currently available for future allocated objects</strong></li>
+<li>max<br/>
+the maximum amount of memory that the Java virtual machine will attempt to use. If there is no inherent limit then the value Long.MAX_VALUE will be returned. <strong>the maximum amount of memory that the virtual machine will attempt to use</strong> </li>
+<li>total<br/>
+the total amount of memory in the Java virtual machine. The value returned by this method may vary over time, depending on the host environment. (Note that the amount of memory required to hold an object of any given type may be implementation-dependent.) <strong>the total amount of memory currently available for current and future objects</strong></li>
+</ul>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+</li>
+<li>
+<a href="#toc_5">giraph log file memory info free/total/max</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[python]]></title>
@@ -69,6 +932,12 @@
 <li>
 <a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
 </li>
+<li>
+<a href="#toc_15">String for pandas datetime period and frequency</a>
+</li>
+<li>
+<a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
+</li>
 </ul>
 
 
@@ -118,7 +987,7 @@ po.iplot(figure)
 
 <p>A very good graph to show the converting relationship:</p>
 
-<p><img src="media/14742423250719/14745985373784.png" alt=""/></p>
+<p><img src="media/14742423250719/14757939209171.jpg" alt=""/></p>
 
 <h1 id="toc_5">To make a linspace of pd.Timestamp</h1>
 
@@ -295,6 +1164,20 @@ selection = df.loc[(slice(None), &#39;two&#39;), :]
 <p>They mean the same thing, normally in <code>[ ]</code>, we just use <code>:</code>, like <code>[5, :]</code><br/>
 However, inside tuple, <code>:</code> is not recognized, we have to use <code>slice(None)</code> instead.</p>
 
+<h1 id="toc_15">String for pandas datetime period and frequency</h1>
+
+<p>Useful official documents</p>
+
+<ul>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases">frequency strings</a></li>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#anchored-offsets">Anchored offset frequency strings</a></li>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#anchored-offset-semantics">Rolling forward or backward to snap on the anchors</a></li>
+</ul>
+
+<h1 id="toc_16">Python Library for Probabilistic Graphical Models</h1>
+
+<p><a href="https://github.com/pgmpy/pgmpy">github link</a></p>
+
 <hr/>
 
 <ul>
@@ -343,88 +1226,11 @@ However, inside tuple, <code>:</code> is not recognized, we have to use <code>sl
 <li>
 <a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
 </li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[technical analysis]]></title>
-    <link href="www.echo-ohce.com/14742423250761.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250761.html</id>
-    <content type="html"><![CDATA[
-<p>This documents my learning of stock technical analysis, keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
 <li>
-<a href="#toc_0">python packages to use</a>
+<a href="#toc_15">String for pandas datetime period and frequency</a>
 </li>
 <li>
-<a href="#toc_1">python notebook extra setting</a>
-</li>
-<li>
-<a href="#toc_2">Some good blogs</a>
-</li>
-<li>
-<a href="#toc_3">Using tushare to get historical data</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">python packages to use</h1>
-
-<ol>
-<li>zipline - for testing framework</li>
-<li>tushare - for chinese stock market data</li>
-<li><a href="https://github.com/mrjbq7/ta-lib">talib</a> - for indicators and functions. The official document is <a href="https://mrjbq7.github.io/ta-lib/doc_index.html">here</a></li>
-</ol>
-
-<h1 id="toc_1">python notebook extra setting</h1>
-
-<pre><code class="language-python">import zipline as zp
-import tushare as ts
-ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf60&#39;) # use your own free api key
-</code></pre>
-
-<h1 id="toc_2">Some good blogs</h1>
-
-<ol>
-<li><a href="http://pythontrader.blogspot.com">使用Python語言開發「程式交易」系統</a></li>
-<li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
-</ol>
-
-<h1 id="toc_3">Using tushare to get historical data</h1>
-
-<ul>
-<li>A good <a href="http://www.360doc.com/content/16/0213/20/7249274_534357168.shtml">post</a> to quick check.</li>
-<li>The stock codename in ts may be different than normal stock software.</li>
-<li>to get the shanghai and shenzhen index use the following code example</li>
-</ul>
-
-<pre><code class="language-python">sh_index=ts.get_hist_data(&#39;sh&#39;)
-sz_index=ts.get_hist_data(&#39;sz&#39;)
-</code></pre>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">python packages to use</a>
-</li>
-<li>
-<a href="#toc_1">python notebook extra setting</a>
-</li>
-<li>
-<a href="#toc_2">Some good blogs</a>
-</li>
-<li>
-<a href="#toc_3">Using tushare to get historical data</a>
+<a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
 </li>
 </ul>
 
@@ -433,244 +1239,35 @@ sz_index=ts.get_hist_data(&#39;sz&#39;)
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[bash]]></title>
-    <link href="www.echo-ohce.com/14742423250478.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250478.html</id>
+    <title type="html"><![CDATA[intellij]]></title>
+    <link href="www.echo-ohce.com/14765768181414.html"/>
+    <updated>2016-10-15T17:13:38-07:00</updated>
+    <id>www.echo-ohce.com/14765768181414.html</id>
     <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+<p>This documents all the tips, shortcuts I learned. Keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
 <ul>
 <li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
-</li>
-<li>
-<a href="#toc_1">nohup to a different file</a>
-</li>
-<li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
-</li>
-<li>
-<a href="#toc_6">check file encoding</a>
-</li>
-<li>
-<a href="#toc_7">du without recursion</a>
-</li>
-<li>
-<a href="#toc_8">checking running job and argument</a>
-</li>
-<li>
-<a href="#toc_9">grep find negate</a>
-</li>
-<li>
-<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
+<a href="#toc_0">List of most frequently used shortcut:</a>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Using curly braces in Bash substitution</h1>
-
-<p>It is always a good practice to use curly braces like <code>${foo}</code>, but there are following situations it is a must:</p>
+<h1 id="toc_0">List of most frequently used shortcut:</h1>
 
 <ul>
-<li>confusing strings <code>${foo}bar</code> vs. <code>$foobar</code> in which <code>foobar</code> is a single parameter.</li>
-<li>expanding arrays <code>${array[42]}</code></li>
-<li>expanding positional parameters beyond 9 <code>$8 $9 ${10}</code></li>
-</ul>
-
-<p><code>{}</code> is called <em>brace expansion</em>, <code>${}</code> is called <em>variable expansion</em><br/>
-<a href="http://stackoverflow.com/questions/8748831/when-do-we-need-curly-braces-in-variables-using-bash">Reference Post</a>  </p>
-
-<h1 id="toc_1">nohup to a different file</h1>
-
-<pre><code class="language-bash">nohup some_command &gt; nohup_file.out 2&gt;&amp;1 &amp;
-</code></pre>
-
-<p>in which <code>2&gt;&amp;1</code> means <font color='red'>redirect <code>stderr</code> to the same output as <code>stdout</code></font>.  </p>
-
-<h1 id="toc_2">Append multiple lines to a file</h1>
-
-<p>Using a <em>eoi</em> (end of input) symbol for multiple lines</p>
-
-<pre><code class="language-bash">cat &lt;&lt;EOI &gt;&gt; file
-multiple lines
-input here
-EOI
-</code></pre>
-
-<p>in which, the <code>&lt;&lt;EOI</code> is registering a special symbol marking the end of input, which should be in a line by itself; the <code>&gt;&gt; file</code> means it is <font color='red'>append</font> to the file.</p>
-
-<h1 id="toc_3">copy from bash shell to clipboard</h1>
-
-<p>On mac, it is super easy: <code>pbcopy</code> and <code>pbpaste</code>.  </p>
-
-<pre><code class="language-bash">cat ~/.bashrc | pbcopy
-</code></pre>
-
-<p>After that command content of the <code>~/.bashrc</code> file will be available for pasting with <code>cmd+v</code> shortcut.</p>
-
-<h1 id="toc_4">Hadoop hdfs get all except one folder (file)</h1>
-
-<p>As noted before, Hadoop use its own <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">glob</a>. to do the pattern matching for file name and paths.</p>
-
-<pre><code class="language-bash">$ hls alibaba/ipstats/
-Found 8 items
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:36 alibaba/ipstats/IP
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/acookie_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/avg_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_acookie_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_day
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/tot_umid_cnt
-drwxr-xr-x   - yu hdfs          0 2016-09-09 21:38 alibaba/ipstats/umid_day  
-
-$ hdfs dfs -get alibaba/ipstats/[^I]*
-</code></pre>
-
-<p>The command gets all folders except for <code>alibaba/ipstats/IP</code>  </p>
-
-<h1 id="toc_5">Hadoop hdfs / bash get matched folders</h1>
-
-<p>This works both on bash and hadoop hdfs</p>
-
-<p>Below is the HDFS folder:</p>
-
-<pre><code class="language-bash">Found 6 items
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/FP
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/TP
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:38 alibaba/graph/stats/UNKNOWN
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/cluster-size-histo
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:19 alibaba/graph/stats/coverage
-drwxr-xr-x   - zwang hdfs          0 2016-09-30 00:45 alibaba/graph/stats/stats
-</code></pre>
-
-<p>Need get the folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code></p>
-
-<pre><code class="language-bash">hdfs dfs -get alibaba/graph/stats/[cs]*
-</code></pre>
-
-<p>Now local folder:</p>
-
-<pre><code class="language-bash">total 8
-drwxrwxr-x 2 yu yu 43 Sep 30 19:37 cluster-size-histo
-drwxrwxr-x 2 yu yu 43 Sep 30 19:37 coverage
--rw-rw-r-- 1 yu yu  9 Sep 30 19:28 FP_cnt
-drwxrwxr-x 2 yu yu 43 Sep 30 19:37 stats
--rw-rw-r-- 1 yu yu  7 Sep 30 19:29 TP_cnt
-</code></pre>
-
-<p>Need delete folders of <code>cluster-size-histo</code>, <code>coverage</code> and <code>stats</code>:</p>
-
-<pre><code class="language-bash">rm -rf [cs]*
-</code></pre>
-
-<h1 id="toc_6">check file encoding</h1>
-
-<pre><code class="language-bash">file -I filename
-</code></pre>
-
-<p>The output is in format of: <code>/Path/To/Filename: fileformat/filetype; charset=encoding</code>. For example:  </p>
-
-<pre><code class="language-bash">file -I Base.pig
-Base.pig: application/octet-stream; charset=binary
-</code></pre>
-
-<h1 id="toc_7">du without recursion</h1>
-
-<p>only want to see the whole folder&#39;s disk usage, not the details of its sub-folders.  </p>
-
-<pre><code class="language-bash">du -s -h *
-</code></pre>
-
-<p><code>-s</code>: no recursion<br/>
-<code>-h</code>: human readable</p>
-
-<h1 id="toc_8">checking running job and argument</h1>
-
-<p>the following commands works well:</p>
-
-<pre><code class="language-bash">top -U [username]
-ps -u [username] # My most used one
-ps -efl | grep &lt;username&gt; # get all the arguments
-ps -efl | grep &lt;command name&gt;  
-
-ps -efl | egrep &#39;\s+yu\s+&#39;
-</code></pre>
-
-<h1 id="toc_9">grep find negate</h1>
-
-<p>negative matching, i.e. match lines that do not contain pattern</p>
-
-<pre><code class="language-bash">grep -v [pattern] 
-# -v, --invert-match select non-matching lines
-</code></pre>
-
-<h1 id="toc_10">grep find text in all files under a folder and all of its subfolders</h1>
-
-<pre><code class="language-bash">grep -r -l -F -n -i -I &quot;string&quot; /path
-</code></pre>
-
-<p>in which:<br/>
-<code>-r</code> is for recursive<br/>
-<code>-l</code> is for showing the file name only (stop reading the file as soon as the string is find)<br/>
-<code>-F</code> is searching for literal &quot;fixed string&quot;, not regexp<br/>
-<code>-n</code> is printing the line number<br/>
-<code>-i</code> is case-insensitive<br/>
-<code>-I</code> is ignore binary files<br/>
-Also there are:<br/>
-<code>--exclude-dir=dir</code> is useful for excluding directories like .svn and .git</p>
-
-<hr/>
+<li>Jump to previous location (navigate back):
 
 <ul>
-<li>
-<a href="#toc_0">Using curly braces in Bash substitution</a>
-</li>
-<li>
-<a href="#toc_1">nohup to a different file</a>
-</li>
-<li>
-<a href="#toc_2">Append multiple lines to a file</a>
-</li>
-<li>
-<a href="#toc_3">copy from bash shell to clipboard</a>
-</li>
-<li>
-<a href="#toc_4">Hadoop hdfs get all except one folder (file)</a>
-</li>
-<li>
-<a href="#toc_5">Hadoop hdfs / bash get matched folders</a>
-</li>
-<li>
-<a href="#toc_6">check file encoding</a>
-</li>
-<li>
-<a href="#toc_7">du without recursion</a>
-</li>
-<li>
-<a href="#toc_8">checking running job and argument</a>
-</li>
-<li>
-<a href="#toc_9">grep find negate</a>
-</li>
-<li>
-<a href="#toc_10">grep find text in all files under a folder and all of its subfolders</a>
-</li>
+<li>cmd + [</li>
+<li>cmd + ]</li>
+</ul></li>
+<li> </li>
 </ul>
-
 
 ]]></content>
   </entry>
@@ -748,6 +1345,18 @@ Also there are:<br/>
 </li>
 <li>
 <a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
+</li>
+<li>
+<a href="#toc_21">Parameter Substitution in Pig</a>
+</li>
+<li>
+<a href="#toc_22">SUBSTRING function</a>
+</li>
+<li>
+<a href="#toc_23">Nested FOREACH</a>
+</li>
+<li>
+<a href="#toc_24">Function are allowed inside FOREACH</a>
 </li>
 </ul>
 
@@ -1024,6 +1633,73 @@ output_to_LP_m0 = FOREACH (GROUP pairs_bucketized ALL) {
 
 <p>But I have also pretty good code using <code>Over</code>, <code>Stitch</code>, <code>ORDER BY</code> to implement cumsum as shown above.</p>
 
+<h1 id="toc_21">Parameter Substitution in Pig</h1>
+
+<p>Official documentation <a href="http://wiki.apache.org/pig/ParameterSubstitution">here</a></p>
+
+<h1 id="toc_22">SUBSTRING function</h1>
+
+<p>It is does not include the second index position<br/>
+<code>SUBSTRING(string, startIndex, stopIndex)</code>, <code>startIndex</code> starts from <code>0</code>, and <code>stopIndex</code> is not included.<br/><br/>
+Given a field named <code>alpha</code> whose value is <code>ABCDEF</code>, to return substring <code>BCD</code> use this statement: <code>SUBSTRING(alpha,1,4)</code>. Note that <code>1</code> is the index of <code>B</code> (the first character of the substring) and <code>4</code> is the index of <code>E</code> (the character <strong>following</strong> the last character of the substring).</p>
+
+<p>Note that the description is different in the official documents both for Pig 0.12:<br/>
+* <a href="https://pig.apache.org/docs/r0.12.0/func.html#substring">Correct official document</a> <br/>
+* <a href="https://pig.apache.org/docs/r0.12.0/api/org/apache/pig/builtin/SUBSTRING.html">Wrong official document</a></p>
+
+<h1 id="toc_23">Nested FOREACH</h1>
+
+<ol>
+<li>Allowed operation are <code>CROSS</code>, <code>DISTINCT</code>, <code>FILTER</code>, <code>FOREACH</code>, <code>LIMIT</code>, <code>ORDER BY</code>, and Project operation. <a href="http://pig.apache.org/docs/r0.15.0/basic.html#foreach">Official Document</a></li>
+<li><code>SPLIT</code> does not work inside nested FOREACH</li>
+</ol>
+
+<h1 id="toc_24">Function are allowed inside FOREACH</h1>
+
+<p><a href="http://stackoverflow.com/a/26996221/4229125">an example of using <code>SUM</code> inside FOREACH from stackoverflow</a>  </p>
+
+<pre><code class="language-sql">file = LOAD &#39;input.txt&#39; USING PigStorage() AS (type: chararray, year: chararray,
+match_count: float, volume_count: float);
+grouped = GROUP file BY type;
+group_operat = FOREACH grouped {
+                                 sum_m = SUM(file.match_count);
+                                 sum_v = SUM(file.volume_count);
+                                 GENERATE group,(float)(sum_m/sum_v) as sum_mv;
+                                }
+</code></pre>
+
+<p>Lesson learned: Do not use 2 levels of <code>FOREACH</code> if it is not absolutely necessary.</p>
+
+<p>Wrong </p>
+
+<pre><code class="language-sql">acookie_log_input = LOAD &#39;$INPUT_ACOOKIE&#39; USING LzoPigStorage()
+                       AS (acookie:chararray, ip:chararray, time_stamp:DateTime, useragent:chararray, browser:chararray,
+                           os:chararray, url:chararray, province:chararray, acookie_daily_tag:chararray,
+                           url_catelevel1:chararray, url_catelevel2:chararray, date:DateTime);
+acookie_log_input_m0 = FOREACH acookie_log_input GENERATE acookie AS acookie, SUBSTRING(province, 0, 2) AS province:chararray;
+acookie_log_input_m1 = FILTER acookie_log_input_m0 BY province IS NOT NULL;
+acookie_log_input_m2 = FOREACH (GROUP acookie_log_input_m1 BY (acookie, province)) GENERATE FLATTEN(group) AS (acookie, province),
+                        COUNT(acookie_log_input_m1) AS acookie_province_cnt;
+-- Does not work from here
+acookie_province = FOREACH (GROUP acookie_log_input_m2 BY acookie) {
+                    total_cnt = SUM(acookie_log_input_m2.acookie_province_cnt);
+                    normalized = FOREACH acookie_log_input_m2 GENERATE (int) (acookie_province_cnt * 100 / total_cnt) AS hist:int;
+                    sorted = ORDER normalized BY hist DESC;
+                    GENERATE group AS acookie, BagToString(sorted.hist) AS hist:chararray;};
+</code></pre>
+
+<p>Correct</p>
+
+<pre><code class="language-sql">acookie_province_m0 = FOREACH (GROUP acookie_log_input_m2 BY acookie) {
+                    total_cnt = SUM(acookie_log_input_m2.acookie_province_cnt);
+                    GENERATE group AS acookie, FLATTEN(acookie_log_input_m2.acookie_province_cnt) AS (acookie_province_cnt),
+                    total_cnt AS total_cnt;};
+acookie_province_m1 = FOREACH acookie_province_m0 GENERATE acookie AS acookie, (int) (acookie_province_cnt*100/total_cnt) AS hist:int;
+acookie_province = FOREACH (GROUP acookie_province_m1 BY acookie) {
+                    sorted = ORDER acookie_province_m1 BY hist DESC;
+                    GENERATE group AS acookie, BagToString(sorted.hist) AS hist:chararray;};
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -1090,6 +1766,18 @@ output_to_LP_m0 = FOREACH (GROUP pairs_bucketized ALL) {
 <li>
 <a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
 </li>
+<li>
+<a href="#toc_21">Parameter Substitution in Pig</a>
+</li>
+<li>
+<a href="#toc_22">SUBSTRING function</a>
+</li>
+<li>
+<a href="#toc_23">Nested FOREACH</a>
+</li>
+<li>
+<a href="#toc_24">Function are allowed inside FOREACH</a>
+</li>
 </ul>
 
 
@@ -1097,176 +1785,107 @@ output_to_LP_m0 = FOREACH (GROUP pairs_bucketized ALL) {
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[giraph]]></title>
-    <link href="www.echo-ohce.com/14742423250614.html"/>
+    <title type="html"><![CDATA[technical analysis]]></title>
+    <link href="www.echo-ohce.com/14742423250761.html"/>
     <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250614.html</id>
+    <id>www.echo-ohce.com/14742423250761.html</id>
     <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+<p>This documents my learning of stock technical analysis, keep updating.</p>
 
 <span id="more"></span><!-- more -->
 
 <ul>
 <li>
-<a href="#toc_0">Kill the background job</a>
+<a href="#toc_0">python packages to use</a>
 </li>
 <li>
-<a href="#toc_1">giraph Unit testing</a>
+<a href="#toc_1">python notebook extra setting</a>
 </li>
 <li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
+<a href="#toc_2">Some good blogs</a>
 </li>
 <li>
-<a href="#toc_3">giraph shell runner / command line</a>
+<a href="#toc_3">Using tushare to get historical data</a>
 </li>
 <li>
-<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+<a href="#toc_4">Using pandas and yahoo is a better choice of getting daily data</a>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Kill the background job</h1>
+<h1 id="toc_0">python packages to use</h1>
 
-<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+<ol>
+<li>zipline - for testing framework</li>
+<li>tushare - for chinese stock market data</li>
+<li><a href="https://github.com/mrjbq7/ta-lib">talib</a> - for indicators and functions. The official document is <a href="https://mrjbq7.github.io/ta-lib/doc_index.html">here</a></li>
+</ol>
 
-<pre><code class="language-bash">ps -u yu
-hadoop job -list | grep yu
+<h1 id="toc_1">python notebook extra setting</h1>
+
+<pre><code class="language-python">import zipline as zp
+import tushare as ts
+ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf60&#39;) # use your own free api key
 </code></pre>
 
-<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+<h1 id="toc_2">Some good blogs</h1>
 
-<pre><code class="language-bash">ps --pid pid#
-</code></pre>
+<ol>
+<li><a href="http://pythontrader.blogspot.com">使用Python語言開發「程式交易」系統</a></li>
+<li><a href="http://tradingwithpython.blogspot.com">Trading with Python</a></li>
+</ol>
 
-<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
-
-<pre><code class="language-bash">yarn application -appStates RUNNING -list
-</code></pre>
-
-<h1 id="toc_1">giraph Unit testing</h1>
+<h1 id="toc_3">Using tushare to get historical data</h1>
 
 <ul>
-<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
-<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
-<li>the testing string input delimiter should always be <code>space</code> even in reality we can use all kinds of delimiter like <code>\t</code> etc.</li>
+<li>A good <a href="http://www.360doc.com/content/16/0213/20/7249274_534357168.shtml">post</a> to quick check.</li>
+<li>The stock codename in ts may be different than normal stock software.</li>
+<li>to get the shanghai and shenzhen index use the following code example</li>
 </ul>
 
-<p><strong>wrong</strong></p>
-
-<pre><code class="language-java">// tab &#39;\t&#39; delimited
-String[] edges = new String[] { &quot;0  1&quot;, &quot;0  3&quot;, &quot;1  0&quot;, &quot;1  3&quot;, &quot;1  2&quot;};
+<pre><code class="language-python">sh_index=ts.get_hist_data(&#39;sh&#39;)
+sz_index=ts.get_hist_data(&#39;sz&#39;)
 </code></pre>
 
-<p><strong>correct</strong></p>
+<h1 id="toc_4">Using pandas and yahoo is a better choice of getting daily data</h1>
 
-<pre><code class="language-java">// space delimited
-String[] edges = new String[] { &quot;0 1&quot;, &quot;0 3&quot;, &quot;1 0&quot;, &quot;1 3&quot;, &quot;1 2&quot;};
+<p>tushare is not very stable, it is slow. It also has 3 years limitation.<br/><br/>
+For using pandas and yahoo, these are resources:</p>
+
+<ul>
+<li><a href="https://yongle.gitbooks.io/data-science/content/note/4pandas/yahoo.html">A good post</a></li>
+<li><a href="http://pandas-datareader.readthedocs.io/en/latest/">official docs</a></li>
+<li><a href="http://jxyyjm.lofter.com/post/1d11b81d_7bbbc16">股票数据接口的小结</a></li>
+</ul>
+
+<p>如果要获取沪深股市信息股票名称格式如下：<br/>
+上海：股票代码.SS<br/>
+深圳：股票代码.SZ</p>
+
+<pre><code class="language-python">import pandas_datareader.data as web
+
+daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39;, &#39;2016-01-01&#39;)
 </code></pre>
-
-<h1 id="toc_2">giraph edge value not Mutable in place</h1>
-
-<p>edges are just a reference, it can not be changed in place.<br/>
-After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
-
-<h1 id="toc_3">giraph shell runner / command line</h1>
-
-<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
-
-<pre><code class="language-bash">WORKER=177
-MEM=5120
-HEAP=4352
-#zoo keeper
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
-
-hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
-        com.adsymp.dpp.giraph.lp.LPRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dmapreduce.map.memory.mb=$MEM \
-        -Dmapreduce.task.timeout=1800000 \
-        -Dmapred.task.timeout=1800000 \
-        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
-        -Dgiraph.zkList=$ZKLIST \
-        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
-        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
-        -ca giraph.textAggregatorWriter.frequency=1 \
-        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
-        -vip $ADJ \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op $OUT \
-        -w $WORKER -ca giraph.SplitMasterWorker=true \
-        -ca giraph.zkSessionMsecTimeout=360000 \
-        -ca giraph.zkOpsMaxAttempts=20 \
-        -ca giraph.zkOpsRetryWaitMsecs=10000 \
-        -ca mapred.job.tracker=sc2-rm1:8088 \
-        -ca mapreduce.job.tracker=sc2-rm1:8088 \
-        -ca com.adsymp.giraph.max.cd=8 \
-        -ca giraph.waitingRequestMsecs=300000 \
-        -ca com.adsymp.giraph.max.cc=100 \
-        -ca com.adsymp.giraph.max.dd=8 \
-        -ca com.adsymp.giraph.max.degree=80 \
-        -ca com.adsymp.giraph.ignore.dev.types=false \
-        -ca com.adsymp.giraph.weight.threshold=0.4 \
-        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
-        -ca mapred.job.queue.name=datascience \
-        -ca mapred.output.compress=true \
-        -ca mapred.task.timeout=1800004 \
-        -ca mapreduce.map.memory.mb=$MEM \
-        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
-</code></pre>
-
-<p>Couple important points:<br/>
-1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
-2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
-3. The zookeeper list after the line of the Computation class is a must!  </p>
-
-<p>This one file is for running giraph with jython:  </p>
-
-<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
-ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
-
-yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
-        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
-        -Dmapred.job.queue.name=datascience \
-        -Dgiraph.zkList=$ZKLIST \
-        graph-distance.py \
-        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
-        --jythonClass GraphDistance \
-        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
-        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
-        -eip giraph-jython/input/tiny_graph \
-        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
-        -op giraph-jython/output \
-        -w 1 \
-        -ca giraph.SplitMasterWorker=false
-</code></pre>
-
-<h1 id="toc_4">Unsolved problem with the input string split in InputFormat class</h1>
-
-<p>My input file is delimited by <code>^A</code> (i.e.<code>\u0001</code>). Tried to change the <code>LongNullTextEdgeInputFormat.LongNullTextEdgeReader#preprocessLine</code> for splitting by <code>\u0001</code>. Failed.</p>
-
-<p>Temporary workaround is wrote another pig script to convert the input file schema.</p>
 
 <hr/>
 
 <ul>
 <li>
-<a href="#toc_0">Kill the background job</a>
+<a href="#toc_0">python packages to use</a>
 </li>
 <li>
-<a href="#toc_1">giraph Unit testing</a>
+<a href="#toc_1">python notebook extra setting</a>
 </li>
 <li>
-<a href="#toc_2">giraph edge value not Mutable in place</a>
+<a href="#toc_2">Some good blogs</a>
 </li>
 <li>
-<a href="#toc_3">giraph shell runner / command line</a>
+<a href="#toc_3">Using tushare to get historical data</a>
 </li>
 <li>
-<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+<a href="#toc_4">Using pandas and yahoo is a better choice of getting daily data</a>
 </li>
 </ul>
 
@@ -1787,85 +2406,6 @@ the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tr
 </li>
 <li>
 <a href="#toc_7">discard unstaged changes in Git</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[maven]]></title>
-    <link href="www.echo-ohce.com/14742423250660.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250660.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">build jar include dependencies</a>
-</li>
-<li>
-<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">build jar include dependencies</h1>
-
-<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
-
-<pre><code class="language-xml">&lt;build&gt;
-   &lt;plugins&gt;
-       &lt;plugin&gt;
-           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-           &lt;configuration&gt;
-               &lt;descriptorRefs&gt;
-                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-               &lt;/descriptorRefs&gt;
-           &lt;/configuration&gt;
-       &lt;/plugin&gt;
-   &lt;/plugins&gt;
-&lt;/build&gt;
-</code></pre>
-
-<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
-
-<p>the maven command to run is:  </p>
-
-<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
-</code></pre>
-
-<h1 id="toc_1">hadoop-common, hadoop-core, hadoop-client</h1>
-
-<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
-
-<p>To help provide some additional details regarding the differences between Hadoop-common, Hadoop-core and Hadoop-client, from a high-level perspective:</p>
-
-<ul>
-<li>Hadoop-common refers to the commonly used utilities and libraries that support the Hadoop modules.</li>
-<li>Hadoop-core is the same as Hadoop-common; It was renamed to Hadoop-common in July 2009.</li>
-<li>Hadoop-client refers to the client libraries used to communicate with Hadoop&#39;s common components (HDFS, MapReduce, YARN) including but not limited to logging and codecs for example.</li>
-</ul>
-
-<p>Generally speaking, for developers who build apps that submit to YARN, run a MR job, or access files from HDFS use Hadoop-client libraries.</p>
-
-<p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">build jar include dependencies</a>
-</li>
-<li>
-<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
 </li>
 </ul>
 

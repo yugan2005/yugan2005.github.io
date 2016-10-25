@@ -96,6 +96,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
 </li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
+</li>
 </ul>
 
 
@@ -143,6 +146,20 @@ $(document).ready(function(event) {
 
 <p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
 
+<h1 id="toc_2">Maven build skip Test compilation</h1>
+
+<p><code>-DskipTests</code> just skips the test execution: the tests are still compiled.<br/>
+<code>-Dmaven.test.skip</code> skips both compilation and execution of the tests.</p>
+
+<p>I need this because I have .gitignore of all the test folders.</p>
+
+<p>This is the command to be used:</p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -Dmaven.test.skip
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/2593834/4229125">stackoverflow post</a></p>
+
 <hr/>
 
 <ul>
@@ -151,6 +168,9 @@ $(document).ready(function(event) {
 </li>
 <li>
 <a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
 </li>
 </ul>
 
@@ -202,12 +222,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250638.html" 
-	        title="Previous Post: git">&laquo; git</a>
+	        <a class="basic-alignment left" href="14773416332741.html" 
+	        title="Previous Post: Graphviz Dot">&laquo; Graphviz Dot</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250782.html" 
-	        title="Next Post: vim">vim &raquo;</a>
+	        <a class="basic-alignment right" href="14770727250961.html" 
+	        title="Next Post: Advanced Analytics with Spark Reading Notes">Advanced Analytics with Spark Reading Notes &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -220,14 +240,14 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(8)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
 	        
 	        
 	        
 	      </li>
 	  
 	      <li class="post">
-	        <a href="documentation.html"><strong>documentation&nbsp;(2)</strong></a>
+	        <a href="documentation.html"><strong>documentation&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -262,13 +282,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14773416332741.html">Graphviz Dot</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
 		      </li>
 	     
 	  
@@ -280,15 +306,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  
 	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
+	  
+	      
+	  
+	      
+	  
+	      
 	  
 	      
 	  

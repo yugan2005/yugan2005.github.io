@@ -102,6 +102,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_3">Using tushare to get historical data</a>
 </li>
+<li>
+<a href="#toc_4">Using pandas and yahoo is a better choice of getting daily data</a>
+</li>
 </ul>
 
 
@@ -141,6 +144,26 @@ ts.set_token(&#39;ef0f57f6c63416271c140912cb1e2bf58e1580f1aa5147efa19538085b21cf
 sz_index=ts.get_hist_data(&#39;sz&#39;)
 </code></pre>
 
+<h1 id="toc_4">Using pandas and yahoo is a better choice of getting daily data</h1>
+
+<p>tushare is not very stable, it is slow. It also has 3 years limitation.<br/><br/>
+For using pandas and yahoo, these are resources:</p>
+
+<ul>
+<li><a href="https://yongle.gitbooks.io/data-science/content/note/4pandas/yahoo.html">A good post</a></li>
+<li><a href="http://pandas-datareader.readthedocs.io/en/latest/">official docs</a></li>
+<li><a href="http://jxyyjm.lofter.com/post/1d11b81d_7bbbc16">股票数据接口的小结</a></li>
+</ul>
+
+<p>如果要获取沪深股市信息股票名称格式如下：<br/>
+上海：股票代码.SS<br/>
+深圳：股票代码.SZ</p>
+
+<pre><code class="language-python">import pandas_datareader.data as web
+
+daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39;, &#39;2016-01-01&#39;)
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -155,6 +178,9 @@ sz_index=ts.get_hist_data(&#39;sz&#39;)
 </li>
 <li>
 <a href="#toc_3">Using tushare to get historical data</a>
+</li>
+<li>
+<a href="#toc_4">Using pandas and yahoo is a better choice of getting daily data</a>
 </li>
 </ul>
 
@@ -206,12 +232,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250719.html" 
-	        title="Previous Post: python">&laquo; python</a>
+	        <a class="basic-alignment left" href="14742423250700.html" 
+	        title="Previous Post: pig">&laquo; pig</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250478.html" 
-	        title="Next Post: bash">bash &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250588.html" 
+	        title="Next Post: giraph with jython">giraph with jython &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -224,14 +250,14 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(8)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
 	        
 	        
 	        
 	      </li>
 	  
 	      <li class="post">
-	        <a href="documentation.html"><strong>documentation&nbsp;(2)</strong></a>
+	        <a href="documentation.html"><strong>documentation&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -266,13 +292,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14773416332741.html">Graphviz Dot</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
 		      </li>
 	     
 	  
@@ -284,15 +316,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  
 	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
+	  
+	      
+	  
+	      
+	  
+	      
 	  
 	      
 	  
