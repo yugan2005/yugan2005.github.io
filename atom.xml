@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2016-10-06T15:42:17-07:00</updated>
+  <updated>2016-10-24T23:19:11-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,207 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Advanced Analytics with Spark Reading Notes]]></title>
+    <link href="www.echo-ohce.com/14770727250961.html"/>
+    <updated>2016-10-21T10:58:45-07:00</updated>
+    <id>www.echo-ohce.com/14770727250961.html</id>
+    <content type="html"><![CDATA[
+<p>This documents the reading notes of this book. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Chapter 1</a>
+<ul>
+<li>
+<a href="#toc_1">Start REPL</a>
+</li>
+<li>
+<a href="#toc_2">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_3">Inside REPL Follow along</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Chapter 1</h1>
+
+<h2 id="toc_1">Start REPL</h2>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client
+
+# this works on dblab
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+</code></pre>
+
+<h2 id="toc_2">Quick tricks to use</h2>
+
+<ol>
+<li>help: <code>:help</code></li>
+<li>history / find the variable or function name: <code>:history</code> or <code>:h?</code></li>
+<li>paste code: <code>:paste</code></li>
+</ol>
+
+<h2 id="toc_3">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
+rawblocks.first
+val head = rawblocks.take(10)
+head.length
+head foreach println
+
+def isHeader(line:String):Boolean =
+    line.contains(&quot;id_1&quot;)
+
+head filterNot isHeader foreach println
+head filter (ele =&gt; ! isHeader(ele)) foreach println
+head filter (!isHeader(_)) foreach println
+
+// Note that spark RDD does not have filterNot method
+val noheader = rawblocks filter (!isHeader(_))
+
+def toDouble(token:String):Double = {
+    if (token.equals(&quot;?&quot;)) Double.NaN;
+    else token.toDouble;}
+    
+val line = head(5)
+
+def parse(line:String):(Int, Int, Array[Double], Boolean) = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    (id1, id2, scores, matched)}
+
+val tup = parse(line)
+
+case class MatchData(id1:Int, id2:Int, scores:Array[Double], matched:Boolean);
+
+def parse(line:String):MatchData = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    MatchData(id1, id2, scores, matched)}
+    
+
+val parsed = rawblocks filter (!isHeader(_)) map parse;
+parsed.cache()
+
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[maven]]></title>
+    <link href="www.echo-ohce.com/14742423250660.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250660.html</id>
+    <content type="html"><![CDATA[
+<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">build jar include dependencies</h1>
+
+<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
+
+<pre><code class="language-xml">&lt;build&gt;
+   &lt;plugins&gt;
+       &lt;plugin&gt;
+           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+           &lt;configuration&gt;
+               &lt;descriptorRefs&gt;
+                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
+               &lt;/descriptorRefs&gt;
+           &lt;/configuration&gt;
+       &lt;/plugin&gt;
+   &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
+
+<p>the maven command to run is:  </p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
+</code></pre>
+
+<h1 id="toc_1">hadoop-common, hadoop-core, hadoop-client</h1>
+
+<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
+
+<p>To help provide some additional details regarding the differences between Hadoop-common, Hadoop-core and Hadoop-client, from a high-level perspective:</p>
+
+<ul>
+<li>Hadoop-common refers to the commonly used utilities and libraries that support the Hadoop modules.</li>
+<li>Hadoop-core is the same as Hadoop-common; It was renamed to Hadoop-common in July 2009.</li>
+<li>Hadoop-client refers to the client libraries used to communicate with Hadoop&#39;s common components (HDFS, MapReduce, YARN) including but not limited to logging and codecs for example.</li>
+</ul>
+
+<p>Generally speaking, for developers who build apps that submit to YARN, run a MR job, or access files from HDFS use Hadoop-client libraries.</p>
+
+<p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_2">Maven build skip Test compilation</h1>
+
+<p><code>-DskipTests</code> just skips the test execution: the tests are still compiled.<br/>
+<code>-Dmaven.test.skip</code> skips both compilation and execution of the tests.</p>
+
+<p>I need this because I have .gitignore of all the test folders.</p>
+
+<p>This is the command to be used:</p>
+
+<pre><code class="language-bash">mvn clean package assembly:single -Dmaven.test.skip
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/2593834/4229125">stackoverflow post</a></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">build jar include dependencies</a>
+</li>
+<li>
+<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+</li>
+<li>
+<a href="#toc_2">Maven build skip Test compilation</a>
+</li>
+</ul>
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Graphviz Dot]]></title>
@@ -119,207 +320,6 @@
 <h1 id="toc_5">Maybe better alternative</h1>
 
 <p>For small one time use graph, maybe use <code>Omnigraffle</code> is a much better choice.</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[maven]]></title>
-    <link href="www.echo-ohce.com/14742423250660.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250660.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">build jar include dependencies</a>
-</li>
-<li>
-<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
-</li>
-<li>
-<a href="#toc_2">Maven build skip Test compilation</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">build jar include dependencies</h1>
-
-<p>For the <code>pom.xml</code> use the <code>maven-assembly-plugin</code>. The lines with respect to this plugin is like follow:  </p>
-
-<pre><code class="language-xml">&lt;build&gt;
-   &lt;plugins&gt;
-       &lt;plugin&gt;
-           &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-           &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-           &lt;configuration&gt;
-               &lt;descriptorRefs&gt;
-                   &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-               &lt;/descriptorRefs&gt;
-           &lt;/configuration&gt;
-       &lt;/plugin&gt;
-   &lt;/plugins&gt;
-&lt;/build&gt;
-</code></pre>
-
-<p>The import line is <code>&lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</code>. This means to include and pack all dependencies into the project jar.</p>
-
-<p>the maven command to run is:  </p>
-
-<pre><code class="language-bash">mvn clean package assembly:single -DskipTests
-</code></pre>
-
-<h1 id="toc_1">hadoop-common, hadoop-core, hadoop-client</h1>
-
-<p>In order to build a Hadoop map-reduce application you need only hadoop client dependency. (Use new API). Dependencies like hadoop-hdfs,hadoop-common,hadoop-clientapp,hadoop-yarn-api are resolved from this.</p>
-
-<p>To help provide some additional details regarding the differences between Hadoop-common, Hadoop-core and Hadoop-client, from a high-level perspective:</p>
-
-<ul>
-<li>Hadoop-common refers to the commonly used utilities and libraries that support the Hadoop modules.</li>
-<li>Hadoop-core is the same as Hadoop-common; It was renamed to Hadoop-common in July 2009.</li>
-<li>Hadoop-client refers to the client libraries used to communicate with Hadoop&#39;s common components (HDFS, MapReduce, YARN) including but not limited to logging and codecs for example.</li>
-</ul>
-
-<p>Generally speaking, for developers who build apps that submit to YARN, run a MR job, or access files from HDFS use Hadoop-client libraries.</p>
-
-<p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
-
-<h1 id="toc_2">Maven build skip Test compilation</h1>
-
-<p><code>-DskipTests</code> just skips the test execution: the tests are still compiled.<br/>
-<code>-Dmaven.test.skip</code> skips both compilation and execution of the tests.</p>
-
-<p>I need this because I have .gitignore of all the test folders.</p>
-
-<p>This is the command to be used:</p>
-
-<pre><code class="language-bash">mvn clean package assembly:single -Dmaven.test.skip
-</code></pre>
-
-<p><a href="http://stackoverflow.com/a/2593834/4229125">stackoverflow post</a></p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">build jar include dependencies</a>
-</li>
-<li>
-<a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
-</li>
-<li>
-<a href="#toc_2">Maven build skip Test compilation</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Advanced Analytics with Spark Reading Notes]]></title>
-    <link href="www.echo-ohce.com/14770727250961.html"/>
-    <updated>2016-10-21T10:58:45-07:00</updated>
-    <id>www.echo-ohce.com/14770727250961.html</id>
-    <content type="html"><![CDATA[
-<p>This documents the reading notes of this book. Keep updating.  </p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">Chapter 1</a>
-<ul>
-<li>
-<a href="#toc_1">Start REPL</a>
-</li>
-<li>
-<a href="#toc_2">Quick tricks to use</a>
-</li>
-<li>
-<a href="#toc_3">Inside REPL Follow along</a>
-</li>
-</ul>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">Chapter 1</h1>
-
-<h2 id="toc_1">Start REPL</h2>
-
-<pre><code class="language-bash"># this works on hlab
-spark-shell --master yarn-client
-
-# this works on dblab
-/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
-</code></pre>
-
-<h2 id="toc_2">Quick tricks to use</h2>
-
-<ol>
-<li>help: <code>:help</code></li>
-<li>history / find the variable or function name: <code>:history</code> or <code>:h?</code></li>
-<li>paste code: <code>:paste</code></li>
-</ol>
-
-<h2 id="toc_3">Inside REPL Follow along</h2>
-
-<pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
-rawblocks.first
-val head = rawblocks.take(10)
-head.length
-head foreach println
-
-def isHeader(line:String):Boolean =
-    line.contains(&quot;id_1&quot;)
-
-head filterNot isHeader foreach println
-head filter (ele =&gt; ! isHeader(ele)) foreach println
-head filter (!isHeader(_)) foreach println
-
-// Note that spark RDD does not have filterNot method
-val noheader = rawblocks filter (!isHeader(_))
-
-def toDouble(token:String):Double = {
-    if (token.equals(&quot;?&quot;)) Double.NaN;
-    else token.toDouble;}
-    
-val line = head(5)
-
-def parse(line:String):(Int, Int, Array[Double], Boolean) = {
-    val tokens = line split (&#39;,&#39;);
-    val id1 = tokens(0).toInt;
-    val id2 = tokens(1).toInt;
-    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
-    val matched = tokens(11).toBoolean;
-    (id1, id2, scores, matched)}
-
-val tup = parse(line)
-
-case class MatchData(id1:Int, id2:Int, scores:Array[Double], matched:Boolean);
-
-def parse(line:String):MatchData = {
-    val tokens = line split (&#39;,&#39;);
-    val id1 = tokens(0).toInt;
-    val id2 = tokens(1).toInt;
-    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
-    val matched = tokens(11).toBoolean;
-    MatchData(id1, id2, scores, matched)}
-    
-
-val parsed = rawblocks filter (!isHeader(_)) map parse;
-parsed.cache()
-
-</code></pre>
 
 ]]></content>
   </entry>
