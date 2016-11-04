@@ -141,6 +141,12 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
 </li>
+<li>
+<a href="#toc_17">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_18">nohup python that includes a nohup shell script</a>
+</li>
 </ul>
 
 
@@ -381,6 +387,59 @@ However, inside tuple, <code>:</code> is not recognized, we have to use <code>sl
 
 <p><a href="https://github.com/pgmpy/pgmpy">github link</a></p>
 
+<h1 id="toc_17">Python blocking and non-blocking subprocess calls</h1>
+
+<p><code>Popen</code> is nonblocking; <code>call</code> and <code>check_call</code> are blocking.<br/><br/>
+<a href="http://stackoverflow.com/a/21936682/4229125">A good stackoverflow post explaining this</a></p>
+
+<h1 id="toc_18">nohup python that includes a nohup shell script</h1>
+
+<ul>
+<li>when using nohup with python, the output will be buffered, in order to see the output in real time using <code>python -u</code> option to turn off the output buffering</li>
+</ul>
+
+<pre><code class="language-bash"># calling the nohup python script like this:
+nohup python -u subprocess_test.py 1&gt;py_nohup.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<ul>
+<li>Do not use <code>nohup</code> inside the python script for calling a shell script. Instead using the <code>Popen</code> with <code>shell=True</code> option, and redirects the stdout to a file.</li>
+</ul>
+
+<p>The following example is located at <code>Dropbox/01-Project/01-Study/playground/py_subprocess_call</code></p>
+
+<p>The python script <code>subprocess_test.py</code>:</p>
+
+<pre><code class="language-python">#!/usr/local/bin/python
+
+from subprocess import Popen;
+from time import sleep, strftime, localtime;
+
+Popen(&#39;./keep_logging.sh 1&gt;shell_logging_out 2&gt;&amp;1&#39;, shell=True)
+
+for i in range(20):
+    print &#39;python logging {:d} time&#39;.format(i)
+    print strftime(&quot;%a %b %d %H:%M:%S PDT %Y&quot;, localtime())
+    sleep(3)
+</code></pre>
+
+<p>The called shell script inside python is <code>keep_logging.sh</code>: </p>
+
+<pre><code class="language-bash">for ((c=1;c&lt;=20 ;c++ ))
+do
+        echo &quot;shell logging $c times&quot;
+        date
+        sleep 3
+done
+</code></pre>
+
+<p>The command of running the python script (in turn running the shell script) is:</p>
+
+<pre><code class="language-bash">nohup python -u subprocess_test.py 1&gt;py_nohup.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>Using <code>tail -f</code> for both logging file <code>shell_logging_out</code> and <code>py_nohup.out</code> shows they are <strong>non-blocking</strong> and the output are in real time.</p>
+
 <hr/>
 
 <ul>
@@ -434,6 +493,12 @@ However, inside tuple, <code>:</code> is not recognized, we have to use <code>sl
 </li>
 <li>
 <a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
+</li>
+<li>
+<a href="#toc_17">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_18">nohup python that includes a nohup shell script</a>
 </li>
 </ul>
 
@@ -489,8 +554,8 @@ var disqus_config = function () {
 	        title="Previous Post: giraph">&laquo; giraph</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14765768181414.html" 
-	        title="Next Post: intellij">intellij &raquo;</a>
+	        <a class="basic-alignment right" href="14773416332741.html" 
+	        title="Next Post: Graphviz Dot">Graphviz Dot &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -557,19 +622,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14773416332741.html">Graphviz Dot</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  

@@ -95,9 +95,14 @@ $(document).ready(function(event) {
 </li>
 <li>
 <a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+<ul>
+<li>
+<a href="#toc_2">Another example just found from giraph jar</a>
+</li>
+</ul>
 </li>
 <li>
-<a href="#toc_2">Maven build skip Test compilation</a>
+<a href="#toc_3">Maven build skip Test compilation</a>
 </li>
 </ul>
 
@@ -146,7 +151,17 @@ $(document).ready(function(event) {
 
 <p><a href="http://stackoverflow.com/a/34229580/4229125">stackoverflow post</a></p>
 
-<h1 id="toc_2">Maven build skip Test compilation</h1>
+<h2 id="toc_2">Another example just found from giraph jar</h2>
+
+<p>Error message like:</p>
+
+<blockquote>
+<p>java.lang.NoSuchMethodError: org.apache.hadoop.ipc.RPC.getServer</p>
+</blockquote>
+
+<p>This is because the <code>pom.xml</code> had <code>hadoop-common</code> dependency, should change to <code>hadoop-client</code></p>
+
+<h1 id="toc_3">Maven build skip Test compilation</h1>
 
 <p><code>-DskipTests</code> just skips the test execution: the tests are still compiled.<br/>
 <code>-Dmaven.test.skip</code> skips both compilation and execution of the tests.</p>
@@ -168,9 +183,14 @@ $(document).ready(function(event) {
 </li>
 <li>
 <a href="#toc_1">hadoop-common, hadoop-core, hadoop-client</a>
+<ul>
+<li>
+<a href="#toc_2">Another example just found from giraph jar</a>
+</li>
+</ul>
 </li>
 <li>
-<a href="#toc_2">Maven build skip Test compilation</a>
+<a href="#toc_3">Maven build skip Test compilation</a>
 </li>
 </ul>
 
@@ -226,8 +246,8 @@ var disqus_config = function () {
 	        title="Previous Post: Advanced Analytics with Spark Reading Notes">&laquo; Advanced Analytics with Spark Reading Notes</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14773416332741.html" 
-	        title="Next Post: Graphviz Dot">Graphviz Dot &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250614.html" 
+	        title="Next Post: giraph">giraph &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -294,19 +314,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14773416332741.html">Graphviz Dot</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  

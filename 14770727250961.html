@@ -104,6 +104,9 @@ $(document).ready(function(event) {
 </li>
 </ul>
 </li>
+<li>
+<a href="#toc_4">Note about the <code>getOrElse()</code> method in the above map:</a>
+</li>
 </ul>
 
 
@@ -176,6 +179,64 @@ def parse(line:String):MatchData = {
 val parsed = rawblocks filter (!isHeader(_)) map parse;
 parsed.cache()
 
+val mds = head filterNot isHeader map parse;
+
+val grouped = mds.groupBy(_.matched);
+
+val matchCounts = parsed.map(_.matched).countByValue()
+val matchCountsSeq = matchCounts.toSeq
+
+import java.lang.Double.isNaN
+
+// Using the stats Action on RDD[Double]
+val stats = for (i &lt;- 0 until 9) yield (parsed map 
+                (_.scores(i)) filter (!isNaN(_)) stats)
+                
+// write and load the NAStatCounter.scala
+:load spark_book/NAStatCounter.scala
+
+// use foldLeft, zip, map to build the stat with missing values
+
+val samp_m0 = rawblocks take 10
+val samp_m1 = samp_m0 filterNot isHeader map parse
+
+val sample = samp_m1.foldLeft(samp_m1.head.scores map (x =&gt; new NAStatCounter())) ((statCounterArry, record) =&gt; statCounterArry zip record.scores map {case (preStatCounter, newScore) =&gt; preStatCounter.add(newScore)})
+// Couple things remember:
+// 1. samp_m1.foldLeft()() is correct, do not use infix here, samp_m1 foldLeft () () is wrong!
+// 2. map {case () =&gt;} is correct, do not use map(case ()=&gt;)
+// 3. Using zip to zip up two arrays, that&#39;s how we get the corresponding foldings
+
+// Note foldLeft is in Scala. In spark use aggregate. Need And the aggregate API is different than scala’s foldLeft. here is a good explaination:
+http://cuipengfei.me/blog/2014/10/31/spark-fold-aggregate-why-not-foldleft/
+
+val statsm = statsWithMissing(parsed filter (_.matched) map (_.scores))
+val statsn = statsWithMissing(parsed filter (!_.matched) map (_.scores))
+
+case class Scored(md : MatchData, score : Double)
+val ct = parsed map (row =&gt; Scored(row, (Seq(2,5,6,7,8) map (idx =&gt; if (row.scores(idx).isNaN) 0 else row.scores(idx))).sum))
+ct.cache()
+
+val allTrue = (ct map (_.md.matched)).countByValue.getOrElse(true, 0).asInstanceOf[Number].doubleValue
+
+val allFalse = (ct map (_.md.matched)).countByValue.getOrElse(false, 0).asInstanceOf[Number].doubleValue
+
+// using different score cut threshold to divide true/false matches
+import breeze.linalg._
+val scoreRange = breeze.linalg.linspace( (ct map (_.score)).min, (ct map (_.score)).max, 5)
+
+val truePositive = scoreRange map (cut =&gt; (ct filter (_.score&gt;cut) map (_.md.matched)).countByValue().getOrElse(true, 0).asInstanceOf[Number].doubleValue)
+
+</code></pre>
+
+<h1 id="toc_4">Note about the <code>getOrElse()</code> method in the above map:</h1>
+
+<p>Because what&#39;s in the map (given by <code>countByValue()</code>) is of type <code>Long</code>, and the default value I gave is of type <code>Int</code>, the <code>getOrElse()</code> method returns the super type for both that is <code>AnyVal</code>.</p>
+
+<p><code>AnyVal</code> has no easy way to cast, so far what I found seems the easiest way is to first convert to type <code>Number</code> then cast to <code>Int</code>. <font color='red'> It can not be convert to type <code>Int</code> directly, otherwise exception will be thrown. </font> </p>
+
+<p>put it all together, for a given map:</p>
+
+<pre><code class="language-scala">val value = map.getOrElse(key, 0).asInstanceOf[Number].doubleValue
 </code></pre>
 
 			</div>
@@ -294,19 +355,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14773416332741.html">Graphviz Dot</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  

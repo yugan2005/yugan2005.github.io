@@ -108,6 +108,31 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_5">giraph log file memory info free/total/max</a>
 </li>
+<li>
+<a href="#toc_6">Giraph Edge and Message memory optimization</a>
+<ul>
+<li>
+<a href="#toc_7">Edge memory management</a>
+</li>
+<li>
+<a href="#toc_8">Message memory management</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_9">Use MessageStore</a>
+</li>
+<li>
+<a href="#toc_10">The memory cost for java classes</a>
+</li>
+<li>
+<a href="#toc_11">Mutate Graph</a>
+<ul>
+<li>
+<a href="#toc_12">When there is a conflict for the mutate request</a>
+</li>
+</ul>
+</li>
 </ul>
 
 
@@ -257,6 +282,129 @@ the maximum amount of memory that the Java virtual machine will attempt to use. 
 the total amount of memory in the Java virtual machine. The value returned by this method may vary over time, depending on the host environment. (Note that the amount of memory required to hold an object of any given type may be implementation-dependent.) <strong>the total amount of memory currently available for current and future objects</strong></li>
 </ul>
 
+<h1 id="toc_6">Giraph Edge and Message memory optimization</h1>
+
+<p>From the book chapter 11:</p>
+
+<blockquote>
+<p>Giraph does some memory management on its own. For instance, it stores some of the data, like edges, messages and vertex values, serialized inside of byte arrays that it allocates at the beginning of the computation. Still, it offers a pure Java object-oriented API. To achieve this abstraction, Giraph keeps a number of objects around, internally called representative objects, which it reinitializes with data coming from these binary arrays before passing them to the user, and which it serializes back to the arrays after the user is done with them. This mechanism is used, for example, for the Iterable containing the messages passed to the compute function, or the default implementation of the OutEdges interface where edges are stored for each vertex.</p>
+</blockquote>
+
+<p>With this said, it is different between edges and messages.</p>
+
+<h2 id="toc_7">Edge memory management</h2>
+
+<p>Edge in its full name should be <code>Edge&lt;I,E&gt;</code> in which <code>I</code> is the vertexID type (which is the vertexIDs that the edge is pointing to, i.e. <code>OutEdges</code>) and <code>E</code> is the edgeValue type. So we need have a data structure that builds the 1-1 corresponds between the pointing-to ID and the corresponding edgeValue.</p>
+
+<p>The naive way of implementing it is just a <code>List&lt;I, E&gt;</code> or <code>Map&lt;I, E&gt;</code>,  the first one only provides iterator but is cheaper, and the second one provides random access efficiently but is more expensive.</p>
+
+<p>Actually, the two different real implementations are: </p>
+
+<ol>
+<li>Provides only Iterable - <code>ByteArrayEdges</code>
+
+<ol>
+<li>Use a reusable <code>edge&lt;I,E&gt;</code> object for iterating all edges </li>
+<li>The underlying data structure is byte array. Every time, it is deserialized (or serialized) to the byte array</li>
+<li>It is already the most memory efficient implementation. The cons are: Not random access, CPU intensive<br/></li>
+</ol></li>
+<li>Provide random access - <code>OpenHashMapOutedges</code>
+
+<ol>
+<li>Can not use byte array anymore, because the edgeValue changes, not fix length of the byte array anymore.</li>
+<li>For each vertex, all the edges are save in one Map, using pointing-to ID as the key, and the edgeValue as the Map value.</li>
+<li>Use <code>fastutil</code> primitive map type.</li>
+<li>Still using a reusable <code>edge&lt;I,E&gt;</code> object for iterating all edges.</li>
+<li>Efficient <code>getEdgeValue</code> and <code>setEdgeValue</code> methods.</li>
+</ol></li>
+</ol>
+
+<p><strong><font color='red'>Special Notes:</font></strong>  </p>
+
+<ul>
+<li>Can I use <code>ByteArrayEdges</code> but instructing the Map inside <code>compute</code> method for fast random access? It has pros and cons. 
+
+<ul>
+<li>Pros: the edges are saved in memory efficient byte arrays for all vertexes. Otherwise, for each vertex, it needs a map. Because in a giraph worker thread, the graph is processed partition after partition, and in a partition, the graph is processed vertex after vertex, so at a single time, for one worker thread, there will be only one map. </li>
+<li>Cons: Stressed on CPU for creating and destroying a lot of maps. Also serialize and deserializes.<br/></li>
+</ul></li>
+<li>Hashmap actually is quite expensive w.r.t the memory usage, because of the load factor and avoid collision</li>
+<li>When using the default <code>ByteArrayEdges</code>, and called <code>getEdgeValue</code> and <code>setEdgeValue</code> method, under the hood, for the <code>getEdgeValue</code>, it just scan through the immutable edges iterator, and for the  <code>setEdgeValue</code> it scan through the <code>MutableEdge</code> iterator.<br/></li>
+</ul>
+
+<blockquote>
+<p>If the VertexEdges implementation has a specialized random-access method, we use that; otherwise, we scan the edges.</p>
+</blockquote>
+
+<h2 id="toc_8">Message memory management</h2>
+
+<p>Different than the Edges, Message are always stored in a <strong>serialized format inside of byte arrays</strong>. We are using the same concept of re-usable iterator to pass the messages to the compute method.</p>
+
+<p>Each giraph <strong>worker</strong> has one <strong>MessageStore</strong>, which is the message &#39;inbox&#39; for <strong>all</strong> the vertexes of this <strong>worker</strong>.</p>
+
+<p>So, the message store, is organized by <strong>Partition index</strong> then further organized by <strong>Vertex index</strong>, essentially a nested map, with partitions as keys of the outer map, and vertex IDs as keys of the inner maps.</p>
+
+<p>The default implementation of giraph uses <strong>original java HashMap</strong> and is not very efficient. There is some space of saving by using the <code>fastutil</code>. (comparing <code>long</code>: 8 bytes, and <code>Long</code>:24 bytes)</p>
+
+<p>This optimization should be done always, because it only sacrifices generality of the partition ID and vertex ID type.</p>
+
+<p><strong><font color='red'><a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/comm/messages/primitives/long_id/LongByteArrayMessageStore.java">ALREADY HAVE A IMPLEMENTATION</a>: Just use <code>LongByteArrayMessageStore</code> </font></strong></p>
+
+<h1 id="toc_9">Use MessageStore</h1>
+
+<p><strong><font color=red>The book&#39;s content is outdated as of giraph v1.1</font></strong></p>
+
+<p>According to the book, I must first write a class that implements <code>MessageStoreFactory</code> interface, and this factory generates the <code>MessageStore</code> implementation that I need.</p>
+
+<p>Then specify the parameter of <code>giraph.messageStoreFactoryClass</code> to let giraph know.</p>
+
+<p>But actually, the default giraph already implemented the <code>LongByteArrayMessageStore</code></p>
+
+<ol>
+<li><a href="http://giraph.apache.org/options.html">the default configuration</a> lists: 
+
+<ol>
+<li><code>messageEncodeAndStoreType</code> = <code>BYTEARRAY_PER_PARTITION</code></li>
+<li><code>messageStoreFactoryClass</code> = <code>InMemoryMessageStoreFactory</code></li>
+</ol></li>
+<li>The <a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/comm/messages/InMemoryMessageStoreFactory.java#L131">source code</a> of <code>InMemoryMessageStoreFactory</code> shows for vertexID <code>LongWritable</code>, <code>messageEncodeAndStoreType</code> = <code>BYTEARRAY_PER_PARTITION</code>, <code>messageStore = new LongByteArrayMessageStore()</code></li>
+</ol>
+
+<h1 id="toc_10">The memory cost for java classes</h1>
+
+<p>Remember the load factors for Hash*** stuff, which make it expensive.</p>
+
+<p>A good series posts here:<br/>
+<a href="http://java-performance.info/overview-of-memory-saving-techniques-java/">An overview of memory saving techniques in Java</a><br/>
+<a href="http://java-performance.info/memory-consumption-of-java-data-types-1/">Memory consumption of popular Java data types – part 1</a><br/>
+<a href="http://java-performance.info/memory-consumption-of-java-data-types-2/">Memory consumption of popular Java data types – part 2</a></p>
+
+<h1 id="toc_11">Mutate Graph</h1>
+
+<p>Three different mechanism of mutating a graph</p>
+
+<p>It is in the book of chapter 8</p>
+
+<h2 id="toc_12">When there is a conflict for the mutate request</h2>
+
+<p>It is resolved by <code>VertexResolver</code></p>
+
+<blockquote>
+<p>The default vertex resolver performs the following operations: </p>
+
+<ol>
+<li>If there were any edge removal requests, first apply these removals. </li>
+<li>If there was a request to remove the vertex, then remove it. This is achieved by setting the return Vertex object to null . </li>
+<li>If there was a request to add the vertex, and it does not exist, then create the vertex. </li>
+<li>If the vertex has messages sent to it, and it does not exist, then create the vertex. </li>
+<li>If there was a request to add edges to the vertex, if the vertex does not exist, first create and then add the edges; otherwise, simply add the edges. </li>
+</ol>
+
+<p>The order of this list is important because it defines exactly the way that Giraph resolves any conflicts by default. This means that if, for instance, there is request to remove a vertex and at the same time a request to add it, then because the default resolver checks the vertex creation after it does the deletion, it ends up creating the vertex.</p>
+</blockquote>
+
+<p><code>-ca giraph.vertexResolverClass=MyVertexResolver</code></p>
+
 <hr/>
 
 <ul>
@@ -277,6 +425,31 @@ the total amount of memory in the Java virtual machine. The value returned by th
 </li>
 <li>
 <a href="#toc_5">giraph log file memory info free/total/max</a>
+</li>
+<li>
+<a href="#toc_6">Giraph Edge and Message memory optimization</a>
+<ul>
+<li>
+<a href="#toc_7">Edge memory management</a>
+</li>
+<li>
+<a href="#toc_8">Message memory management</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_9">Use MessageStore</a>
+</li>
+<li>
+<a href="#toc_10">The memory cost for java classes</a>
+</li>
+<li>
+<a href="#toc_11">Mutate Graph</a>
+<ul>
+<li>
+<a href="#toc_12">When there is a conflict for the mutate request</a>
+</li>
+</ul>
 </li>
 </ul>
 
@@ -328,8 +501,8 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14767220898143.html" 
-	        title="Previous Post: Scala">&laquo; Scala</a>
+	        <a class="basic-alignment left" href="14742423250660.html" 
+	        title="Previous Post: maven">&laquo; maven</a>
 	    
 	    
 	        <a class="basic-alignment right" href="14742423250719.html" 
@@ -400,19 +573,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14742423250614.html">giraph</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14773416332741.html">Graphviz Dot</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14767220898143.html">Scala</a>
 		      </li>
 	     
 	  
