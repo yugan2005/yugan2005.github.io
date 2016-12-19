@@ -126,6 +126,12 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_11">Keep the REPL across sessions</a>
 </li>
+<li>
+<a href="#toc_12">Schedule Auto jobs on Mac using crontab</a>
+</li>
+<li>
+<a href="#toc_13">Hadoop Yarn get the Aggregated Log for a job</a>
+</li>
 </ul>
 
 
@@ -260,6 +266,22 @@ ps -efl | grep &lt;command name&gt;
 ps -efl | egrep &#39;\s+yu\s+&#39;
 </code></pre>
 
+<p>This is another good example, used to check <code>mongo</code> instance running in the system:</p>
+
+<pre><code class="language-bash">ps -ef | grep mongod | grep -v grep | wc -l | tr -d &#39; &#39;
+</code></pre>
+
+<p>Step-by-Step:</p>
+
+<ul>
+<li><p>The <strong><code>ps -ef | grep mongod</code></strong> part return all the running processes, that have any relation to the supplied string, i.e. <code>mongod</code>, e.g. have the string in the executable path, have the string in the username, etc.</p></li>
+<li><p>When you run the previous command, the <code>grep mongod</code> also becomes a process containing the string <code>mongod</code> in the <code>COMMAND</code> column of <code>ps</code> output, so it will also appear in the output. For that reason you need to eliminate it by piping <strong><code>grep -v grep</code></strong>, which filters all the lines from the input that contain the string <code>grep</code>.</p></li>
+<li><p>So now you have all possible lines that contain string <code>mongod</code> and are not the instances of <code>grep</code>. What to do? Count them, and do that with <strong><code>wc -l</code></strong>.</p></li>
+<li><p><code>wc -l</code> output contains additional formatting, i.e. spaces, so just for the sake of the beauty, run <strong><code>tr -d &#39; &#39;</code></strong> to remove the redundant spaces.</p></li>
+</ul>
+
+<p>As a result you will get a single number, representing the number of processes you <code>grep</code>&#39;ed for.</p>
+
 <h1 id="toc_9">grep find negate</h1>
 
 <p>negative matching, i.e. match lines that do not contain pattern</p>
@@ -303,6 +325,19 @@ screen -r
 
 <p><a href="http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/">Detailed post for the <code>screen</code> command</a></p>
 
+<h1 id="toc_12">Schedule Auto jobs on Mac using crontab</h1>
+
+<p><a href="https://ole.michelsen.dk/blog/schedule-jobs-with-crontab-on-mac-osx.html">Schedule jobs with crontab on Mac OS X</a></p>
+
+<p>This can be used to build and update personal stock repo.</p>
+
+<h1 id="toc_13">Hadoop Yarn get the Aggregated Log for a job</h1>
+
+<p>(Thanks Mingyang)</p>
+
+<pre><code class="language-bash">yarn logs -applicationId application_1478897002704_67148 -appOwner yu  
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -341,6 +376,12 @@ screen -r
 </li>
 <li>
 <a href="#toc_11">Keep the REPL across sessions</a>
+</li>
+<li>
+<a href="#toc_12">Schedule Auto jobs on Mac using crontab</a>
+</li>
+<li>
+<a href="#toc_13">Hadoop Yarn get the Aggregated Log for a job</a>
 </li>
 </ul>
 
@@ -392,12 +433,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14773416332741.html" 
-	        title="Previous Post: Graphviz Dot">&laquo; Graphviz Dot</a>
+	        <a class="basic-alignment left" href="14820465795454.html" 
+	        title="Previous Post: mongodb">&laquo; mongodb</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14767220898143.html" 
-	        title="Next Post: Scala">Scala &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250719.html" 
+	        title="Next Post: python">python &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -410,7 +451,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
 	        
 	        
 	        
@@ -452,19 +493,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+		        <a href="14820465795454.html">mongodb</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -476,9 +511,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14773416332741.html">Graphviz Dot</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
 	  
 	      
 	  

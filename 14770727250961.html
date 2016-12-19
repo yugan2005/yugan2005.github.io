@@ -91,30 +91,60 @@ $(document).ready(function(event) {
 
 <ul>
 <li>
-<a href="#toc_0">Chapter 1</a>
+<a href="#toc_0">Souce Code Link:</a>
+</li>
+<li>
+<a href="#toc_1">Chapter 1 and 2</a>
 <ul>
 <li>
-<a href="#toc_1">Start REPL</a>
+<a href="#toc_2">Start REPL</a>
 </li>
 <li>
-<a href="#toc_2">Quick tricks to use</a>
+<a href="#toc_3">Quick tricks to use</a>
 </li>
 <li>
-<a href="#toc_3">Inside REPL Follow along</a>
+<a href="#toc_4">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_5">Note about the <code>getOrElse()</code> method in the above map:</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#toc_4">Note about the <code>getOrElse()</code> method in the above map:</a>
+<a href="#toc_6">Chapter 3</a>
+<ul>
+<li>
+<a href="#toc_7">Download dataset and put on HDFS and start REPL</a>
+</li>
+<li>
+<a href="#toc_8">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_9">The use of mllib ALS</a>
+</li>
+<li>
+<a href="#toc_10">Rating</a>
+</li>
+<li>
+<a href="#toc_11">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_12">split into Training set and CV set and calculate the AUC</a>
+</li>
+</ul>
 </li>
 </ul>
 
 
 <hr/>
 
-<h1 id="toc_0">Chapter 1</h1>
+<h1 id="toc_0">Souce Code Link:</h1>
 
-<h2 id="toc_1">Start REPL</h2>
+<p><a href="https://github.com/sryza/aas/tree/1st-edition">github</a></p>
+
+<h1 id="toc_1">Chapter 1 and 2</h1>
+
+<h2 id="toc_2">Start REPL</h2>
 
 <pre><code class="language-bash"># this works on hlab
 spark-shell --master yarn-client
@@ -123,7 +153,7 @@ spark-shell --master yarn-client
 /home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
 </code></pre>
 
-<h2 id="toc_2">Quick tricks to use</h2>
+<h2 id="toc_3">Quick tricks to use</h2>
 
 <ol>
 <li>help: <code>:help</code></li>
@@ -131,7 +161,7 @@ spark-shell --master yarn-client
 <li>paste code: <code>:paste</code></li>
 </ol>
 
-<h2 id="toc_3">Inside REPL Follow along</h2>
+<h2 id="toc_4">Inside REPL Follow along</h2>
 
 <pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
 rawblocks.first
@@ -228,7 +258,7 @@ val truePositive = scoreRange map (cut =&gt; (ct filter (_.score&gt;cut) map (_.
 
 </code></pre>
 
-<h1 id="toc_4">Note about the <code>getOrElse()</code> method in the above map:</h1>
+<h2 id="toc_5">Note about the <code>getOrElse()</code> method in the above map:</h2>
 
 <p>Because what&#39;s in the map (given by <code>countByValue()</code>) is of type <code>Long</code>, and the default value I gave is of type <code>Int</code>, the <code>getOrElse()</code> method returns the super type for both that is <code>AnyVal</code>.</p>
 
@@ -238,6 +268,228 @@ val truePositive = scoreRange map (cut =&gt; (ct filter (_.score&gt;cut) map (_.
 
 <pre><code class="language-scala">val value = map.getOrElse(key, 0).asInstanceOf[Number].doubleValue
 </code></pre>
+
+<h1 id="toc_6">Chapter 3</h1>
+
+<h2 id="toc_7">Download dataset and put on HDFS and start REPL</h2>
+
+<p><code>http://bit.ly/1KiJdOR</code></p>
+
+<p>The default spark-shell on hlab has driver memory and executor memory of 512MB, which are not enough for the job that we are doing for this chapter. Use the following setting for setting the memory</p>
+
+<p><a href="http://stackoverflow.com/questions/31463382/increase-java-heap-size-in-spark-on-yarn">stackoverflow post</a></p>
+
+<p><a href="https://spark.apache.org/docs/1.2.0/configuration.html">official spark option list</a></p>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client --driver-memory 2g --executor-memory 2g --conf spark.rdd.compress=true
+</code></pre>
+
+<h2 id="toc_8">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawUserArtistData = sc.textFile(&quot;spark_book/user_artist_data.txt&quot;, 20)
+
+val overLimitCnt = (rawUserArtistData map (_.split(&quot;\\s+&quot;) map (_.toLong)) 
+                    filter (arr =&gt; arr(0) &gt; java.lang.Integer.MAX_VALUE 
+                                || arr(1)  &gt; java.lang.Integer.MAX_VALUE)).count()
+//Note that in scala, we use .size, but for spark RDD, we need use .count(), because it is parallel partitioned.
+
+val rawArtistData =sc.textFile(&quot;spark_book/artist_data.txt&quot;, 20)
+
+//note the following is use char of single quote
+val test = rawArtistData take 10
+val line0 = test(0) span (_ != &#39;\t&#39;) match {case (id, name) =&gt; (id.toInt, name.trim)}
+
+//Using the flatMap and Option and pattern match with default to handle the dirty data
+val artistByID = rawArtistData flatMap (_ span (_ != &#39;\t&#39;) 
+                                        match { 
+                                            case(id, name) =&gt; {
+                                                try {
+                                                    Some((id.toInt, name.trim))
+                                                } catch {
+                                                    case e:NumberFormatException =&gt; None
+                                                }}
+                                            case anythingElse =&gt; None})
+                                        
+val rawArtistAlias = sc.textFile(&quot;spark_book/artist_alias.txt&quot;, 20)
+
+//Just as before, using Option to catch exceptions
+val artistAliasOption = (rawArtistAlias map (_ span (_ != &#39;\t&#39;) 
+                                             match {case (id1, id2) 
+                                                      =&gt; try { 
+                                                          (Some(id1.trim.toInt, id2.trim.toInt)) } 
+                                                         catch { 
+                                                          case e: NumberFormatException=&gt;None};
+                                                    case _ =&gt; None}))
+
+//remove Options
+val artistAliasRDD = artistAliasOption flatMap (x=&gt;x)
+
+//collect as Map
+val artistAlias = artistAliasRDD collectAsMap
+
+// pay special attention to the pattern matching of Array
+val formatedUserArtistData =(rawUserArtistData map (_ split(&quot;\\s+&quot;) match 
+    { case Array(id1Str, id2Str, cntStr) =&gt; try {
+                                                Some(Array(id1Str.trim.toInt,
+                                                           id2Str.trim.toInt,
+                                                           cntStr.trim.toInt))
+                                                }
+                                            catch {
+                                                case e:Throwable =&gt; None
+                                                };
+      case _ =&gt; None })) flatMap (x=&gt;x)
+// build the Rating class used in MLLib
+import org.apache.spark.mllib.recommendation._
+// broadcast to save resource and speed up, then clean the alias
+val bArtistAlias = sc.broadcast(artistAlias)
+
+// special note:
+// 1. use the broadcasted thing, need refer to its .value.
+// 2. pay attention to how to use the pattern matching inside map anonymous func
+val cleanedUserArtistData = (formatedUserArtistData map 
+     ({case Array(userId, artistId, cnt) =&gt; 
+       Rating(userId, bArtistAlias.value.getOrElse(artistId, artistId), cnt)
+       })
+    ).cache()
+
+val model = ALS.trainImplicit(cleanedUserArtistData, 10, 5, 0.01, 1.0)                                                 
+
+// see what model looks like
+model.userFeatures take 10 map ({case (userId, scoresArr) =&gt; userId.toString + &quot; : &quot; + scoresArr.mkString(&quot; , &quot;)}) foreach println
+
+model.productFeatures take 10 map ({case (productId, scoresArr) =&gt; productId.toString + &quot; : &quot; + scoresArr.mkString(&quot; , &quot;)}) foreach println
+                                 
+</code></pre>
+
+<h2 id="toc_9">The use of mllib ALS</h2>
+
+<p><a href="http://spark.apache.org/docs/latest/ml-collaborative-filtering.html">Official documents</a></p>
+
+<p>A very good page for explaining the &quot;explicit preference&quot; and &quot;implicit preference&quot; at <a href="http://predictionio.incubator.apache.org/templates/recommendation/training-with-implicit-preference/">PredicctionIO</a></p>
+
+<h2 id="toc_10">Rating</h2>
+
+<p>A more compact class to represent a rating than Tuple3[Int, Int, Double].<br/>
+It is kind of like case class <code>Rating(user: Int, product: Int, rating: Double)</code><br/>
+<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.mllib.recommendation.Rating">reference</a></p>
+
+<h2 id="toc_11">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">
+// find the artist list for userID = 2093760
+val targetUserID = 2093760
+val joined = cleanedUserArtistData filter (_.user == targetUserID) map (rateEntry =&gt; (rateEntry.product, rateEntry.rating)) join (artistByID)
+
+// Note that these are RDDs, do not forget the collect!
+(joined map ({case (artistID, (cnt, name)) =&gt; name + &quot; : &quot; + cnt.toInt.toString}) collect) foreach println
+
+
+// make recommendation
+// Note that it is NOT RDD, but regular scala Array
+val recommendations = model.recommendProducts(targetUserID, 5)
+
+val recommendSet = (recommendations map (_.product)).toSet
+
+val relatedArtistNameMap = (artistByID filter (record =&gt; recommendSet.contains(record._1))).collectAsMap
+
+recommendations map (rateEntry =&gt; relatedArtistNameMap.getOrElse(rateEntry.product, &quot;NoName&quot;) + &quot; : &quot; + rateEntry.rating.toString) foreach println
+
+</code></pre>
+
+<h2 id="toc_12">split into Training set and CV set and calculate the AUC</h2>
+
+<pre><code class="language-scala">val Array(trainData, cvData) = cleanedUserArtistData.randomSplit(Array(0.9, 0.1))
+trainData.cache()
+cvData.cache()
+val model = ALS.trainImplicit(trainData, 10, 5, 0.01, 1.0)
+
+// calculate the mean AUC for cvData
+// 1. get the prediction on cvData using the model
+val cvDataOfUserProduct = cvData map (record =&gt; (record.user, record.product))
+// predict take RDD[tuple2]
+val predictRating = model.predict(cvDataOfUserProduct)
+
+// construct (user, wrongproduct)
+val allProduct = (cleanedUserArtistData map (_.product) distinct).collect()
+val allProductSize = allProduct.size
+val bAllProduct = sc.broadcast(allProduct)
+// using mapPartitions and broadcast to save memory, groupBy shuffles the RDD partitions, the shuffled RDD will have the same groupBy key records together inside one partition.
+
+cvData groupBy (_.user) mapPartitions 
+    {case (user, ratings) =&gt; {
+        val correctProductSet = (ratings map (_.product)).collect().toSet
+        var counter = 0
+        val randomGen = new scala.util.Random()
+        val wrongProductArr = new ArrayBuffer[Int]()
+        while (counter &lt; correctProductSet.size) {
+            val productCandidate = bAllProduct.value(randomGen.nextInt(allProductSize))
+            if (!correctProductSet.contains(productCandidate)) {
+                counter += 1
+                wrongProductArr += productCandidate
+            }
+        }
+    }
+    wrongProductArr
+}
+
+        
+            
+            
+                        
+
+
+
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Souce Code Link:</a>
+</li>
+<li>
+<a href="#toc_1">Chapter 1 and 2</a>
+<ul>
+<li>
+<a href="#toc_2">Start REPL</a>
+</li>
+<li>
+<a href="#toc_3">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_4">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_5">Note about the <code>getOrElse()</code> method in the above map:</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_6">Chapter 3</a>
+<ul>
+<li>
+<a href="#toc_7">Download dataset and put on HDFS and start REPL</a>
+</li>
+<li>
+<a href="#toc_8">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_9">The use of mllib ALS</a>
+</li>
+<li>
+<a href="#toc_10">Rating</a>
+</li>
+<li>
+<a href="#toc_11">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_12">split into Training set and CV set and calculate the AUC</a>
+</li>
+</ul>
+</li>
+</ul>
+
 
 			</div>
 
@@ -286,9 +538,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
+	        <a class="basic-alignment left" href="14742423250523.html" 
+	        title="Previous Post: bayesian statistics">&laquo; bayesian statistics</a>
 	    
-	        <a class="basic-alignment right" href="14742423250660.html" 
-	        title="Next Post: maven">maven &raquo;</a>
+	    
+	        <a class="basic-alignment right" href="14767220898143.html" 
+	        title="Next Post: Scala">Scala &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -301,7 +556,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
 	        
 	        
 	        
@@ -343,19 +598,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+		        <a href="14820465795454.html">mongodb</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -367,9 +616,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14773416332741.html">Graphviz Dot</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
 	  
 	      
 	  

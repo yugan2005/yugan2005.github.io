@@ -165,6 +165,18 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_24">Function are allowed inside FOREACH</a>
 </li>
+<li>
+<a href="#toc_25">Use Star Expression and Project-Range Expression</a>
+</li>
+<li>
+<a href="#toc_26">Strange bug ERROR 2116 related with compression</a>
+</li>
+<li>
+<a href="#toc_27">Strange Bug with Split of two logic expressions</a>
+</li>
+<li>
+<a href="#toc_28">Use AvroStorage() inside pig</a>
+</li>
 </ul>
 
 
@@ -507,6 +519,130 @@ acookie_province = FOREACH (GROUP acookie_province_m1 BY acookie) {
                     GENERATE group AS acookie, BagToString(sorted.hist) AS hist:chararray;};
 </code></pre>
 
+<h1 id="toc_25">Use Star Expression and Project-Range Expression</h1>
+
+<p>to avoid copy all the fields again and again.<br/>
+<a href="https://pig.apache.org/docs/r0.12.0/basic.html#expressions">0.12 official documentation</a></p>
+
+<p>Star Expression: <code>*</code><br/>
+Project-Range Expression: <code>..</code></p>
+
+<p>A good example:</p>
+
+<pre><code class="language-sql">
+lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING PigStorage() AS (id1:long, id2:long, c2NumPath:int,
+            c2SumTot:float, c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, 
+            c2MaxS1:float, c2SumS2:float, c2MinS2:float, c2MaxS2:float, c3NumPath:int, 
+            c3NumNoRedundantPath:int, c3NumDistinctID:int, c3SumTot:float, c3MinTot:float, 
+            c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float, c3SumS2:float, 
+            c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float);
+
+-- avoid using duplicated field names!
+lkp_index_table = LOAD &#39;$INPUT_INDEX_TABLE&#39; USING LzoPigStorage() 
+                    AS (id:long, str_id:chararray);
+
+lkp_str_l = FOREACH (JOIN lkp_input BY id1, lkp_index_table BY id) GENERATE
+            str_id AS strId1, id2..c3MaxS3;
+lkp_str = FOREACH (JOIN lkp_str_l BY id2, lkp_index_table BY id) GENERATE
+            strId1 AS strId1, str_id AS strId2, c2NumPath..c3MaxS3;
+
+</code></pre>
+
+<h1 id="toc_26">Strange bug ERROR 2116 related with compression</h1>
+
+<p>Error code like:</p>
+
+<blockquote>
+<p>ERROR 2116:<br/>
+<file lkpAddLabelNoLzo.pig, line 38, column 0> Output Location Validation Failed for: &#39;hdfs://sc2prod/user/yu/linkprediction/processed_full/0.05_0.08_0.005_11/pairsNoLzo</p>
+
+<p>org.apache.pig.impl.plan.VisitorException: ERROR 2116:<br/>
+<file lkpAddLabelNoLzo.pig, line 38, column 0> Output Location Validation Failed for: &#39;hdfs://sc2prod/user/yu/linkprediction/processed_full/0.05_0.08_0.005_11/pairsNoLzo<br/>
+        at org.apache.pig.newplan.logical.rules.InputOutputFileValidator$InputOutputFileVisitor.visit(InputOutputFileValidator.java:75)</p>
+</blockquote>
+
+<p>This error has nothing to do with the output location, but because the wrong compression setting</p>
+
+<p>The wrong one caused the bug</p>
+
+<pre><code class="language-sql">SET output.compression.enabled true;
+</code></pre>
+
+<p>The correct one:</p>
+
+<pre><code class="language-sql">SET mapreduce.output.fileoutputformat.compress true;
+</code></pre>
+
+<h1 id="toc_27">Strange Bug with Split of two logic expressions</h1>
+
+<p>The error message looks like this:</p>
+
+<blockquote>
+<p>2016-11-10 03:38:16,010 WARN [main] org.apache.hadoop.mapred.YarnChild: Exception running child : org.apache.pig.backend.executionengine.ExecException: ERROR 0: Exception while executing (Name: Split - scope-1576 Operator Key: scope-1576): org.apache.pig.backend.executionengine.ExecException: ERROR 0: Error while executing ForEach at [null[-1,-1]]<br/>
+    at ....PhysicalOperator.processInput(PhysicalOperator.java:289)<br/>
+    at ....physicalLayer.relationalOperators.POSplit.getNextTuple(POSplit.java:214)<br/>
+    at ....relationalOperators.POSplit.runPipeline(POSplit.java:255)<br/>
+    ...<br/>
+Caused by: org.apache.pig.backend.executionengine.ExecException: ERROR 0: Error while executing ForEach at [null[-1,-1]]<br/>
+    at ....physicalLayer.relationalOperators.POForEach.getNextTuple(POForEach.java:306)<br/>
+    at ....PhysicalOperator.processInput(PhysicalOperator.java:281)<br/>
+    ... 19 more<br/>
+Caused by: java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.Float<br/>
+    at java.lang.Float.compareTo(Float.java:50)<br/>
+    at ....expressionOperators.NotEqualToExpr.doComparison(NotEqualToExpr.java:113)<br/>
+    at ....expressionOperators.NotEqualToExpr.getNextBoolean(NotEqualToExpr.java:84)<br/>
+    at ....expressionOperators.POAnd.getNextBoolean(POAnd.java:90)</p>
+</blockquote>
+
+<p>This error message is <strong><font color='red'>misleading</font></strong>. There is not <code>ClassCastException</code> issue, it is caused by the <code>Split</code>. I don&#39;t understand how this is happened, but <code>split</code> is merely a syntax sugar, we can just use the <code>filter</code> with the same efficiency.</p>
+
+<p>Problem code:</p>
+
+<pre><code class="language-sql">lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING LzoPigStorage() AS (strID1:chararray, strID2:chararray, c2NumPath:int, c2SumTot:float,
+                    c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, c2MaxS1:float, c2SumS2:float,
+                    c2MinS2:float, c2MaxS2:float, c3NumPath:int, c3NumNoRedundantPath:int, c3NumDistinctID:int,
+                    c3SumTot:float, c3MinTot:float, c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float,
+                    c3SumS2:float, c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float, label:int);
+SPLIT lkp_input INTO
+    c2_only_pairs IF ((c2NumPath != -1) AND (c3NumPath == -1)),
+    c3_only_pairs IF ((c2NumPath == -1) AND (c3NumPath != -1)),
+    c2_c3_pairs OTHERWISE;
+
+c2_all_pairs = FILTER lkp_input BY (c2NumPath != -1);
+c3_all_pairs = FILTER lkp_input BY (c3NumPath != -1);
+</code></pre>
+
+<p>Correct code:</p>
+
+<pre><code class="language-sql">lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING LzoPigStorage() AS (strID1:chararray, strID2:chararray, c2NumPath:int, c2SumTot:float,
+                    c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, c2MaxS1:float, c2SumS2:float,
+                    c2MinS2:float, c2MaxS2:float, c3NumPath:int, c3NumNoRedundantPath:int, c3NumDistinctID:int,
+                    c3SumTot:float, c3MinTot:float, c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float,
+                    c3SumS2:float, c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float, label:int);
+
+c2_only_pairs = FILTER lkp_input BY ((c2NumPath != -1) AND (c3NumPath == -1));
+c3_only_pairs = FILTER lkp_input BY ((c2NumPath == -1) AND (c3NumPath != -1));
+c2_c3_pairs = FILTER lkp_input BY ((c2NumPath != -1) AND (c3NumPath != -1));;
+    
+c2_all_pairs = FILTER lkp_input BY (c2NumPath != -1);
+c3_all_pairs = FILTER lkp_input BY (c3NumPath != -1);
+</code></pre>
+
+<h1 id="toc_28">Use AvroStorage() inside pig</h1>
+
+<p>Need register the following jars</p>
+
+<pre><code class="language-sql">REGISTER /home/adsymp/lib/piggybank.jar;
+REGISTER /home/adsymp/lib/avro-1.7.6.jar;
+REGISTER /home/adsymp/lib/jackson-core-asl-1.7.3.jar;
+REGISTER /home/adsymp/lib/jackson-mapper-asl-1.7.3.jar;
+REGISTER /home/adsymp/lib/json-simple-1.1.jar;
+
+DEFINE AvroStorage org.apache.pig.piggybank.storage.avro.AvroStorage(&#39;no_schema_check&#39;);
+</code></pre>
+
+<p>Also, don&#39;t mess with the <code>float</code> and <code>double</code> types with the AvroStorage input.</p>
+
 <hr/>
 
 <ul>
@@ -585,6 +721,18 @@ acookie_province = FOREACH (GROUP acookie_province_m1 BY acookie) {
 <li>
 <a href="#toc_24">Function are allowed inside FOREACH</a>
 </li>
+<li>
+<a href="#toc_25">Use Star Expression and Project-Range Expression</a>
+</li>
+<li>
+<a href="#toc_26">Strange bug ERROR 2116 related with compression</a>
+</li>
+<li>
+<a href="#toc_27">Strange Bug with Split of two logic expressions</a>
+</li>
+<li>
+<a href="#toc_28">Use AvroStorage() inside pig</a>
+</li>
 </ul>
 
 
@@ -635,12 +783,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14765768181414.html" 
-	        title="Previous Post: intellij">&laquo; intellij</a>
+	        <a class="basic-alignment left" href="14742423250761.html" 
+	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250761.html" 
-	        title="Next Post: technical analysis">technical analysis &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250614.html" 
+	        title="Next Post: giraph">giraph &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -653,7 +801,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
 	        
 	        
 	        
@@ -695,19 +843,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+		        <a href="14820465795454.html">mongodb</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -719,9 +861,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14773416332741.html">Graphviz Dot</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
 	  
 	      
 	  

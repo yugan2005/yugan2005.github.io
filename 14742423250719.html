@@ -103,49 +103,67 @@ $(document).ready(function(event) {
 <a href="#toc_3">timezone</a>
 </li>
 <li>
-<a href="#toc_4">datetime, pd.Timestamp, np.datetime64</a>
+<a href="#toc_4">From String to timestamp to epoch unix time</a>
 </li>
 <li>
-<a href="#toc_5">To make a linspace of pd.Timestamp</a>
+<a href="#toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</a>
 </li>
 <li>
-<a href="#toc_6">plotly tick setting: string format, number of ticks and location of ticks.</a>
+<a href="#toc_6">To make a linspace of pd.Timestamp</a>
 </li>
 <li>
-<a href="#toc_7">plotly datetime type tick setting</a>
+<a href="#toc_7">plotly tick setting: string format, number of ticks and location of ticks.</a>
 </li>
 <li>
-<a href="#toc_8">plotly change the padding size between subplots</a>
+<a href="#toc_8">plotly datetime type tick setting</a>
 </li>
 <li>
-<a href="#toc_9">read in gz / gzip file</a>
+<a href="#toc_9">plotly change the padding size between subplots</a>
 </li>
 <li>
-<a href="#toc_10">plotly bar chart, use whether value is negative or positive to determine its color</a>
+<a href="#toc_10">read in gz / gzip file</a>
 </li>
 <li>
-<a href="#toc_11">plotly subplot shared axis setting</a>
+<a href="#toc_11">plotly bar chart, use whether value is negative or positive to determine its color</a>
 </li>
 <li>
-<a href="#toc_12">plotly remove missed dates from time series plot</a>
+<a href="#toc_12">plotly subplot shared axis setting</a>
 </li>
 <li>
-<a href="#toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+<a href="#toc_13">plotly remove missed dates from time series plot</a>
 </li>
 <li>
-<a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
+<a href="#toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
 </li>
 <li>
-<a href="#toc_15">String for pandas datetime period and frequency</a>
+<a href="#toc_15">Use <code>:</code> or <code>slice(None)</code></a>
 </li>
 <li>
-<a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
+<a href="#toc_16">String for pandas datetime period and frequency</a>
 </li>
 <li>
-<a href="#toc_17">Python blocking and non-blocking subprocess calls</a>
+<a href="#toc_17">Python Library for Probabilistic Graphical Models</a>
 </li>
 <li>
-<a href="#toc_18">nohup python that includes a nohup shell script</a>
+<a href="#toc_18">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_19">nohup python that includes a nohup shell script</a>
+</li>
+<li>
+<a href="#toc_20">ipython jupyter notebook pandas showing options</a>
+</li>
+<li>
+<a href="#toc_21">matplotlib style and colors</a>
+</li>
+<li>
+<a href="#toc_22">matplotlib backend choices</a>
+</li>
+<li>
+<a href="#toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</a>
+</li>
+<li>
+<a href="#toc_24">Conda install python package CondaHTTPError Error</a>
 </li>
 </ul>
 
@@ -192,13 +210,32 @@ po.iplot(figure)
 
 <p>the <code>tz_localize(&#39;UTC&#39;)</code> make it timezone aware, the <code>tz_convert(&#39;US/Pacific&#39;)</code> convert it to local timezone.</p>
 
-<h1 id="toc_4">datetime, pd.Timestamp, np.datetime64</h1>
+<h1 id="toc_4">From String to timestamp to epoch unix time</h1>
+
+<p>Use <code>pd.Timestamp()</code> to convert string into pandas timestamp, then use <code>value</code> to epoch unix time in nanosecond</p>
+
+<pre><code class="language-python">pd.Timestamp(&#39;2002-01-01&#39;).value/1e6
+# this convert to epoch microseconds
+</code></pre>
+
+<h1 id="toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</h1>
+
+<p>At least between python and pandas is easy:</p>
+
+<pre><code class="language-python">from dateutil import parser as dateparser
+from datetime import datetime
+
+dt = dateparser.parse(&#39;2015-01-01&#39;) # python datetime
+dt2 = datetime(2015, 1, 1)          # Also python datetime
+ts = pd.to_datetime(dt)             # pandas Timestamp
+dt = ts.to_pydatetime()             # back to python datetime
+</code></pre>
 
 <p>A very good graph to show the converting relationship:</p>
 
 <p><img src="media/14742423250719/14757939209171.jpg" alt=""/></p>
 
-<h1 id="toc_5">To make a linspace of pd.Timestamp</h1>
+<h1 id="toc_6">To make a linspace of pd.Timestamp</h1>
 
 <p>The <code>pd.date_range(start=None, end=None, periods=None, freq=&#39;D&#39;)</code> method will not work. This method is for different purpose.</p>
 
@@ -232,7 +269,7 @@ ticks_array = [pd.Timestamp(timetick, tz=memory_df.index.tz) for timetick in
                             num=n_ticks, endpoint=True))]
 </code></pre>
 
-<h1 id="toc_6">plotly tick setting: string format, number of ticks and location of ticks.</h1>
+<h1 id="toc_7">plotly tick setting: string format, number of ticks and location of ticks.</h1>
 
 <ul>
 <li>The easiest way to set <code>nticks</code> and <code>tickformat</code>. Like the following example:</li>
@@ -246,7 +283,7 @@ ticks_array = [pd.Timestamp(timetick, tz=memory_df.index.tz) for timetick in
 <li>The hard way is to set <code>tickmode=&#39;array&#39;, ticktext=[...], tickvals=[...]</code>. </li>
 </ul>
 
-<h1 id="toc_7">plotly datetime type tick setting</h1>
+<h1 id="toc_8">plotly datetime type tick setting</h1>
 
 <p>directly use <code>datetime</code> datatype and the plotly tick setting options have subtle bugs, especially when dealing with timezone awared data.</p>
 
@@ -286,7 +323,7 @@ ticks_array = [pd.Timestamp(timetick, tz=memory_df.index.tz) for timetick in
     po.iplot(mem_fig, show_link=False)
 </code></pre>
 
-<h1 id="toc_8">plotly change the padding size between subplots</h1>
+<h1 id="toc_9">plotly change the padding size between subplots</h1>
 
 <p>Use <code>specs</code> and <code>vertical_spacing</code> or <code>horizontal_spacing</code> inside <code>tls.make_subplots()</code></p>
 
@@ -299,7 +336,7 @@ figure = tls.make_subplots(rows=2, cols=1, shared_xaxes=True,
                            vertical_spacing=0.01)
 </code></pre>
 
-<h1 id="toc_9">read in gz / gzip file</h1>
+<h1 id="toc_10">read in gz / gzip file</h1>
 
 <pre><code class="language-python">import gzip
 
@@ -307,7 +344,7 @@ with gzip.open(file_path, &#39;rb&#39;) as f:
     for line in f:
 </code></pre>
 
-<h1 id="toc_10">plotly bar chart, use whether value is negative or positive to determine its color</h1>
+<h1 id="toc_11">plotly bar chart, use whether value is negative or positive to determine its color</h1>
 
 <pre><code class="language-python"># here sh_MACD.ch is a time series, with values can be positive or negative.
 # want to generate the bar chart that is red if its value is positive, or green if negative
@@ -322,7 +359,7 @@ trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
 * use values to get np.ndarray not pd.Series (because plotly need np.ndarray)<br/>
 * use <code>marker</code> filed</p>
 
-<h1 id="toc_11">plotly subplot shared axis setting</h1>
+<h1 id="toc_12">plotly subplot shared axis setting</h1>
 
 <p>For example, if the subplot is 2 row 1 col, with shared x axis, the axis&#39; names are: [(1,1) x1,y1 ], [(2,1) x1,y2 ]. To set the axis properties in the <code>layout</code> dictionary, using <code>xaxis1</code> instead of <code>xaxis</code>.</p>
 
@@ -331,11 +368,11 @@ trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
 <pre><code class="language-python">overlay_plot[&#39;layout&#39;].update(xaxis1=dict(type=&#39;category&#39;))
 </code></pre>
 
-<h1 id="toc_12">plotly remove missed dates from time series plot</h1>
+<h1 id="toc_13">plotly remove missed dates from time series plot</h1>
 
 <p>change the xaxis&#39; type to <code>category</code>. (refer to the example above)</p>
 
-<h1 id="toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</h1>
+<h1 id="toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</h1>
 
 <pre><code>In [65]: df
 Out[65]: 
@@ -368,12 +405,12 @@ selection = df.loc[(slice(None), &#39;two&#39;), :]
 <pre><code class="language-python">selection = df.xs(&#39;two&#39;, level=&#39;second&#39;)
 </code></pre>
 
-<h1 id="toc_14">Use <code>:</code> or <code>slice(None)</code></h1>
+<h1 id="toc_15">Use <code>:</code> or <code>slice(None)</code></h1>
 
 <p>They mean the same thing, normally in <code>[ ]</code>, we just use <code>:</code>, like <code>[5, :]</code><br/>
 However, inside tuple, <code>:</code> is not recognized, we have to use <code>slice(None)</code> instead.</p>
 
-<h1 id="toc_15">String for pandas datetime period and frequency</h1>
+<h1 id="toc_16">String for pandas datetime period and frequency</h1>
 
 <p>Useful official documents</p>
 
@@ -383,16 +420,16 @@ However, inside tuple, <code>:</code> is not recognized, we have to use <code>sl
 <li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#anchored-offset-semantics">Rolling forward or backward to snap on the anchors</a></li>
 </ul>
 
-<h1 id="toc_16">Python Library for Probabilistic Graphical Models</h1>
+<h1 id="toc_17">Python Library for Probabilistic Graphical Models</h1>
 
 <p><a href="https://github.com/pgmpy/pgmpy">github link</a></p>
 
-<h1 id="toc_17">Python blocking and non-blocking subprocess calls</h1>
+<h1 id="toc_18">Python blocking and non-blocking subprocess calls</h1>
 
 <p><code>Popen</code> is nonblocking; <code>call</code> and <code>check_call</code> are blocking.<br/><br/>
 <a href="http://stackoverflow.com/a/21936682/4229125">A good stackoverflow post explaining this</a></p>
 
-<h1 id="toc_18">nohup python that includes a nohup shell script</h1>
+<h1 id="toc_19">nohup python that includes a nohup shell script</h1>
 
 <ul>
 <li>when using nohup with python, the output will be buffered, in order to see the output in real time using <code>python -u</code> option to turn off the output buffering</li>
@@ -440,6 +477,107 @@ done
 
 <p>Using <code>tail -f</code> for both logging file <code>shell_logging_out</code> and <code>py_nohup.out</code> shows they are <strong>non-blocking</strong> and the output are in real time.</p>
 
+<h1 id="toc_20">ipython jupyter notebook pandas showing options</h1>
+
+<p><a href="http://pandas.pydata.org/pandas-docs/stable/options.html">official documents</a></p>
+
+<ul>
+<li>set jupyter notebook show float in dataframe with 2 digits precision (globally)<br/>
+<code>pd.options.display.float_format = &#39;{:.2f}&#39;.format</code> <a href="http://stackoverflow.com/a/31671975/4229125">stackoverflow reference</a></li>
+<li>get/set number of dataframe rows to show in notebook<br/>
+<code>pd.get_option(&quot;display.max_rows&quot;)</code><br/>
+<code>pd.set_option(&quot;display.max_rows&quot;,999)</code><br/></li>
+</ul>
+
+<h1 id="toc_21">matplotlib style and colors</h1>
+
+<ul>
+<li><a href="https://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html">Here</a> is a good post for showing how all the matplotlib styles look like.</li>
+<li>The recommended way of choosing color is through <code>seaborn</code>. <a href="http://seaborn.pydata.org/tutorial/color_palettes.html">The office document</a> which is very useful.</li>
+<li>To temporarily change the matplotlib&#39;s default <a href="http://seaborn.pydata.org/tutorial/color_palettes.html#palette-contexts">color palette</a> and <a href="http://matplotlib.org/users/style_sheets.html#temporary-styling">style</a>, use <code>with</code>:<br/></li>
+</ul>
+
+<pre><code class="language-python">
+with sns.color_palette(&quot;PuBuGn_d&quot;):
+    # generate some plots with this color_palette
+    
+with plt.style.context((&#39;ggplot&#39;)):
+    # generate some plots using the ggplot style  
+    
+</code></pre>
+
+<h1 id="toc_22">matplotlib backend choices</h1>
+
+<p>If a separate figure window needed (not the jupyter embedded window) use <code>Qt5Agg</code> as:</p>
+
+<pre><code class="language-python">from matplotlib import pyplot as plt
+
+plt.switch_backend(&#39;Qt5Agg&#39;)
+</code></pre>
+
+<p>If want to see the figure embedded inside the jupyter notebook, use magic line will be good enough:</p>
+
+<pre><code class="language-python">%matplotlib notebook
+</code></pre>
+
+<h1 id="toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</h1>
+
+<p><code>mpld3</code> can correctly convert matplotlib twinx figs, plotly cannot</p>
+
+<pre><code class="language-python">import matplotlib as mpl
+from matplotlib import pyplot as plt
+import mpld3
+import plotly.tools as tls
+import plotly.offline as po
+
+%matplotlib notebook
+
+fig, ax = plt.subplots()
+ax2 = ax.twinx()
+ax.plot([1,3,2], &#39;b-&#39;)
+ax2.plot([16, 4, 1], &#39;r:&#39;)
+ax.set_ylabel(&#39;y1&#39;)
+ax2.set_ylabel(&#39;y2&#39;)
+ax2.patch.set_alpha(0.0) # This is the main trick for showing two axes
+ax.set_xlabel(&#39;x&#39;)
+fig.show()
+
+###
+mpld3.display(fig)
+
+###
+po.init_notebook_mode()
+plotly_fig = tls.mpl_to_plotly(fig)
+po.iplot(plotly_fig, show_link=False)
+</code></pre>
+
+<h1 id="toc_24">Conda install python package CondaHTTPError Error</h1>
+
+<p>Mysterious error like:</p>
+
+<blockquote>
+<p>CondaHTTPError: HTTP 404 None<br/>
+for url &lt;None&gt;<br/>
+The remote server could not find the channel you requested.</p>
+</blockquote>
+
+<p>The reason is that some package installed previous changed the <code>~/.condarc</code> setting and added a channel, which <a href="http://conda.pydata.org/docs/config.html?highlight=channel%20url#channel-locations-channels">&quot;Listing channel locations in the .condarc file will override conda defaults&quot;</a></p>
+
+<p>the modified <code>~/.condarc</code> that cause problem:  </p>
+
+<pre><code class="language-bash">channels:
+  - https://repo.continuum.io/pkgs/
+  - defaults
+</code></pre>
+
+<p>just need delete the extra line, make it look like</p>
+
+<pre><code class="language-bash">channels:
+  - defaults
+</code></pre>
+
+<p>Problem solved.</p>
+
 <hr/>
 
 <ul>
@@ -456,49 +594,67 @@ done
 <a href="#toc_3">timezone</a>
 </li>
 <li>
-<a href="#toc_4">datetime, pd.Timestamp, np.datetime64</a>
+<a href="#toc_4">From String to timestamp to epoch unix time</a>
 </li>
 <li>
-<a href="#toc_5">To make a linspace of pd.Timestamp</a>
+<a href="#toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</a>
 </li>
 <li>
-<a href="#toc_6">plotly tick setting: string format, number of ticks and location of ticks.</a>
+<a href="#toc_6">To make a linspace of pd.Timestamp</a>
 </li>
 <li>
-<a href="#toc_7">plotly datetime type tick setting</a>
+<a href="#toc_7">plotly tick setting: string format, number of ticks and location of ticks.</a>
 </li>
 <li>
-<a href="#toc_8">plotly change the padding size between subplots</a>
+<a href="#toc_8">plotly datetime type tick setting</a>
 </li>
 <li>
-<a href="#toc_9">read in gz / gzip file</a>
+<a href="#toc_9">plotly change the padding size between subplots</a>
 </li>
 <li>
-<a href="#toc_10">plotly bar chart, use whether value is negative or positive to determine its color</a>
+<a href="#toc_10">read in gz / gzip file</a>
 </li>
 <li>
-<a href="#toc_11">plotly subplot shared axis setting</a>
+<a href="#toc_11">plotly bar chart, use whether value is negative or positive to determine its color</a>
 </li>
 <li>
-<a href="#toc_12">plotly remove missed dates from time series plot</a>
+<a href="#toc_12">plotly subplot shared axis setting</a>
 </li>
 <li>
-<a href="#toc_13">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+<a href="#toc_13">plotly remove missed dates from time series plot</a>
 </li>
 <li>
-<a href="#toc_14">Use <code>:</code> or <code>slice(None)</code></a>
+<a href="#toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
 </li>
 <li>
-<a href="#toc_15">String for pandas datetime period and frequency</a>
+<a href="#toc_15">Use <code>:</code> or <code>slice(None)</code></a>
 </li>
 <li>
-<a href="#toc_16">Python Library for Probabilistic Graphical Models</a>
+<a href="#toc_16">String for pandas datetime period and frequency</a>
 </li>
 <li>
-<a href="#toc_17">Python blocking and non-blocking subprocess calls</a>
+<a href="#toc_17">Python Library for Probabilistic Graphical Models</a>
 </li>
 <li>
-<a href="#toc_18">nohup python that includes a nohup shell script</a>
+<a href="#toc_18">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_19">nohup python that includes a nohup shell script</a>
+</li>
+<li>
+<a href="#toc_20">ipython jupyter notebook pandas showing options</a>
+</li>
+<li>
+<a href="#toc_21">matplotlib style and colors</a>
+</li>
+<li>
+<a href="#toc_22">matplotlib backend choices</a>
+</li>
+<li>
+<a href="#toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</a>
+</li>
+<li>
+<a href="#toc_24">Conda install python package CondaHTTPError Error</a>
 </li>
 </ul>
 
@@ -550,12 +706,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250614.html" 
-	        title="Previous Post: giraph">&laquo; giraph</a>
+	        <a class="basic-alignment left" href="14742423250478.html" 
+	        title="Previous Post: bash">&laquo; bash</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14773416332741.html" 
-	        title="Next Post: Graphviz Dot">Graphviz Dot &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250761.html" 
+	        title="Next Post: technical analysis">technical analysis &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -568,7 +724,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(11)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
 	        
 	        
 	        
@@ -610,19 +766,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+		        <a href="14820465795454.html">mongodb</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250660.html">maven</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -634,9 +784,17 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14773416332741.html">Graphviz Dot</a>
+		        <a href="14742423250761.html">technical analysis</a>
 		      </li>
 	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250700.html">pig</a>
+		      </li>
+	     
+	  
+	      
 	  
 	      
 	  
