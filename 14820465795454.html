@@ -179,7 +179,6 @@ After install this app, the <code>~/Library/LaunchAgents/homebrew.mxcl.mongodb.p
 
 <ul>
 <li><a href="https://docs.mongodb.com/manual/reference/ulimit/#recommended-ulimit-settings">recommended limit</a></li>
-<li>change the limit from the <code>plist</code> file will <strong>not</strong> help.</li>
 <li>temporary set a higher limit (which will expire when restart)</li>
 </ul>
 
@@ -188,6 +187,15 @@ sudo launchctl limit maxproc 2048 2048
 ulimit -n 65536
 sudo ulimit -u 2048
 </code></pre>
+
+<p>What I did in the end that works are exactly following the <a href="https://github.com/basho/basho_docs/issues/1402">aforementioned post</a></p>
+
+<ol>
+<li>Changed the limit from the <code>plist</code> file.</li>
+<li>created the two file: <code>/Library/LaunchDaemons/limit.maxfiles.plist</code> and <code>/Library/LaunchDaemons/limit.maxproc.plis</code></li>
+<li>Updated my <code>~/.bashrc</code></li>
+<li>restart</li>
+</ol>
 
 <h1 id="toc_3">sort argument inside find_one method</h1>
 
@@ -291,6 +299,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
+	        <a class="basic-alignment left" href="14742423250761.html" 
+	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
+	    
 	    
 	        <a class="basic-alignment right" href="14742423250478.html" 
 	        title="Next Post: bash">bash &raquo;</a>
@@ -348,19 +359,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
 		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250638.html">git</a>
 		      </li>
 	     
 	  
@@ -372,7 +377,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  

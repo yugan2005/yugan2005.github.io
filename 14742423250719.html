@@ -165,6 +165,18 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_24">Conda install python package CondaHTTPError Error</a>
 </li>
+<li>
+<a href="#toc_25">utf8 unicode in string formatter &amp; file read/write</a>
+</li>
+<li>
+<a href="#toc_26">Use a relative path in a python module</a>
+</li>
+<li>
+<a href="#toc_27">Mysterious Error pandas groupby error</a>
+</li>
+<li>
+<a href="#toc_28">matplotlib add axes (subplot) on a made figure and sharex</a>
+</li>
 </ul>
 
 
@@ -578,6 +590,145 @@ The remote server could not find the channel you requested.</p>
 
 <p>Problem solved.</p>
 
+<h1 id="toc_25">utf8 unicode in string formatter &amp; file read/write</h1>
+
+<ul>
+<li>Use the <code>io</code> package for utf8 file read/write</li>
+</ul>
+
+<pre><code class="language-python">import io
+with io.open(filename,&#39;r&#39;,encoding=&#39;utf8&#39;) as f:
+    text = f.read()
+# process Unicode text
+with io.open(filename,&#39;w&#39;,encoding=&#39;utf8&#39;) as f:
+    f.write(text)
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/19591815/4229125">Stackoverflow post</a></p>
+
+<ul>
+<li>Use <code>u</code> for both strings in string formatter</li>
+</ul>
+
+<pre><code class="language-python">s = u&#39;\u2265&#39;
+
+# UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2265&#39; in position 0...
+print &#39;{0}&#39;.format(s)
+
+# Correct
+print u&#39;{0}&#39;.format(s)
+</code></pre>
+
+<ul>
+<li>To make the code itself utf8 (such as including chinese characters inside the code), add this line at the beginning of the python file</li>
+</ul>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+</code></pre>
+
+<h1 id="toc_26">Use a relative path in a python module</h1>
+
+<p>Use case: need refer to my personal key which is located in another folder <code>resources</code></p>
+
+<p>Store the absolute path to the module directory at the very beginning of the module:</p>
+
+<pre><code class="language-python">package_directory = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(package_directory, &#39;../resources/tk.key&#39;), &#39;r&#39;) as f:
+    token = f.readline()
+    ts.set_token(token)
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/4187345/4229125">stackoverflow post</a></p>
+
+<p>The same trick can be used for import a relative path module. <a href="http://stackoverflow.com/a/7506029/4229125">This neat trick is from stackoverflow here</a></p>
+
+<p>At the head of the python file:</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), &#39;..&#39;))
+
+import pymongo
+from indicators import commonIndicator
+from Const import Const
+import fromTDX
+</code></pre>
+
+<h1 id="toc_27">Mysterious Error pandas groupby error</h1>
+
+<p>For some version of Pandas actually this error will not occur. (pandas v.18.1 will have error, but v.19 has no problem)  </p>
+
+<ul>
+<li>Symptom:</li>
+</ul>
+
+<blockquote>
+<p>lib/python2.7/site-packages/pandas/core/groupby.pyc in reset_identity(values)<br/>
+AttributeError: &#39;NoneType&#39; object has no attribute &#39;_get_axis&#39;</p>
+</blockquote>
+
+<ul>
+<li><p>Cause:<br/><br/>
+The apply function return <code>None</code>. When groupby then apply this func, this will cause issue.<br/><br/>
+<a href="http://stackoverflow.com/a/20225276/4229125">A similar discussion on stackoverflow</a></p></li>
+<li><p>The fix:</p></li>
+</ul>
+
+<p>The apply func should return empty <code>pd.DataFrame()</code> or empty <code>pd.Series()</code>.   </p>
+
+<p>Wrong:</p>
+
+<pre><code class="language-python">def get_buy_in_grp(self, grp):
+   cond_1_m0 = (grp[&#39;MA_2_&#39; + self.base_period] &gt; grp[&#39;MA_5_&#39; + self.base_period])
+   cond_1 = cond_1_m0 &amp; (~cond_1_m0.shift().astype(bool))
+   cond_2 = (grp[&#39;MA_5_&#39; + self.base_period] &gt;= self.MA5_p * grp[&#39;MA_5_&#39; + self.base_period].shift())
+   cond = cond_1 &amp; cond_2
+
+   if ~(cond.any()):
+       return
+   return grp[cond]
+</code></pre>
+
+<p>Correct:</p>
+
+<pre><code class="language-python">def get_buy_in_grp(self, grp):
+   cond_1_m0 = (grp[&#39;MA_2_&#39; + self.base_period] &gt; grp[&#39;MA_5_&#39; + self.base_period])
+   cond_1 = cond_1_m0 &amp; (~cond_1_m0.shift().astype(bool))
+   cond_2 = (grp[&#39;MA_5_&#39; + self.base_period] &gt;= self.MA5_p * grp[&#39;MA_5_&#39; + self.base_period].shift())
+   cond = cond_1 &amp; cond_2
+
+   if ~(cond.any()):
+       return pd.DataFrame() # return None may cause issues for the groupby().apply() action
+   return grp[cond]     
+</code></pre>
+
+<h1 id="toc_28">matplotlib add axes (subplot) on a made figure and sharex</h1>
+
+<p>Use the <code>fig.add_axes()</code> method <a href="http://matplotlib.org/api/figure_api.html#matplotlib.figure.Figure.add_axes">official document</a></p>
+
+<p>To sharex, just <code>sharex</code> parameter in the method. Note that if <code>adjustable</code> parameter is set, in order to use <code>sharex</code>, <code>adjustable = ‘datalim’</code></p>
+
+<pre><code class="language-python">
+# the fig and ax_close etc are returned by another method
+
+ax_close_pos = ax_close.get_position()
+ax_macd_pos = [ax_close_pos.x0, ax_close_pos.y0, ax_close_pos.width, ax_close_pos.height/5.0]
+ax_macd = fig.add_axes(ax_macd_pos, frameon=True, sharex=ax_close)
+macd_df = (test_record.df[[col_name for col_name in test_record.df.columns
+                           if col_name[-1]==&#39;m&#39;]]
+           .drop_duplicates()
+           .set_index(&#39;Date_m&#39;))
+ax_macd.bar(macd_df[macd_df.MACD_m&gt;0].index.values, 
+            macd_df[macd_df.MACD_m&gt;0].MACD_m.values,
+            width=15, color=&#39;salmon&#39;)
+ax_macd.bar(macd_df[macd_df.MACD_m&lt;0].index.values, 
+            macd_df[macd_df.MACD_m&lt;0].MACD_m.values,
+            width=15, color=&#39;steelblue&#39;)
+ax_macd.grid(True)
+mpld3.display()
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -656,6 +807,18 @@ The remote server could not find the channel you requested.</p>
 <li>
 <a href="#toc_24">Conda install python package CondaHTTPError Error</a>
 </li>
+<li>
+<a href="#toc_25">utf8 unicode in string formatter &amp; file read/write</a>
+</li>
+<li>
+<a href="#toc_26">Use a relative path in a python module</a>
+</li>
+<li>
+<a href="#toc_27">Mysterious Error pandas groupby error</a>
+</li>
+<li>
+<a href="#toc_28">matplotlib add axes (subplot) on a made figure and sharex</a>
+</li>
 </ul>
 
 
@@ -706,12 +869,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250478.html" 
-	        title="Previous Post: bash">&laquo; bash</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250761.html" 
-	        title="Next Post: technical analysis">technical analysis &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250638.html" 
+	        title="Next Post: git">git &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -766,19 +926,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
 		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250638.html">git</a>
 		      </li>
 	     
 	  
@@ -790,7 +944,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  

@@ -114,6 +114,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_7">使用通达信等本地股票软件的数据</a>
 </li>
+<li>
+<a href="#toc_8">通达信的本地数据</a>
+</li>
 </ul>
 
 
@@ -189,7 +192,25 @@ daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39
 
 <h1 id="toc_7">使用通达信等本地股票软件的数据</h1>
 
-<p><a href="%E7%94%A8golang%E9%81%8D%E5%8E%86%E8%AF%81%E5%88%B8%E8%BD%AF%E4%BB%B6%E9%80%9A%E8%BE%BE%E4%BF%A1%E6%97%A5%E7%BA%BF%E7%9B%AE%E5%BD%95">使用的go语言</a></p>
+<p><a href="http://studygolang.com/topics/922">使用的go语言</a></p>
+
+<h1 id="toc_8">通达信的本地数据</h1>
+
+<ul>
+<li>最全面的方式是在通达信中键入34打开数据导出，然后导出数据为CSV的格式。
+
+<ul>
+<li>这种方式可以选择前后复权或者不复权。</li>
+<li>必须在windows才有这项功能</li>
+<li>VMShareFolder的同步</li>
+<li><a href="https://github.com/pywinauto/pywinauto">pywinauto</a>来实现自动操作</li>
+</ul></li>
+<li><p>可以在<code>安装目录\vipdoc\{sh,sz}\lday</code>下直接读取binary的日线数据文件，读取的格式是：<br/>
+<code>int date; int open; int high; int low; int close; int amount; int vol; int reservation;</code><br/><br/>
+<a href="http://www.doczj.com/doc/aa3ebcb827284b73f24250d8.html">参考文档 - 目录位置</a><br/>
+<a href="http://www.doczj.com/doc/d1217c1ec281e53a5802ff71-3.html">参考文档 - 数据结构</a></p></li>
+<li></li>
+</ul>
 
 <hr/>
 
@@ -217,6 +238,9 @@ daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39
 </li>
 <li>
 <a href="#toc_7">使用通达信等本地股票软件的数据</a>
+</li>
+<li>
+<a href="#toc_8">通达信的本地数据</a>
 </li>
 </ul>
 
@@ -268,12 +292,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250719.html" 
-	        title="Previous Post: python">&laquo; python</a>
+	        <a class="basic-alignment left" href="14742423250638.html" 
+	        title="Previous Post: git">&laquo; git</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250700.html" 
-	        title="Next Post: pig">pig &raquo;</a>
+	        <a class="basic-alignment right" href="14820465795454.html" 
+	        title="Next Post: mongodb">mongodb &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -328,19 +352,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
 		        <a href="14742423250719.html">python</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250638.html">git</a>
 		      </li>
 	     
 	  
@@ -352,7 +370,13 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250700.html">pig</a>
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
