@@ -102,6 +102,9 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_3">Mac OS gets very busy on background process</a>
 </li>
+<li>
+<a href="#toc_4">DNS and VPN connection issue</a>
+</li>
 </ul>
 
 
@@ -168,6 +171,13 @@ source deactive
 See the <a href="http://apple.stackexchange.com/a/234478">original post for this scirpt</a><br/></li>
 </ol>
 
+<h1 id="toc_4">DNS and VPN connection issue</h1>
+
+<pre><code class="language-bash">alias reload=&quot;sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.mDNSResponder.plist;sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.mDNSResponder.plist&quot;
+</code></pre>
+
+<p>From obuli: this refreshes DNS entries somehow i have to do this every time I connect to VPN from my home</p>
+
 <hr/>
 
 <ul>
@@ -182,6 +192,9 @@ See the <a href="http://apple.stackexchange.com/a/234478">original post for this
 </li>
 <li>
 <a href="#toc_3">Mac OS gets very busy on background process</a>
+</li>
+<li>
+<a href="#toc_4">DNS and VPN connection issue</a>
 </li>
 </ul>
 
@@ -233,12 +246,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250782.html" 
-	        title="Previous Post: vim">&laquo; vim</a>
+	        <a class="basic-alignment left" href="14742423250761.html" 
+	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250680.html" 
-	        title="Next Post: metrics">metrics &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250700.html" 
+	        title="Next Post: pig">pig &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -293,13 +306,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250638.html">git</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -311,13 +330,7 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  

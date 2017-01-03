@@ -111,6 +111,12 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_6">check mongodb is running or not</a>
 </li>
+<li>
+<a href="#toc_7">embedded documents</a>
+</li>
+<li>
+<a href="#toc_8">delete a field</a>
+</li>
 </ul>
 
 
@@ -136,6 +142,18 @@ $(document).ready(function(event) {
 start_date = dateparser.parse(&#39;2015-01-01&#39;)
 end_date = dateparser.parse(&#39;2016-01-01&#39;)
 mongo_df = pd.DataFrame(list(db.timeline.find({&#39;Date&#39;:{&#39;$lt&#39;:end_date, &#39;$gt&#39;:start_date}})))
+</code></pre>
+
+<ul>
+<li>If it is pymongo&#39;s <code>find_one</code> output, it should convert to <code>pd.Series</code> instead of dataframe</li>
+</ul>
+
+<pre><code class="language-python">import pymongo
+import pandas as pd
+client = pymongo.MongoClient(host=&#39;localhost&#39;, port=27017)
+db = client[&#39;personalTrader&#39;]
+symbol_coll = db[&#39;symbol&#39;]
+stock_info = pd.Series(symbol_coll.find_one({&#39;code&#39;:&#39;600000&#39;}))
 </code></pre>
 
 <h1 id="toc_1">Auto Start MongoDB daemon (mongod) on the background</h1>
@@ -225,6 +243,99 @@ last_date = db[ncode].find_one(sort=[(&#39;Date_d&#39;, pymongo.DESCENDING)])[&#
 <pre><code class="language-bash">ps -ef | grep mongod | grep -v grep | wc -l | tr -d &#39; &#39;
 </code></pre>
 
+<h1 id="toc_7">embedded documents</h1>
+
+<p>Filter or no filter,there is no difference on performance. See this <a href="http://stackoverflow.com/a/2140125/4229125">post</a>:  </p>
+
+<blockquote>
+<p>There&#39;s currently no way to filter on embedded docs in the way you&#39;re describing. Using the dot notation allows you to match on an embedded doc, but the entire document, parent and all, will still be returned. It&#39;s also possible to select which fields will be returned, but that doesn&#39;t really help your case, either.</p>
+</blockquote>
+
+<p>It doesn&#39;t make difference to filter it inside pandas DataFrame or filter it from the mongodb side.</p>
+
+<p>However, I have some good working examples for the advanced usage of mongodb</p>
+
+<ul>
+<li>put a dataframe into a document as an array of embedded sub-documents</li>
+</ul>
+
+<pre><code class="language-python">code = &#39;600033&#39;
+symbol_coll.update_one({&#39;code&#39;:code}, 
+                       {&#39;$set&#39;: {&#39;fhpg&#39;: [dict(v.dropna()) for k, v in df.iterrows()]}}, 
+                       upsert=False)
+</code></pre>
+
+<p>In the above code, <code>[dict(v.dropna()) for k, v in df.iterrows()]</code> is equivalent to <code>df.to_dict(&#39;records&#39;)</code>, but also skip the field with <code>nan</code> values when insert into the mongodb, i.e. make the database a little bit cleaner.</p>
+
+<ul>
+<li>get the dataframe out from an array of embedded sub-documents inside a document. Need use pipeline (listed two methods below)</li>
+</ul>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_project = {&#39;$project&#39;: {&#39;fhps&#39;:1, &#39;_id&#39;:0}}
+pipeline=[p_match, p_project]
+
+# note the use of [0], because the aggregate result is a list with one element
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline))[0][&#39;fhps&#39;])
+
+# use $unwind, do not need [0] anymore.
+p_unwind = {&#39;$unwind&#39;: {&#39;path&#39;:&#39;$fhps&#39;}}
+pipeline=[p_match, p_project, p_unwind]
+df = pd.DataFrame([record[&#39;fhps&#39;] for record in symbol_coll.aggregate(pipeline)])
+</code></pre>
+
+<ul>
+<li>get only one field (one column) out from an array of embedded sub-documents inside a document.</li>
+</ul>
+
+<p>The trick is inside the <code>$project</code>: using the <a href="https://docs.mongodb.com/manual/reference/glossary/#term-field-path">field path</a> syntax</p>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_unwind = {&#39;$unwind&#39;: {&#39;path&#39;:&#39;$fhps&#39;}}
+# here used field path syntax
+p_project = {&#39;$project&#39;: {&#39;Date&#39;: &#39;$fhps.Date&#39;, &#39;_id&#39;:0}}
+pipeline=[p_match, p_unwind, p_project]
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline)))
+</code></pre>
+
+<ul>
+<li>get some rows out from an array of embedded sub-documents inside a document.</li>
+</ul>
+
+<p>This is much easier to do once we have pandas dataframe. To do it in side mongo actually has no benefit. But document there as a future reference</p>
+
+<p><strong>A pitfall : <code>$elemMatch</code> used with <code>$project</code> only return the <font color='red'>first</font> matching element.</strong> <a href="https://docs.mongodb.com/v3.2/reference/operator/projection/elemMatch/#definition">See reference here</a><br/>
+<strong>The same thing holds true for <code>$</code>, i.e. the positional operator</strong> <a href="https://docs.mongodb.com/v3.2/reference/operator/projection/positional/#proj._S_">reference here</a></p>
+
+<pre><code class="language-python"># only return the first match
+symbol_coll.find_one({&#39;code&#39;:code, 
+                      &#39;fhps.Date&#39;:{&#39;$lt&#39;:date_parser.parse(&#39;2012-06-25&#39;)}},
+                     {&#39;fhps.$&#39;:1, &#39;_id&#39;:0})
+# still only return the first match
+symbol_coll.find_one({&#39;code&#39;: code}, {&#39;fhps&#39;: {&#39;$elemMatch&#39;: {&#39;Fh&#39;: {&#39;$gt&#39;: 0.01}}}, &#39;_id&#39;:0})    
+</code></pre>
+
+<p>Need use <code>$filter</code> method inside the <code>$project</code> pipeline stage (<font color='red'> <code>$filter</code> itself is not a pipeline stage</font>)</p>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_project = {&#39;$project&#39;: {&#39;fhps&#39;:{&#39;$filter&#39;:{&#39;input&#39;:&#39;$fhps&#39;, 
+                                             &#39;as&#39;:&#39;fhps_f&#39;,
+                                             &#39;cond&#39;:{&#39;$gt&#39;: [&#39;$$fhps_f.Date&#39;, date_parser.parse(&#39;2012-06-25&#39;)]}}},
+                          &#39;_id&#39;:0}}
+pipeline=[p_match, p_project]
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline))[0][&#39;fhps&#39;])
+</code></pre>
+
+<p><code>$$</code> in the above code is the syntax to refer a variable, as explained <a href="https://docs.mongodb.com/master/meta/aggregation-quick-reference/#field-path-and-system-variables">in the official document</a></p>
+
+<h1 id="toc_8">delete a field</h1>
+
+<p>I need remove <code>fhps</code> which is an array of embedded sub-documents:</p>
+
+<pre><code class="language-python"># note the empty &#39;&#39; inside the unset
+symbol_coll.update_one({&#39;code&#39;:code}, {&#39;$unset&#39;:{&#39;fhps&#39;:&#39;&#39;}})
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -248,6 +359,12 @@ last_date = db[ncode].find_one(sort=[(&#39;Date_d&#39;, pymongo.DESCENDING)])[&#
 </li>
 <li>
 <a href="#toc_6">check mongodb is running or not</a>
+</li>
+<li>
+<a href="#toc_7">embedded documents</a>
+</li>
+<li>
+<a href="#toc_8">delete a field</a>
 </li>
 </ul>
 
@@ -299,12 +416,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250761.html" 
-	        title="Previous Post: technical analysis">&laquo; technical analysis</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250478.html" 
-	        title="Next Post: bash">bash &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250719.html" 
+	        title="Next Post: python">python &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -359,13 +473,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250638.html">git</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -377,13 +497,7 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  

@@ -132,6 +132,12 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_13">Hadoop Yarn get the Aggregated Log for a job</a>
 </li>
+<li>
+<a href="#toc_14">History search</a>
+</li>
+<li>
+<a href="#toc_15">check what pid is listening to the port</a>
+</li>
 </ul>
 
 
@@ -338,6 +344,30 @@ screen -r
 <pre><code class="language-bash">yarn logs -applicationId application_1478897002704_67148 -appOwner yu  
 </code></pre>
 
+<h1 id="toc_14">History search</h1>
+
+<p>I use very frequently <code>Ctrl-r</code> to get the command. However, not in the most efficient way. It should be:</p>
+
+<ol>
+<li><code>Ctrl-r</code></li>
+<li>type in the start of the command</li>
+<li>repeat pressing <code>Ctrl-r</code> to do the reverse search</li>
+<li>use <code>Ctrl-s</code> to do the forward search with the partially typed in command</li>
+</ol>
+
+<p>In order to enable <code>Ctrl-s</code>, <a href="http://stackoverflow.com/a/36331088/4229125">the following setting need be configured in <code>~/.bashrc</code></a></p>
+
+<pre><code class="language-bash"># Y.G. to enable Ctrl-S for the reverse command history search
+stty -ixon
+</code></pre>
+
+<h1 id="toc_15">check what pid is listening to the port</h1>
+
+<p><a href="http://unix.stackexchange.com/a/106572">from this post, and works for mac</a></p>
+
+<pre><code class="language-bash">lsof -i :4444 # I used this to check whether my Selenium server has been shut down
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -382,6 +412,12 @@ screen -r
 </li>
 <li>
 <a href="#toc_13">Hadoop Yarn get the Aggregated Log for a job</a>
+</li>
+<li>
+<a href="#toc_14">History search</a>
+</li>
+<li>
+<a href="#toc_15">check what pid is listening to the port</a>
 </li>
 </ul>
 
@@ -433,12 +469,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14820465795454.html" 
-	        title="Previous Post: mongodb">&laquo; mongodb</a>
+	        <a class="basic-alignment left" href="14742423250719.html" 
+	        title="Previous Post: python">&laquo; python</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250700.html" 
-	        title="Next Post: pig">pig &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250761.html" 
+	        title="Next Post: technical analysis">technical analysis &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -493,13 +529,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250638.html">git</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -511,13 +553,7 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  

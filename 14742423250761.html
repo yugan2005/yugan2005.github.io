@@ -117,6 +117,21 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_8">通达信的本地数据</a>
 </li>
+<li>
+<a href="#toc_9">知乎上的一个关于获取数据的合集</a>
+</li>
+<li>
+<a href="#toc_10">各种股票软件当地数据的数据结构</a>
+</li>
+<li>
+<a href="#toc_11">实时行情数据接口</a>
+</li>
+<li>
+<a href="#toc_12">前后，不复权</a>
+</li>
+<li>
+<a href="#toc_13">Very useful Yahoo API to obtain data</a>
+</li>
 </ul>
 
 
@@ -209,8 +224,218 @@ daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39
 <code>int date; int open; int high; int low; int close; int amount; int vol; int reservation;</code><br/><br/>
 <a href="http://www.doczj.com/doc/aa3ebcb827284b73f24250d8.html">参考文档 - 目录位置</a><br/>
 <a href="http://www.doczj.com/doc/d1217c1ec281e53a5802ff71-3.html">参考文档 - 数据结构</a></p></li>
-<li></li>
+<li><p>通达信的复权有一个精确复权的选项，在这个<a href="https://read01.com/yzaQ04.html">帖子</a>里面有比较</p></li>
+<li><p>这个blog有一套很全面的通达信目录文件结构的说明<br/>
+<a href="http://www.programgo.com/article/80971445678/;jsessionid=1C3A149026552B218952C855376F14C6">目录文件结构说明</a></p></li>
+<li><p>C code for read in the daily data</p></li>
 </ul>
+
+<pre><code class="language-c++">//  stock.cpp : Defines the entry point for the console application.
+ //
+ 
+#include  &quot; stdafx.h &quot; 
+#include  &lt; stdio.h &gt; 
+#include  &lt; conio.h &gt; 
+#include  &lt; stdlib.h &gt; 
+
+typedef  struct 
+ {
+    int date;
+    int open;
+    int high;
+    int low;
+    int close;
+    int amount;
+    int vol;
+    int reservation;
+}  StockData; 
+
+StockData stockData;
+ int  read_data(FILE  * );
+
+ void  main()
+ {
+    FILE *fp;
+    if((fp = fopen(&quot;E:/通达信/Vipdoc/sh/lday/sh600036.day&quot;,&quot;rb&quot;)) == NULL) // 打开招商银行日线
+    { printf(&quot;Error: Can^t open sh600036.DAY ! &quot;);
+    exit(0); }
+    read_data(fp);
+    fclose(fp);
+    if(getch()==0) getch();
+    exit(0);
+} 
+
+ int  read_data(FILE  * fp)
+ {
+    float fn;
+    while (! feof(fp)) {
+        fread(&amp;stockData,sizeof(StockData),1,fp);
+        printf(&quot;%10lu &quot;,stockData.date);
+        fn=float(stockData.open)/100;
+        printf(&quot;%8.2f &quot;,fn);
+        fn=float(stockData.high)/100;
+        printf(&quot;%8.2f &quot;,fn);
+        fn=float(stockData.low)/100;
+        printf(&quot;%8.2f &quot;,fn);
+        fn=float(stockData.close)/100;
+        printf(&quot;%8.2f &quot;,fn);
+        printf(&quot;%8lu &quot;,stockData.amount);
+        fn=float(stockData.vol)/100;
+        printf(&quot;%8.2f &quot;,fn);
+    }
+    printf(&quot; &quot;);
+    return 0;
+} 
+</code></pre>
+
+<p><a href="http://www.cnblogs.com/same/archive/2007/04/13/711466.html">另一个数据读取的源码</a></p>
+
+<h1 id="toc_9">知乎上的一个关于获取数据的合集</h1>
+
+<p><a href="https://www.zhihu.com/question/22145919">不错的一个总结</a></p>
+
+<p>其中我准备实现的是:    </p>
+
+<ul>
+<li>yahoo</li>
+<li>Sina</li>
+<li>雪球</li>
+<li>sohu <a href="http://q.stock.sohu.com/hisHq?code=zs_000001&amp;start=20000504&amp;end=20151215&amp;stat=1&amp;order=D&amp;period=d&amp;callback=historySearchHandler&amp;rt=jsonp&amp;r=0.8391495715053367&amp;0.9677250558488026">一个范例e</a></li>
+<li>tushare</li>
+</ul>
+
+<h1 id="toc_10">各种股票软件当地数据的数据结构</h1>
+
+<p><a href="http://so.anggang.com/?a=url&amp;k=c3732a2c&amp;u=aHR0cDovL3d3dy4zNjBkb2MuY29tL2NvbnRlbnQvMTAvMTIwMy8xNS8xMzcyNDA5Xzc0Njk1MDEzLnNodG1s&amp;t=5Yi45ZWG572R57uc5o6l5Y!j5YiG5p6Q5pa55rOVKOW3sue7j!WPr!S7peS4jumAmui!vuS@oeacjeWKoeWZqOihjOaDheaVsOaNrui@nuaOpSEpKOmhtSAuLi4=&amp;s=6YCa6L6!5L!h6IKh56Wo5pWw5o2u5o6l5Y!j">汇总的帖子</a></p>
+
+<h1 id="toc_11">实时行情数据接口</h1>
+
+<p><a href="http://so.anggang.com/?a=url&amp;k=c3732a2c&amp;u=aHR0cDovL3d3dy4zNjBkb2MuY29tL2NvbnRlbnQvMTAvMTIwMy8xNS8xMzcyNDA5Xzc0Njk1MDEzLnNodG1s&amp;t=5Yi45ZWG572R57uc5o6l5Y!j5YiG5p6Q5pa55rOVKOW3sue7j!WPr!S7peS4jumAmui!vuS@oeacjeWKoeWZqOihjOaDheaVsOaNrui@nuaOpSEpKOmhtSAuLi4=&amp;s=6YCa6L6!5L!h6IKh56Wo5pWw5o2u5o6l5Y!j">带附件下载的</a></p>
+
+<h1 id="toc_12">前后，不复权</h1>
+
+<p><a href="https://xueqiu.com/3488649239/62074848">这个帖子说得很详细</a><br/>
+<img src="media/14742423250761/14828098074435.jpg" alt=""/></p>
+
+<h1 id="toc_13">Very useful Yahoo API to obtain data</h1>
+
+<p>Spent more time to dig into the Yahoo API. They actually have all data including dividend and split.</p>
+
+<p>There are several different APIs:</p>
+
+<hr/>
+
+<ul>
+<li>For getting the <font color='red'><strong>historical</strong></font> information: <code>http://ichart.yahoo.com/</code>
+
+<ol>
+<li><code>http://ichart.yahoo.com/x?</code></li>
+<li><code>http://ichart.yahoo.com/table.csv?</code></li>
+</ol></li>
+</ul>
+
+<p>The <code>x?</code> API can get access to dividend and split information, which is very important!<br/>
+There is no complete API documentation that I can find. but a <a href="http://stackoverflow.com/a/6123886/4229125">sample code looks like this</a>:   </p>
+
+<pre><code class="language-html">http://ichart.finance.yahoo.com/x?s=IBM&amp;a=00&amp;b=2&amp;c=1962&amp;d=04&amp;e=25&amp;f=2011&amp;g=v&amp;y=0&amp;z=30000
+</code></pre>
+
+<p>As far as I can tell, <code>g=v</code> means get the dividend and split, <code>y</code> and <code>z</code> seems not been used, and the starting date / ending date of <code>a~f</code> can be ignored if we need all information of the dividend and split. My example:</p>
+
+<pre><code class="language-html">http://ichart.finance.yahoo.com/x?s=600859.SS&amp;g=v
+</code></pre>
+
+<p>specifying the date can cut the data&#39;s from/to:</p>
+
+<pre><code class="language-html">http://ichart.finance.yahoo.com/x?s=600859.SS&amp;a=0&amp;b=1&amp;c=1998&amp;d=0&amp;e=1&amp;f=2013&amp;g=v
+STARTDATE, 19980101
+ENDDATE, 20130101
+</code></pre>
+
+<p>The <code>table.csv?</code> API is very similar, only difference is the lack of the <font color='red'><strong>split</strong></font> information.</p>
+
+<p><a href="http://community.jaspersoft.com/wiki/building-custom-datasource-yahoo-finance-data">A good post for the meaning of the parameters and a Java implementation</a></p>
+
+<p>A exmaple:</p>
+
+<pre><code class="language-html">http://ichart.finance.yahoo.com/table.csv?s=YHOO&amp;d=0&amp;e=28&amp;f=2010&amp;g=d&amp;a=3&amp;b=12&amp;c=2009&amp;ignore=.csv
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">symbol</th>
+<th style="text-align: center">meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">s</td>
+<td style="text-align: center">Ticker symbol</td>
+</tr>
+<tr>
+<td style="text-align: center">a</td>
+<td style="text-align: center">The &quot;from month&quot; - 1</td>
+</tr>
+<tr>
+<td style="text-align: center">b</td>
+<td style="text-align: center">The &quot;from day&quot; (two digits)</td>
+</tr>
+<tr>
+<td style="text-align: center">c</td>
+<td style="text-align: center">The &quot;from year&quot;</td>
+</tr>
+<tr>
+<td style="text-align: center">d</td>
+<td style="text-align: center">The &quot;to month&quot; - 1</td>
+</tr>
+<tr>
+<td style="text-align: center">e</td>
+<td style="text-align: center">The &quot;to day&quot; (two digits)</td>
+</tr>
+<tr>
+<td style="text-align: center">f</td>
+<td style="text-align: center">The &quot;to year&quot;</td>
+</tr>
+<tr>
+<td style="text-align: center">g</td>
+<td style="text-align: center">d for day, m for month, y for yearly, v for dividend</td>
+</tr>
+</tbody>
+</table>
+
+<p>Javascript built-in function can be used in the url too, <a href="https://support.klipfolio.com/hc/en-us/articles/215546368-Use-Yahoo-Finance-as-a-data-source-">example</a></p>
+
+<pre><code class="language-html">http://ichart.yahoo.com/x?s=600839.SS&amp;a={date.addMonths(-2).format(&#39;MM&#39;)}&amp;b={date.today.format(&#39;dd&#39;)}&amp;c={date.today.format(&#39;yyyy&#39;)}&amp;d={date.addMonths(-1).format(&#39;MM&#39;)}&amp;e={date.today.format(&#39;dd&#39;)}&amp;f={date.today.format(&#39;yyyy&#39;)}&amp;g=v&amp;ignore=.csv
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>For getting the <font color='red'><strong>latest</strong></font> information: <code>http://finance.yahoo.com/d/</code><br/>
+
+<ol>
+<li><code>http://download.finance.yahoo.com/d/quotes.csv?</code></li>
+<li><code>http://finance.yahoo.com/d/quotes.csv?</code></li>
+</ol></li>
+</ul>
+
+<p><code>http://download.finance.yahoo.com/d/quotes.csv?s={SYMBOLS}&amp;f={DATA THAT WE WANT}</code><br/>
+<code>f</code> is for the data specification characters. </p>
+
+<ul>
+<li><a href="http://wern-ancheta.com/blog/2015/04/05/getting-started-with-the-yahoo-finance-api/">Here is a good table for all the symbols</a> </li>
+<li><a href="http://www.jarloo.com/yahoo_finance/">Another good one</a></li>
+<li><a href="https://greenido.wordpress.com/2009/12/22/work-like-a-pro-with-yahoo-finance-hidden-api/">Another yet good one</a></li>
+<li><a href="http://www.financialwisdomforum.org/gummy-stuff/Yahoo-data.htm">gummy-stuff probably is the first person put everything together</a></li>
+</ul>
+
+<hr/>
+
+<p>There is another yahoo <code>YQL</code> API.   </p>
+
+<p><a href="http://thesimplesynthesis.com/article/finance-apis#yahoo-yql-finance-api">This post</a> give some good information about this and a summary of other yahoo APIs</p>
 
 <hr/>
 
@@ -241,6 +466,21 @@ daily = web.DataReader(&#39;000001.SS&#39;, &#39;yahoo&#39;, &#39;2000-01-01&#39
 </li>
 <li>
 <a href="#toc_8">通达信的本地数据</a>
+</li>
+<li>
+<a href="#toc_9">知乎上的一个关于获取数据的合集</a>
+</li>
+<li>
+<a href="#toc_10">各种股票软件当地数据的数据结构</a>
+</li>
+<li>
+<a href="#toc_11">实时行情数据接口</a>
+</li>
+<li>
+<a href="#toc_12">前后，不复权</a>
+</li>
+<li>
+<a href="#toc_13">Very useful Yahoo API to obtain data</a>
 </li>
 </ul>
 
@@ -292,12 +532,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250638.html" 
-	        title="Previous Post: git">&laquo; git</a>
+	        <a class="basic-alignment left" href="14742423250478.html" 
+	        title="Previous Post: bash">&laquo; bash</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14820465795454.html" 
-	        title="Next Post: mongodb">mongodb &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250740.html" 
+	        title="Next Post: setting">setting &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -352,13 +592,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250638.html">git</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -370,13 +616,7 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  

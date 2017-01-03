@@ -177,6 +177,15 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_28">Use AvroStorage() inside pig</a>
 </li>
+<li>
+<a href="#toc_29">Load Parquet data to pig</a>
+</li>
+<li>
+<a href="#toc_30">A side-by-side datatype comparison among avro, parquet, and pig</a>
+</li>
+<li>
+<a href="#toc_31">More about the parquet</a>
+</li>
 </ul>
 
 
@@ -643,6 +652,153 @@ DEFINE AvroStorage org.apache.pig.piggybank.storage.avro.AvroStorage(&#39;no_sch
 
 <p>Also, don&#39;t mess with the <code>float</code> and <code>double</code> types with the AvroStorage input.</p>
 
+<h1 id="toc_29">Load Parquet data to pig</h1>
+
+<p>Need specify the schema string in the constructor</p>
+
+<p>for example the following file:<br/>
+<code>/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet</code></p>
+
+<p>The schema of this parquet data is specified in the source code:<br/>
+<code>/Users/yugan/repo/drawbridge/dpp/spark2/src/main/scala/ge/drawbrid/dpp/spark2/pairing/PairingFormat.scala</code></p>
+
+<pre><code class="language-scala">case class PairData(id1: String, id2: String, id1Type: String, id2Type: String, pairingVersion: String,
+                    id1TotalFrequency: Long, id2TotalFreqency: Long, precision: Double, rfc: Double, scores: scala.collection.Map[String, Double])
+</code></pre>
+
+<p>In order to read this data into pig we should do:</p>
+
+<pre><code class="language-sql">A = LOAD &#39;/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;id1:chararray, id2:chararray, id1Type:chararray, id2Type:chararray, pairingVersion:chararray, id1TotalFrequency:long, id2TotalFrequency:long, precision:double, rfc:double, scores:map[double]&#39;);
+</code></pre>
+
+<p>Don&#39;t mess up the field names and the float/double datatypes. Also pay attention to the <code>:map[double]</code> type specification (refer to the <a href="http://pig.apache.org/docs/r0.12.0/basic.html#schema-complex">pig schema documentation here</a>).</p>
+
+<p><font color='red'><strong>The most important advantage is reading some columns out only</strong></font></p>
+
+<pre><code class="language-sql">A = LOAD &#39;/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;id1:chararray, id2:chararray, precision:double&#39;);
+</code></pre>
+
+<ul>
+<li><strong>There is another way to load by column position</strong>
+<a href="http://stackoverflow.com/a/32276119/4229125">stackoverflow post</a></li>
+</ul>
+
+<p>As specified in the <a href="https://github.com/Parquet/parquet-mr/blob/master/parquet-pig/src/main/java/parquet/pig/ParquetLoader.java#L119">source code</a>: just add a boolean string as the 2nd argument (I did not try it)</p>
+
+<pre><code class="language-java">ParquetLoader(String requestedSchemaStr, String columnIndexAccess)
+
+ParquetLoader(&#39;n1:int, n2:float, n3:double, n4:long&#39;, &#39;true&#39;)
+</code></pre>
+
+<ul>
+<li><font color='red'><strong>read in the metadata in the pig mr-planning phase</strong></font></li>
+</ul>
+
+<p>when load parquet data into pig, all parquet files&#39; footer, i.e. metadata need be read in first (which in my case takes quite some time) <br/>
+<a href="https://forums.databricks.com/questions/1097/stall-on-loading-many-parquet-files-on-s3.html">Very good reference</a><br/>
+<a href="https://drill.apache.org/docs/optimizing-parquet-metadata-reading/">reference1</a><br/>
+<a href="https://issues.apache.org/jira/browse/SPARK-9347">reference2</a><br/>
+<a href="https://groups.google.com/forum/#!topic/parquet-dev/aQU9Q8f0bPY">reference3</a></p>
+
+<blockquote>
+<p>I might have an explanation. It appears to be because the current Spark/Hadoop versions are not designed to read thousands of tables (a handful of large/small tables instead). Before any job is actually submitted to the cluster, the driver will go through the parquet files one-by-one, reading the footers from each parquet part. If your parts are small, this is tantamount to the driver serially reading all your data from S3 before starting your job.<br/>
+The driver log contains these lines:<br/>
+Jun 27, 2015 8:34:23 PM INFO: parquet.hadoop.ParquetFileReader: Initiating action with parallelism: 5 Jun 27, 2015 8:34:23 PM INFO: parquet.hadoop.SplitStrategy: Using Client Side Metadata Split Strategy Jun 27, 2015 8:34:24 PM INFO: parquet.hadoop.ClientSideMetadataSplitStrategy: There were no row groups that could be dropped due to filter predicates Jun 27, 2015 8:34:24 PM INFO: parquet.hadoop.ParquetInputFormat: Total input paths to process : 14<br/>
+In addition, it appears that opening up parquet files through the newAPIHadoopFile creates a broadcast variable per file: SparkContext: Created broadcast 653 from newAPIHadoopFile at ADAMContext.scala:150<br/>
+The solution would seem to be to both produce parquet files with larger/fewer parts, and to aggregate your parquet files together. Of course doing so means you might have to pay this penalty to simply run the job to aggregate to a single logical parquet file.<br/>
+A _metadata files contains a copy of all the footers of all the files in same directory. To produce efficient splits and do projection push down we read the metadata on the client side. Consolidating the metadata per directory reduces the number of files to open and speeds up that process.If the _metadata file is absent we just fall back to the files footers, also if there are files are missing, we just ignore the information in the _metadata file so you can delete part files or move them around and it still works.</p>
+</blockquote>
+
+<ul>
+<li><strong>Improve the speed of read in the metadata files</strong><br/>
+Currently I have no good ways to generate the common metadata, the only option that I know is to increase the parquet.metadata.read.parallelism<br/></li>
+</ul>
+
+<p><a href="http://stackoverflow.com/questions/33726400/what-is-parquet-read-parallelism">stackoverflow</a></p>
+
+<blockquote>
+<p>increase ParquetFileReader parallelism from default 5 to 30 - with setting &quot;parquet.metadata.read.parallelism&quot;: &quot;30&quot; in newAPIHadoopFile config</p>
+</blockquote>
+
+<p>The way of setting it is like follow:</p>
+
+<pre><code class="language-sql">%default BUCKET_SIZE 981
+
+SET mapred.job.queue.name &#39;datascience&#39;;
+SET parquet.metadata.read.parallelism 50;
+
+REGISTER /home/adsymp/lib/dpp-pig-udf-0.0.1-SNAPSHOT.jar;
+...
+</code></pre>
+
+<p><strong>reference</strong></p>
+
+<ul>
+<li><a href="https://groups.google.com/forum/#!topic/parquet-dev/qyqRrJ3bMew">A code snippet in a google-group&#39;s post</a></li>
+</ul>
+
+<pre><code class="language-sql">REGISTER /xxtech/scenarios/parquet-pig-bundle-1.2.4.jar
+REGISTER $xxtechLocalRepo/xxtechPigExtension.jar
+REGISTER $xxtechLocalRepo/lib/piggybank.jar
+REGISTER $xxtechLocalRepo/lib/joda-time-1.6.jar
+
+SET job.name parquet-store-$record-$parquet.pig;
+
+dataImport = LOAD ‚/xxtech/$record/{%DATE%}/{%HOUR%}/{*}.avro&#39; USING com.xxtech.repo.pig.udf.storage.avro.ExtendedxxtechAvroStorage(&#39;$timestamp&#39;, &#39;-7200&#39;, &#39;missing_input_dir&#39;);
+
+SET parquet.compression snappy
+SET parquet.enable.dictionary true
+SET parquet.block.size 536870912
+
+store dataImport into &#39;/$parquet/xxtech/$record/20131020/10/$record.par&#39; using parquet.pig.ParquetStorer();
+
+parquet.pig:
+
+REGISTER /xxtech/scenarios/parquet-pig-bundle-1.2.4.jar
+
+data = LOAD &#39;/parquet/xxtech/rawlogs/20131020/10/rawlogs.par/part-m-00000.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;SGSHeader: (VersionID: int,SequenceID: long,RecordType: int,TimeStamp: int,GMTOffset: int)&#39;);
+
+a = GROUP data ALL;
+describe a;
+
+
+b = foreach a generate SUM(a.data.RecordType);
+describe b;
+dump b;
+</code></pre>
+
+<ul>
+<li><a href="https://hadoopified.wordpress.com/2013/10/18/parquet-columnar-storage-hadoop/">A blog. By the way this is a good hadoop blog</a></li>
+</ul>
+
+<h1 id="toc_30">A side-by-side datatype comparison among avro, parquet, and pig</h1>
+
+<p><a href="http://alvincjin.blogspot.com/2014/06/convert-same-pig-and-avro-output-schema.html">Not that useful, just a quick reference</a></p>
+
+<h1 id="toc_31">More about the parquet</h1>
+
+<p><strong>some useful command line tools</strong></p>
+
+<pre><code class="language-bash"># showing schema
+hadoop parquet.tools.Main schema /user/oozie/pairing-modeling-gpairing/2016-12-23/dev-cookie/dev-mob/output/part-r-28207-74d4715e-3418-4f39-9519-109c7364f939.snappy.parquet
+
+# Check meta
+hadoop parquet.tools.Main meta ...
+
+# check head
+ hadoop parquet.tools.Main head ...
+</code></pre>
+
+<p>More <a href="https://www.cloudera.com/documentation/enterprise/5-8-x/topics/cdh_ig_parquet.html#parquet_files">here</a></p>
+
+<ul>
+<li>A visual representation of parquet data strcuture</li>
+</ul>
+
+<p><img src="media/14742423250700/14827763637843.jpg" alt=""/></p>
+
+<p><a href="http://grepalex.com/2014/05/13/parquet-file-format-and-object-model/">Original post</a></p>
+
 <hr/>
 
 <ul>
@@ -733,6 +889,15 @@ DEFINE AvroStorage org.apache.pig.piggybank.storage.avro.AvroStorage(&#39;no_sch
 <li>
 <a href="#toc_28">Use AvroStorage() inside pig</a>
 </li>
+<li>
+<a href="#toc_29">Load Parquet data to pig</a>
+</li>
+<li>
+<a href="#toc_30">A side-by-side datatype comparison among avro, parquet, and pig</a>
+</li>
+<li>
+<a href="#toc_31">More about the parquet</a>
+</li>
 </ul>
 
 
@@ -783,12 +948,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250478.html" 
-	        title="Previous Post: bash">&laquo; bash</a>
+	        <a class="basic-alignment left" href="14742423250740.html" 
+	        title="Previous Post: setting">&laquo; setting</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250614.html" 
-	        title="Next Post: giraph">giraph &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250638.html" 
+	        title="Next Post: git">git &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -843,13 +1008,19 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
+		        <a href="14820465795454.html">mongodb</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="14742423250719.html">python</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250638.html">git</a>
+		        <a href="14742423250478.html">bash</a>
 		      </li>
 	     
 	  
@@ -861,13 +1032,7 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14742423250740.html">setting</a>
 		      </li>
 	     
 	  
