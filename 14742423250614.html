@@ -136,6 +136,24 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_13">The timeout parameter for waiting resources</a>
 </li>
+<li>
+<a href="#toc_14">duplicated job tracker setting is a must</a>
+</li>
+<li>
+<a href="#toc_15">Use both Edge Input and Vertex Value Input</a>
+</li>
+<li>
+<a href="#toc_16">Output during computation</a>
+</li>
+<li>
+<a href="#toc_17">A lot of supersteps cause counters.LimitExceededException</a>
+</li>
+<li>
+<a href="#toc_18">giraph jar Hadoop building dependency</a>
+</li>
+<li>
+<a href="#toc_19">CPU bounded computation</a>
+</li>
 </ul>
 
 
@@ -182,7 +200,8 @@ String[] edges = new String[] { &quot;0 1&quot;, &quot;0 3&quot;, &quot;1 0&quot
 <h1 id="toc_2">giraph edge value not Mutable in place</h1>
 
 <p>edges are just a reference, it can not be changed in place.<br/>
-After mutate the edge value, use <code>vertex.setEdge(id, edgevalue)</code> to change it.</p>
+After mutate the edge value, use <code>vertex.setEdgeValue(targetVertexId, edgeValue)</code> to change it.<br/>
+<a href="https://giraph.apache.org/apidocs/org/apache/giraph/graph/Vertex.html#setEdgeValue-I-E-">Official Document</a></p>
 
 <h1 id="toc_3">giraph shell runner / command line</h1>
 
@@ -413,6 +432,146 @@ the total amount of memory in the Java virtual machine. The value returned by th
 <pre><code class="language-bash">-Dgiraph.maxMasterSuperstepWaitMsecs=18700000 \
 </code></pre>
 
+<h1 id="toc_14">duplicated job tracker setting is a must</h1>
+
+<p>In <code>oozie</code> or just run in command line, for certain version of giraph, we must specify both <code>mapred.job.tracker</code> and <code>mapreduce.job.tracker</code> parameters</p>
+
+<p>Otherwise, there is be error message looks like below:</p>
+
+<blockquote>
+<p>java.lang.IllegalArgumentException: checkLocalJobRunnerConfiguration: When using LocalJobRunner, must have only one worker since only 1 task at a time!</p>
+</blockquote>
+
+<p>This bug actually is reported <a href="https://issues.apache.org/jira/browse/GIRAPH-1001">here</a></p>
+
+<h1 id="toc_15">Use both Edge Input and Vertex Value Input</h1>
+
+<p>EdgeInput to build edges, and vertex value input to attach vertex information to the vertexes.</p>
+
+<p>From <a href="http://giraph.apache.org/io.html">Giraph official document</a> </p>
+
+<blockquote>
+<p>To summarize, VertexInputFormat is usually used by itself, whereas EdgeInputFormat may be used in combination with VertexValueInputFormat.</p>
+</blockquote>
+
+<p>The way of specifying <code>VertexValueInputFormat</code> in the command line parameter is exactly the same as using <code>VertexInputFormat</code></p>
+
+<p>The schema of EdgeInput is: <code>VId1, VId2, EdgeValue</code> \(\rightarrow\) type info: <code>&lt;I, E&gt;</code><br/>
+The schema of VertexValueInput is : <code>VId, VValue</code> \(\rightarrow\) type info: <code>&lt;I, V&gt;</code></p>
+
+<p>See my latest push of <code>algo-109-v1</code> for example <code>VIF=&#39;com.adsymp.dpp.giraph.jython.inputformats.LongTextTextVertexValueInputFormat&#39;</code></p>
+
+<h1 id="toc_16">Output during computation</h1>
+
+<p>The main class is <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/GiraphTextOutputFormat.java">GiraphTextOutputFormat</a></p>
+
+<ol>
+<li>Set <code>giraph.doOutputDuringComputation</code> <a href="http://giraph.apache.org/options.html">doc</a></li>
+<li>Change behavior of <code>ImmutableClassesGiraphConfiguration</code>
+
+<ol>
+<li>generate <code>SynchronizedSuperstepOutput</code> as <code>SuperstepOutput</code>, the <code>ImmutableClassesGiraphConfiguration</code> is passed to <code>SynchronizedSuperstepOutput</code> constructor <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L462">doc</a></li>
+<li>Inside <code>SynchronizedSuperstepOutput</code>, the <code>ImmutableClassesGiraphConfiguration</code> also create <code>WrappedVertexOutputFormat</code>. <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/superstep_output/SynchronizedSuperstepOutput.java#L64">doc</a></li>
+<li>The <code>WrappedVertexOutputFormat</code> wraps <code>VertexOutputFormat</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L386">doc</a></li>
+<li>The <code>VertexOutputFormat</code> is created by <font color='salmon'><strong>User specified Vertex Output Format Class</strong></font> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L357">doc</a></li>
+<li>The <code>WrappedVertexOutputFormat</code> uses the wrapped <code>VertexOutputFormat</code> class&#39;s method <code>createVertexWriter</code> <font color='salmon'><strong>This is the place we can hook up the logic of creating SS aware outputpaht</strong></font>to create the base <code>VertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/internal/WrappedVertexOutputFormat.java#L68">doc</a>, and then wrap on this base <code>VertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/internal/WrappedVertexOutputFormat.java#L71">doc</a></li>
+</ol></li>
+<li><code>VertexWriter</code> has following abstract method: 
+
+<ol>
+<li>itself has <code>initialize</code> and <code>close</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/VertexWriter.java">doc</a>. </li>
+<li>It also inherit from interface <code>SimpleVertexWriter</code> with method <code>writeVertex</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/SimpleVertexWriter.java#L43">doc</a></li>
+<li>It also inherit from concrete class <code>DefaultImmutableClassesGiraphConfigurable</code> with method <code>setConf</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/DefaultImmutableClassesGiraphConfigurable.java#L39">doc</a></li>
+</ol></li>
+<li>Assume that we are using <code>org.apache.giraph.io.formats.IdWithValueTextOutputFormat</code> as the Vertex Output Format class. 
+
+<ol>
+<li>Its <code>createVertexWriter</code> methods gives <code>IdWithValueVertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/IdWithValueTextOutputFormat.java#L54">doc</a></li>
+<li>This Vertex Output Format class extends <code>TextVertexOutputFormat</code> and its writer extends <code>TextVertexWriterToEachLine</code>. </li>
+</ol></li>
+<li>The <code>TextVertexOutputFormat</code> extends <code>VertexOutputFormat</code> and its <code>TextVertexWriterToEachLine</code> extends <code>TextVertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L148">doc</a>, which is also defined in the same class <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L87">doc</a></li>
+<li>The <code>TextVertexOutputFormat</code> delegate <code>GiraphTextOutputFormat</code> to get the <code>OutputCommitter</code>, which defines the output path in Hadoop <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L49">doc</a></li>
+<li>The real work of generate the output path inside <code>GiraphTextOutputFormat</code> is <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/GiraphTextOutputFormat.java#L60">here</a></li>
+</ol>
+
+<p>DAMN! I wasted a lot of time. Actually, the output is just appended in the output folder. That&#39;s it.</p>
+
+<h1 id="toc_17">A lot of supersteps cause counters.LimitExceededException</h1>
+
+<p>Because by default, giraph use Hadoop counters to record giraph stats, like how many messages, how many vertexes, edges etc. in each superstep, if the superstep is very large, we will have error like this:</p>
+
+<blockquote>
+<p>.MasterThread: masterThread: Master algorithm failed with LimitExceededException<br/>
+org.apache.hadoop.mapreduce.counters.LimitExceededException: Too many counters: 1025 max=1024</p>
+</blockquote>
+
+<p>The way of fixing it is to set <code>-ca giraph.useSuperstepCounters=false</code> in the runner to turn off the recording mechanism for every superstep.</p>
+
+<h1 id="toc_18">giraph jar Hadoop building dependency</h1>
+
+<p>When build the giraph jar, correct Hadoop version dependency is a must. For my case, the main cluster run at <code>Hadoop 2.5.0-cdh5.3.0</code> </p>
+
+<p>When I use <code>pom.xml</code> like follow, it fails: (This pom was supposed to be used for a different client&#39;s Hadoop environment)  </p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;
+  &lt;version&gt;2.6.4&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-mapreduce-client-jobclient&lt;/artifactId&gt;
+  &lt;version&gt;2.6.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>And the error message is very confusing: </p>
+
+<blockquote>
+<p>2017-03-23 00:24:03,717 INFO [main] org.apache.hadoop.mapreduce.v2.jobhistory.JobHistoryUtils: Default file system [hdfs://sc2prod:8020]<br/>
+2017-03-23 00:24:03,718 INFO [main] org.apache.hadoop.service.AbstractService: Service JobHistoryEventHandler failed in state INITED; cause: java.lang.IllegalArgumentException: Wrong FS: hdfs://sc2prod:8020/user/yu/.staging/job_1489616796019_14222, expected: hdfs://sc2prod<br/>
+java.lang.IllegalArgumentException: Wrong FS: hdfs://sc2prod:8020/user/yu/.staging/job_1489616796019_14222, expected: hdfs://sc2prod<br/>
+    at org.apache.hadoop.fs.FileSystem.checkPath(FileSystem.java:645)<br/>
+    at org.apache.hadoop.fs.FileSystem.makeQualified(FileSystem.java:465)<br/>
+    at org.apache.hadoop.mapreduce.jobhistory.JobHistoryEventHandler.serviceInit(JobHistoryEventHandler.java:143)<br/>
+    at org.apache.hadoop.service.AbstractService.init(AbstractService.java:163)</p>
+</blockquote>
+
+<p>My guess is that for the wrong hadoop dependency, the jar can not find the correct hadoop config path/file for the configurations. Then it just uses the default, which is not right.</p>
+
+<p>After I changed the <code>pom.xml</code> to below, it works fine.</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-mapreduce-client-jobclient&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><strong>Note</strong> The newly added <code>hadoop-client</code> is a must, otherwise will have error like follow:</p>
+
+<blockquote>
+<p>2017-03-23 06:22:00,622 FATAL [main] org.apache.hadoop.mapreduce.v2.app.MRAppMaster: Error starting MRAppMaster<br/>
+java.lang.NoSuchMethodError: org.apache.hadoop.ipc.RPC.getServer(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;IIZLorg/apache/hadoop/conf/Configuration;Lorg/apache/hadoop/security/token/SecretManager;)Lorg/apache/hadoop/ipc/RPC$Server;<br/>
+    at org.apache.hadoop.mapred.TaskAttemptListenerImpl.startRpcServer(TaskAttemptListenerImpl.java:121)</p>
+</blockquote>
+
+<p>As noted in <a href="http://stackoverflow.com/questions/39574202/java-lang-nosuchmethoderror-org-apache-hadoop-ipc-rpc-getproxy-while-creating-h">this stackoverflow post</a>, the <code>hadoop-client</code> dependency need be added.</p>
+
+<h1 id="toc_19">CPU bounded computation</h1>
+
+<p>Simply use `<code>giraph.numComputeThreads</code> (by default it is 1) to speed it up. Randy tested it and it works very well.</p>
+
 <hr/>
 
 <ul>
@@ -461,6 +620,24 @@ the total amount of memory in the Java virtual machine. The value returned by th
 </li>
 <li>
 <a href="#toc_13">The timeout parameter for waiting resources</a>
+</li>
+<li>
+<a href="#toc_14">duplicated job tracker setting is a must</a>
+</li>
+<li>
+<a href="#toc_15">Use both Edge Input and Vertex Value Input</a>
+</li>
+<li>
+<a href="#toc_16">Output during computation</a>
+</li>
+<li>
+<a href="#toc_17">A lot of supersteps cause counters.LimitExceededException</a>
+</li>
+<li>
+<a href="#toc_18">giraph jar Hadoop building dependency</a>
+</li>
+<li>
+<a href="#toc_19">CPU bounded computation</a>
 </li>
 </ul>
 
@@ -512,12 +689,9 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250638.html" 
-	        title="Previous Post: git">&laquo; git</a>
 	    
-	    
-	        <a class="basic-alignment right" href="14742423250523.html" 
-	        title="Next Post: bayesian statistics">bayesian statistics &raquo;</a>
+	        <a class="basic-alignment right" href="14865029971468.html" 
+	        title="Next Post: Spark">Spark &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -530,7 +704,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(16)</strong></a>
 	        
 	        
 	        
@@ -558,7 +732,7 @@ var disqus_config = function () {
 	      </li>
 	  
 	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(2)</strong></a>
+	        <a href="theory.html"><strong>theory&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -572,33 +746,37 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
+		        <a href="14742423250614.html">giraph</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14865029971468.html">Spark</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14867660612004.html">Oozie</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven & gradle</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
+		        <a href="14896415461580.html">Zeppelin</a>
 		      </li>
 	     
+	  
+	      
+	  
+	      
 	  
 	      
 	  

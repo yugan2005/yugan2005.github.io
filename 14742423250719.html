@@ -198,6 +198,18 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_35">start and shutdown the selenium-server</a>
 </li>
+<li>
+<a href="#toc_36">phantomJS options</a>
+</li>
+<li>
+<a href="#toc_37">Pycharm unittest not finding the module path</a>
+</li>
+<li>
+<a href="#toc_38">Conda rename environment</a>
+</li>
+<li>
+<a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
 </ul>
 
 
@@ -1207,6 +1219,117 @@ def open_selenium_server():
 
 <p><a href="http://stackoverflow.com/a/6883164/4229125">referred to this post</a></p>
 
+<h1 id="toc_36">phantomJS options</h1>
+
+<p>In the readme page of <code>ghostdriver</code> project, it gave a section about how to set the webdriver properties of phantomJS. <a href="https://github.com/detro/ghostdriver#what-extra-webdriver-capabilities-ghostdriver-offers">It is a good reference</a></p>
+
+<p>specificially, besides the setting that I figured out randomly before, the following setting seems pretty good:</p>
+
+<pre><code class="language-python"># new settings
+capabilities[&#39;phantomjs.page.settings.resourceTimeout&#39;] = 5000 # 5000 milliseconds
+</code></pre>
+
+<p><a href="http://phantomjs.org/api/webpage/property/settings.html">official list of all properties / settings</a></p>
+
+<h1 id="toc_37">Pycharm unittest not finding the module path</h1>
+
+<p>This is something wrong with Pycharm itself</p>
+
+<p>Error message looks like:</p>
+
+<blockquote>
+<p>RuntimeWarning: Parent module &#39;tests&#39; not found while handling absolute import<br/>
+  import unittest</p>
+</blockquote>
+
+<p>Fix:<br/>
+download the <code>utrunner.py</code> file from <a href="https://youtrack.jetbrains.com/_persistent/utrunner.py?file=74-332199&amp;c=true">here</a><br/>
+copy it to <code>/Applications/PyCharm CE.app/Contents/helpers/pycharm/</code> and overwrite the original <code>utrunner.py</code> file</p>
+
+<p><a href="http://stackoverflow.com/a/38724508/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_38">Conda rename environment</h1>
+
+<p>Not specific command to do that. Just copy and remove like follow</p>
+
+<pre><code class="language-bash">conda create --name personalTrader --clone bktrader
+conda remove --name bktrader --all
+</code></pre>
+
+<p>also need manually remove the list entries inside this file: <code>~/.conda/environments.txt</code>, as referred <a href="https://github.com/conda/conda/issues/2704">here</a></p>
+
+<p><a href="https://github.com/conda/conda/issues/3097">reference post</a></p>
+
+<h1 id="toc_39">Deploy an egg package to distributed nodes on hadoop</h1>
+
+<p>In <code>oozie</code> workflow, use <code>&lt;file&gt;</code> action node to &#39;ship&#39; the egg to distributed nodes</p>
+
+<pre><code class="language-xml">    &lt;action name=&#39;train-cd&#39;&gt;
+        &lt;shell xmlns=&quot;uri:oozie:shell-action:0.1&quot;&gt;
+            &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+            &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+            &lt;prepare&gt;
+                &lt;delete path=&quot;${nameNode}${modelOut}/CD&quot;/&gt;
+                &lt;mkdir path=&quot;${nameNode}${modelOut}/CD&quot;/&gt;
+            &lt;/prepare&gt;
+            &lt;configuration&gt;
+                &lt;property&gt;
+                    &lt;name&gt;mapred.job.queue.name&lt;/name&gt;
+                    &lt;value&gt;${queueName}&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;oozie.launcher.mapreduce.map.memory.mb&lt;/name&gt;
+                    &lt;value&gt;204800&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;oozie.launcher.mapreduce.map.java.opts&lt;/name&gt;
+                    &lt;value&gt;-Xmx174080m&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;mapreduce.task.timeout&lt;/name&gt;
+                    &lt;value&gt;36000000&lt;/value&gt;
+                &lt;/property&gt;
+            &lt;/configuration&gt;
+            &lt;exec&gt;train.py&lt;/exec&gt;
+            &lt;argument&gt;${rankOut}/features-all/CD&lt;/argument&gt;
+            &lt;argument&gt;${modelOut}/CD&lt;/argument&gt;
+            &lt;env-var&gt;HADOOP_USER_NAME=${wf:user()}&lt;/env-var&gt;
+            &lt;file&gt;${trainScript}#train.py&lt;/file&gt;
+            &lt;file&gt;${lightgbmegg}#lightgbm-0.1-py2.7.egg&lt;/file&gt;
+            &lt;capture-output/&gt;&lt;/shell&gt;
+        &lt;ok to=&quot;pred-cd&quot; /&gt;
+        &lt;error to=&quot;email-error&quot; /&gt;
+    &lt;/action&gt;
+</code></pre>
+
+<p>In python need do two things:</p>
+
+<ol>
+<li>unzip the egg file</li>
+<li>append the <code>cwd</code> to the system path</li>
+</ol>
+
+<pre><code class="language-python">#!/usr/local/bin/python2.7
+
+import sys
+import os
+import pandas as pd
+import cPickle as pickle
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.grid_search import GridSearchCV
+from sklearn.utils import shuffle
+from sklearn.metrics import auc, precision_recall_curve
+from subprocess import call
+call(&#39;unzip lightgbm-0.1-py2.7.egg&#39;, shell=True)
+
+cwd = os.getcwd()
+sys.path.append(cwd)
+
+from lightgbm import LGBMClassifier
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -1318,6 +1441,18 @@ def open_selenium_server():
 <li>
 <a href="#toc_35">start and shutdown the selenium-server</a>
 </li>
+<li>
+<a href="#toc_36">phantomJS options</a>
+</li>
+<li>
+<a href="#toc_37">Pycharm unittest not finding the module path</a>
+</li>
+<li>
+<a href="#toc_38">Conda rename environment</a>
+</li>
+<li>
+<a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
 </ul>
 
 
@@ -1368,12 +1503,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14820465795454.html" 
-	        title="Previous Post: mongodb">&laquo; mongodb</a>
+	        <a class="basic-alignment left" href="14896415461580.html" 
+	        title="Previous Post: Zeppelin">&laquo; Zeppelin</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250478.html" 
-	        title="Next Post: bash">bash &raquo;</a>
+	        <a class="basic-alignment right" href="14742423250700.html" 
+	        title="Next Post: pig">pig &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -1386,7 +1521,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(16)</strong></a>
 	        
 	        
 	        
@@ -1414,7 +1549,7 @@ var disqus_config = function () {
 	      </li>
 	  
 	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(2)</strong></a>
+	        <a href="theory.html"><strong>theory&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -1428,33 +1563,37 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
+		        <a href="14742423250614.html">giraph</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14865029971468.html">Spark</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14867660612004.html">Oozie</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven & gradle</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
+		        <a href="14896415461580.html">Zeppelin</a>
 		      </li>
 	     
+	  
+	      
+	  
+	      
 	  
 	      
 	  

@@ -132,6 +132,14 @@ $(document).ready(function(event) {
 <li>
 <a href="#toc_13">Very useful Yahoo API to obtain data</a>
 </li>
+<li>
+<a href="#toc_14">The schema of my MongoDB</a>
+<ul>
+<li>
+<a href="#toc_15">collection per stock</a>
+</li>
+</ul>
+</li>
 </ul>
 
 
@@ -437,6 +445,32 @@ ENDDATE, 20130101
 
 <p><a href="http://thesimplesynthesis.com/article/finance-apis#yahoo-yql-finance-api">This post</a> give some good information about this and a summary of other yahoo APIs</p>
 
+<h1 id="toc_14">The schema of my MongoDB</h1>
+
+<h2 id="toc_15">collection per stock</h2>
+
+<p>collection name: &#39;600033&#39;</p>
+
+<pre><code class="language-json">{&#39;Date&#39;: 2010-01-15, // sorted
+ &#39;Open&#39;: [{&#39;value&#39;: 11.25,
+           &#39;data_source&#39;: [1, 3, 4], // set
+           &#39;vote&#39;: 3}, // sorted on &#39;vote&#39;
+          {&#39;value&#39;: 13.24,
+           &#39;data_source&#39;: [2],
+           &#39;vote&#39;: 1},
+          {&#39;value&#39;: 24,
+           &#39;data_source&#39;: [5],
+           &#39;vote&#39;: 1}]
+ &#39;Close&#39;: [...]
+ &#39;High&#39;: [...]
+ &#39;Low&#39;: [...]
+ &#39;Volume&#39;: [...]
+ &#39;Amount&#39;: [...]
+                
+    
+    
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -481,6 +515,14 @@ ENDDATE, 20130101
 </li>
 <li>
 <a href="#toc_13">Very useful Yahoo API to obtain data</a>
+</li>
+<li>
+<a href="#toc_14">The schema of my MongoDB</a>
+<ul>
+<li>
+<a href="#toc_15">collection per stock</a>
+</li>
+</ul>
 </li>
 </ul>
 
@@ -532,12 +574,12 @@ var disqus_config = function () {
 
 	    <p class="meta">
 	    
-	        <a class="basic-alignment left" href="14742423250478.html" 
-	        title="Previous Post: bash">&laquo; bash</a>
+	        <a class="basic-alignment left" href="14858223421956.html" 
+	        title="Previous Post: Machine Learning">&laquo; Machine Learning</a>
 	    
 	    
-	        <a class="basic-alignment right" href="14742423250740.html" 
-	        title="Next Post: setting">setting &raquo;</a>
+	        <a class="basic-alignment right" href="14820465795454.html" 
+	        title="Next Post: mongodb">mongodb &raquo;</a>
 	    
 	    </p>
 	  </footer>
@@ -550,7 +592,7 @@ var disqus_config = function () {
 	  <ul id="recent_posts">
 	  
 	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(12)</strong></a>
+	        <a href="tips.html"><strong>tips&nbsp;(16)</strong></a>
 	        
 	        
 	        
@@ -578,7 +620,7 @@ var disqus_config = function () {
 	      </li>
 	  
 	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(2)</strong></a>
+	        <a href="theory.html"><strong>theory&nbsp;(3)</strong></a>
 	        
 	        
 	        
@@ -592,33 +634,37 @@ var disqus_config = function () {
 	  
 	      
 		      <li class="post">
-		        <a href="14820465795454.html">mongodb</a>
+		        <a href="14742423250614.html">giraph</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250719.html">python</a>
+		        <a href="14865029971468.html">Spark</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250478.html">bash</a>
+		        <a href="14867660612004.html">Oozie</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250761.html">technical analysis</a>
+		        <a href="14742423250660.html">maven & gradle</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="14742423250740.html">setting</a>
+		        <a href="14896415461580.html">Zeppelin</a>
 		      </li>
 	     
+	  
+	      
+	  
+	      
 	  
 	      
 	  

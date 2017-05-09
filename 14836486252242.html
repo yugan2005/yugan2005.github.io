@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <title>
     
-  expired - Echo-ohcE
+  aws - Echo-ohcE
   
 
   </title>
@@ -78,36 +78,138 @@ $(document).ready(function(event) {
 </nav>
   <div id="main">
     <div id="content"> 
-<div class="blog-index">
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">aws</h1>
+				<p class="meta"><time datetime="2017-01-05T12:37:05-08:00" pubdate data-updated="true">2017/1/5</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">setting the credential and connect to ec2</a>
+</li>
+<li>
+<a href="#toc_1">Deploy a jupyter notebook server on aws</a>
+</li>
+</ul>
 
 
+<hr/>
+
+<h1 id="toc_0">setting the credential and connect to ec2</h1>
+
+<ul>
+<li>Need install <code>awscli</code> by:</li>
+</ul>
+
+<pre><code class="language-bash">conda install -c conda-forge awscli
+</code></pre>
+
+<ul>
+<li>Then run:</li>
+</ul>
+
+<pre><code class="language-bash">aws configure
+</code></pre>
+
+<ul>
+<li><p>Log in the management account of aws, and check the Access Key ID and Secret Access Key for the developer account for the configure setting</p></li>
+<li><p>After setting up, <code>boto3</code> can connect to the aws ec2</p></li>
+</ul>
+
+<pre><code class="language-python">import boto3
+region = &#39;us-west-2&#39;
+instance_id = &#39;i-0fa00c2c21a729e6e&#39;
+ec2 = boto3.resource(&#39;ec2&#39;, region_name = region)
+i = ec2.Instance(id=instance_id)
+i.start()
+print i.state
+print &#39;{} or by DNS name: {}&#39;.format(i.public_ip_address, i.public_dns_name)
+i.stop()
+</code></pre>
+
+<h1 id="toc_1">Deploy a jupyter notebook server on aws</h1>
+
+<ul>
+<li><a href="http://yangjie.me/2015/08/26/Run-Jupyter-Notebook-Server-on-AWS-EC2/">reference post 1</a></li>
+<li><a href="http://navoshta.com/aws-tensorflow/">set up jupyter and tensorflow on aws</a></li>
+<li><a href="https://gist.github.com/dengemann/3245552bcdbf7f8f2293abb96c2348f4">Here is a security group script for ipython on aws</a></li>
+</ul>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">setting the credential and connect to ec2</a>
+</li>
+<li>
+<a href="#toc_1">Deploy a jupyter notebook server on aws</a>
+</li>
+</ul>
+
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			<strong>Categories:</strong>&nbsp; 
+			<span class="categories">
+			
+			    <a class='category' href='tips.html'>tips</a>&nbsp;
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          
+
+          
 
 		</div>
 
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250557.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
-  
-	<div class="pagination">
-	
-<a href="archives.html">Blog Archives</a>
-	 
+	    <p class="meta">
 	    
-	</div>
+	        <a class="basic-alignment left" href="14767220898143.html" 
+	        title="Previous Post: Scala">&laquo; Scala</a>
+	    
+	    
+	        <a class="basic-alignment right" href="14742423250782.html" 
+	        title="Next Post: vim">vim &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
 </div>
  <aside class="sidebar"> 
 
