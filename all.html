@@ -1,721 +1,1245 @@
-
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
     
   Echo-ohcE
   
-
   </title>
-  <meta name="author" content="">
-  <meta name="description" content="Code For Big Data">
-
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  
   <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
-  <script src="asset/js/modernizr-2.0.js"></script>
-  <script src="asset/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
   <script src="asset/highlightjs/highlight.pack.js"></script>
-  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script>hljs.initHighlightingOnLoad();</script>
-
-  <style type="text/css">
-  .cat-children-p{ padding: 6px 0px;}
-  .hljs{background: none;}
-  </style>
-  <script type="text/javascript">
-  var isAddSildbar = true;
-  </script>
-  <script src="asset/js/octopress.js" type="text/javascript"></script>
-</head>
 <script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
-  });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
 </script>
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="index.html">Echo-ohcE</a></h1>
-  
-    <h2>Code For Big Data</h2>
-  
-</hgroup>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:www.echo-ohce.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
 </form>
-  
-<ul class="main-navigation">
-
-  <li id=""><a target="self" href="index.html">Home</a></li>
-
-  <li id=""><a target="_self" href="archives.html">Archives</a></li>
-
-</ul>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
 
 </nav>
-  <div id="main">
-    <div id="content"> 
-<div class="blog-index">
 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250614.html">giraph</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
 
 
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
 
+ <script type="text/javascript">
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
+</script>
+<div class="row">
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="14742423250638.html">
+                
+                  <h1>git</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250638.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14979138208242.html">
+                
+                  <h1>Gradle</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<hr/>
+
+<h1 id="toc_0">Avro auto-generated source code and IntelliJ</h1>
+
+<p>Need do the following three things for IntelliJ to pickup the source code and recognize the auto-generated source files.</p>
+
+<ol>
+<li>Install the <code>Apache Avro™ Support</code> plugin</li>
+<li><code>mint checkout ***</code> checkout the multi-product</li>
+<li><code>mint build</code></li>
+<li><code>mint idea</code></li>
+<li>open it in IntelliJ</li>
+</ol>
+
+<p>The above <strong>order</strong> matters. <a href="https://github.com/commercehub-oss/gradle-avro-plugin#intellij-integration">Official plugin reference</a></p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2017/7/3</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14981525245438.html">
+                
+                  <h1>SSH connections</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h1 id="toc_0">Set the <code>ssh</code> from MacBook to linux desktop</h1>
+
+<ul>
+<li><code>seas</code> MP must be build on Linux box, so we have to able to ssh to desktop</li>
+<li>Enable desktop ssh Server <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-ssh-configuration-sshd.html">Reference</a>:
+
+<ul>
+<li>start <code>sshd</code> from command line: <code>service sshd start</code></li>
+<li>start daemon automatically: <code>chkconfig sshd on</code></li>
+</ul></li>
+<li><p>Set the public and private key pairs</p>
+
+<ul>
+<li><code>scp</code> the <code>ygan_at_linkedin.com_ssh_key.pub</code>(public) from MacBook to Linux box and save it @ <code>~/.ssh/authorized_keys</code>, change mode to <code>600</code> <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-ssh-configuration-keypairs.html">reference</a></li>
+<li><p>The following are for avoiding enter passphrase every time</p>
+
+<ul>
+<li>Set the following lines in <code>.bash_profile</code> on both the MacBook and the linux box <a href="https://iwww.corp.linkedin.com/wiki/cf/pages/viewpage.action?pageId=683">reference</a></li>
+</ul>
+
+<pre><code class="language-bash">if [ -x /usr/bin/keychain ] ; then
+  MYNAME=`/usr/bin/whoami`
+  if [ -f ~/.ssh/${MYNAME}_at_linkedin.com_ssh_key ] ; then
+        /usr/bin/keychain ~/.ssh/${MYNAME}_at_linkedin.com_ssh_key
+              . ~/.keychain/`hostname`-sh
+  fi
+fi
+</code></pre>
+
+<ul>
+<li>Every session (Maybe every reboot?) add the identity to the ssh-agent:</li>
+</ul>
+
+<pre><code class="language-bash"># starting the ssh-agent
+eval $(ssh-agent) 
+
+# add the private key to ssh-agent. Will be asked for passphrase once for all.
+ssh-add ~/.ssh/ygan_at_linkedin.com_ssh_key
+</code></pre></li>
+</ul></li>
+</ul>
+
+<h1 id="toc_1">The final solution for vnc (remote desktop)</h1>
+
+<ul>
+<li>Mac use system default app <code>screen sharing</code></li>
+<li>Linux (redhat 6) installed:<code>sudo yum install tigervnc-server</code></li>
+<li>(maybe optional) Disabled all firewall on Linux <code>sudo service iptables stop</code></li>
+<li>I setup a separate user #2. Every time after system reboot need run this on Linux: <code>vncserver :2</code></li>
+<li>The connection on Mac is <code>ygan-ld1.linkedin.biz:5902</code></li>
+</ul>
+
+<p><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/chap-TigerVNC.html">Official Reference</a></p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2017/7/3</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14987718493111.html">
+                
+                  <h1>Git, Mint workflow</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>The main part is based on <a href="https://iwww.corp.linkedin.com/wiki/cf/display/TOOLS/Git+Workflow#GitWorkflow-historyline">this wiki page</a></p>
+
+<hr/>
+
+<h1 id="toc_0">Rebase</h1>
+
+<h1 id="toc_1">Squash local commits</h1>
+
+<h1 id="toc_2">Personal branches</h1>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2017/7/3</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250614.html">
+                
+                  <h1>giraph</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250614.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14865029971468.html">
+                
+                  <h1>Spark</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14865029971468.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/2/7</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14867660612004.html">
+                
+                  <h1>Oozie</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14867660612004.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/2/10</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250660.html">
+                
+                  <h1>maven & gradle</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250660.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14896415461580.html">
+                
+                  <h1>Zeppelin</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14896415461580.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/3/15</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250719.html">
+                
+                  <h1>python</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250719.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250700.html">
+                
+                  <h1>pig</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250700.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250478.html">
+                
+                  <h1>bash</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250478.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14767220898143.html">
+                
+                  <h1>Scala</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14767220898143.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/10/17</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14836486252242.html">
+                
+                  <h1>aws</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14836486252242.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/1/5</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250782.html">
+                
+                  <h1>vim</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250782.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14770727250961.html">
+                
+                  <h1>Advanced Analytics with Spark Reading Notes</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents the reading notes of this book. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14770727250961.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/10/21</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='documentation.html'>documentation</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14858223421956.html">
+                
+                  <h1>Machine Learning</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents my personal understandings about bayesian, keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14858223421956.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2017/1/30</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='theory.html'>theory</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250761.html">
+                
+                  <h1>technical analysis</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents my learning of stock technical analysis, keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250761.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='stock.html'>stock</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14820465795454.html">
+                
+                  <h1>mongodb</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14820465795454.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/12/17</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14765768181414.html">
+                
+                  <h1>intellij</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, shortcuts I learned. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14765768181414.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/10/15</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250740.html">
+                
+                  <h1>setting</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents various settings that I normally use. Keep updating.  </p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250740.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='documentation.html'>documentation</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250523.html">
+                
+                  <h1>bayesian statistics</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents my personal understandings about bayesian, keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250523.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='theory.html'>theory</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14773416332741.html">
+                
+                  <h1>Graphviz Dot</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14773416332741.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/10/24</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250588.html">
+                
+                  <h1>giraph with jython</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This post specifically documents the key point of using giraph with jython. Once everything is done, I will write another post for a tutorial with giraph + jython</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250588.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='tips.html'>tips</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250680.html">
+                
+                  <h1>metrics</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This document collects statistics metrics used in my work.</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250680.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='theory.html'>theory</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250557.html">
+                
+                  <h1>Github Page, Hexo, MWeb, GoDaddy setting</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
+
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250557.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='expired.html'>expired</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
+
+
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
 		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250614.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14865029971468.html">Spark</a></h1>
-			<p class="meta"><time datetime="2017-02-07T13:29:57-08:00" 
-			pubdate data-updated="true">2017/2/7</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14865029971468.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14867660612004.html">Oozie</a></h1>
-			<p class="meta"><time datetime="2017-02-10T14:34:21-08:00" 
-			pubdate data-updated="true">2017/2/10</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14867660612004.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250660.html">maven & gradle</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250660.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14896415461580.html">Zeppelin</a></h1>
-			<p class="meta"><time datetime="2017-03-15T22:19:06-07:00" 
-			pubdate data-updated="true">2017/3/15</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14896415461580.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250719.html">python</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250719.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250700.html">pig</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250700.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250638.html">git</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250638.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250478.html">bash</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250478.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14767220898143.html">Scala</a></h1>
-			<p class="meta"><time datetime="2016-10-17T09:34:49-07:00" 
-			pubdate data-updated="true">2016/10/17</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14767220898143.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14836486252242.html">aws</a></h1>
-			<p class="meta"><time datetime="2017-01-05T12:37:05-08:00" 
-			pubdate data-updated="true">2017/1/5</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14836486252242.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250782.html">vim</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250782.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a></h1>
-			<p class="meta"><time datetime="2016-10-21T10:58:45-07:00" 
-			pubdate data-updated="true">2016/10/21</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents the reading notes of this book. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14770727250961.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14858223421956.html">Machine Learning</a></h1>
-			<p class="meta"><time datetime="2017-01-30T16:25:42-08:00" 
-			pubdate data-updated="true">2017/1/30</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents my personal understandings about bayesian, keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14858223421956.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250761.html">technical analysis</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents my learning of stock technical analysis, keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250761.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14820465795454.html">mongodb</a></h1>
-			<p class="meta"><time datetime="2016-12-17T23:36:19-08:00" 
-			pubdate data-updated="true">2016/12/17</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14820465795454.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14765768181414.html">intellij</a></h1>
-			<p class="meta"><time datetime="2016-10-15T17:13:38-07:00" 
-			pubdate data-updated="true">2016/10/15</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, shortcuts I learned. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14765768181414.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250740.html">setting</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents various settings that I normally use. Keep updating.  </p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250740.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250523.html">bayesian statistics</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents my personal understandings about bayesian, keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250523.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14773416332741.html">Graphviz Dot</a></h1>
-			<p class="meta"><time datetime="2016-10-24T13:40:33-07:00" 
-			pubdate data-updated="true">2016/10/24</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14773416332741.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250588.html">giraph with jython</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This post specifically documents the key point of using giraph with jython. Once everything is done, I will write another post for a tutorial with giraph + jython</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250588.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250680.html">metrics</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>This document collects statistics metrics used in my work.</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250680.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a></h1>
-			<p class="meta"><time datetime="2016-09-18T16:45:25-07:00" 
-			pubdate data-updated="true">2016/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="14742423250557.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
-  
-	<div class="pagination">
-	
-<a href="archives.html">Blog Archives</a>
-	 
-	    
-	</div>
+	</div><!-- large 8 -->
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14742423250638.html">git</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14979138208242.html">Gradle</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14981525245438.html">SSH connections</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14987718493111.html">Git, Mint workflow</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250614.html">giraph</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
 </div>
- <aside class="sidebar"> 
 
-	<section>
-	  <h1>Categories</h1>
-	  <ul id="recent_posts">
-	  
-	      <li class="post">
-	        <a href="tips.html"><strong>tips&nbsp;(16)</strong></a>
-	        
-	        
-	        
-	      </li>
-	  
-	      <li class="post">
-	        <a href="documentation.html"><strong>documentation&nbsp;(3)</strong></a>
-	        
-	        
-	        
-	      </li>
-	  
-	      <li class="post">
-	        <a href="expired.html"><strong>expired&nbsp;(1)</strong></a>
-	        
-	        
-	        
-	      </li>
-	  
-	      <li class="post">
-	        <a href="stock.html"><strong>stock&nbsp;(1)</strong></a>
-	        
-	        
-	        
-	      </li>
-	  
-	      <li class="post">
-	        <a href="theory.html"><strong>theory&nbsp;(3)</strong></a>
-	        
-	        
-	        
-	      </li>
-	   
-	  </ul>
-	</section>
-	<section>
-	  <h1>Recent Posts</h1>
-	  <ul id="recent_posts">
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250614.html">giraph</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14865029971468.html">Spark</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14867660612004.html">Oozie</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14742423250660.html">maven & gradle</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="14896415461580.html">Zeppelin</a>
-		      </li>
-	     
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	  
-	      
-	   
-	  </ul>
-	</section>
-	
-</aside> </div></div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 -  -
-  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
+        </section>
+      </div>
+    </div>
 
   
     
 
-<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
-</body>
+
+  </body>
 </html>
