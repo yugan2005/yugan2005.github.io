@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  maven & gradle - Echo-ohcE
+  maven - Echo-ohcE
   
   </title>
   
@@ -107,7 +107,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>maven & gradle</h1>
+          <h1>maven</h1>
      
         <div class="read-more clearfix">
           <span class="date">2016/9/18</span>
@@ -145,12 +145,6 @@
 </li>
 <li>
 <a href="#toc_3">Maven build skip Test compilation</a>
-</li>
-<li>
-<a href="#toc_4">DB gradle build jar without testing</a>
-</li>
-<li>
-<a href="#toc_5">Gradle build jar with dependencies self contained</a>
 </li>
 </ul>
 
@@ -223,55 +217,6 @@
 
 <p><a href="http://stackoverflow.com/a/2593834/4229125">stackoverflow post</a></p>
 
-<h1 id="toc_4">DB gradle build jar without testing</h1>
-
-<pre><code class="language-bash"># delete previous built jars
-gradle clean
-
-gradle build -x test
-</code></pre>
-
-<h1 id="toc_5">Gradle build jar with dependencies self contained</h1>
-
-<p>For this simple purpose, do not need use <code>shadowJar</code> plugin</p>
-
-<p>My example is trying to include <a href="https://mvnrepository.com/artifact/org.uaparser/uap-scala_2.11"><code>group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;</code></a> in my <code>spark2.jar</code>, and of course all dependencies of the <code>uaparser</code> jar</p>
-
-<pre><code class="language-gradle">...
-
-configurations {
-    // configuration that holds jars to include in the jar
-    extraLibs
-}
-dependencies {
-    ...
-    extraLibs group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;
-    configurations.compile.extendsFrom(configurations.extraLibs)
-    ...
-}
-
-...
-
-jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-</code></pre>
-
-<p>Now what you put behind <code>extraLibs</code> will be both compiled and included into your jar as a dependency.</p>
-
-<p>The command for building the jar is:   </p>
-
-<pre><code class="language-bash">gradle jar   
-</code></pre>
-
-<p>This is because <code>jar</code> is an task, and the <code>fatJar</code> is created at <code>build/libs/</code></p>
-
-<p><a href="https://discuss.gradle.org/t/how-to-include-dependencies-in-jar/19571/5">reference</a></p>
-
-<p>My own example is at <code>repo/drawbridge/dpp/spark2/build.gradle</code> and the git branch <code>ali2</code></p>
-
 <hr/>
 
 <ul>
@@ -289,12 +234,6 @@ jar {
 <li>
 <a href="#toc_3">Maven build skip Test compilation</a>
 </li>
-<li>
-<a href="#toc_4">DB gradle build jar without testing</a>
-</li>
-<li>
-<a href="#toc_5">Gradle build jar with dependencies self contained</a>
-</li>
 </ul>
 
 
@@ -307,16 +246,16 @@ jar {
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14867660612004.html" 
-          title="Previous Post: Oozie">&laquo; Oozie</a>
+          <a href="14765768181414.html" 
+          title="Previous Post: intellij">&laquo; intellij</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14896415461580.html" 
-          title="Next Post: Zeppelin">Zeppelin &raquo;</a>
+          <a  href="14742423250680.html" 
+          title="Next Post: metrics">metrics &raquo;</a>
       
       </p>
         </div>
@@ -414,31 +353,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742423250638.html">git</a>
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14979138208242.html">Gradle</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14981525245438.html">SSH connections</a>
+			        <a href="14858223421956.html">Machine Learning</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14987718493111.html">Git, Mint workflow</a>
+			        <a href="14836486252242.html">aws</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742423250614.html">giraph</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  

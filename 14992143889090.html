@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  Git, Mint workflow - Echo-ohcE
+  tmux - Echo-ohcE
   
   </title>
   
@@ -107,10 +107,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>Git, Mint workflow</h1>
+          <h1>tmux</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2017/7/3</span>
+          <span class="date">2017/7/4</span>
 
           <span>posted in&nbsp;</span> 
           
@@ -127,15 +127,72 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>The main part is based on <a href="https://iwww.corp.linkedin.com/wiki/cf/display/TOOLS/Git+Workflow#GitWorkflow-historyline">this wiki page</a></p>
+      <p>tmux is the <code>screen</code> like tool that comes in handy. This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Reloading tmux config</a>
+</li>
+<li>
+<a href="#toc_1">Main reference of tmux</a>
+</li>
+</ul>
+
 
 <hr/>
 
-<h1 id="toc_0">Rebase</h1>
+<h1 id="toc_0">Reloading tmux config</h1>
 
-<h1 id="toc_1">Squash local commits</h1>
+<ul>
+<li>tmux config file is at <code>~/.tmux.conf</code></li>
+<li>If it is inside tmux session:
 
-<h1 id="toc_2">Personal branches</h1>
+<ul>
+<li><code>Ctrl-b</code> then <code>:</code> to bring the command prompt</li>
+<li><code>:source-file ~/.tmux.conf</code></li>
+</ul></li>
+<li>If it is outside tmux session:
+
+<ul>
+<li><code>tmux source-file ~/.tmux.conf</code></li>
+</ul></li>
+</ul>
+
+<p><a href="https://sanctum.geek.nz/arabesque/reloading-tmux-config/">arabesque blog</a></p>
+
+<h1 id="toc_1">Main reference of tmux</h1>
+
+<ul>
+<li><a href="https://tmuxcheatsheet.com/?q=copy&amp;hPP=100&amp;idx=tmux_cheats&amp;p=0&amp;is_v=1">An interactive cheat sheet</a></li>
+<li><a href="https://robots.thoughtbot.com/a-tmux-crash-course">tmux crash course</a></li>
+<li><p><a href="https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future">tmux copy and paste in OS X</a>.<br/><br/>
+The code inside this post is already <strong><font color='salmon'>depreciated</font></strong><br/>
+According to this <a href="https://github.com/tmux/tmux/issues/592">page</a>, the update config should be:</p>
+
+<pre><code class="language-bash"># Use vim keybindings in copy mode
+set-window-option -g mode-keys vi
+
+bind-key -T copy-mode-vi &#39;v&#39; send -X begin-selection
+bind-key -T copy-mode-vi &#39;y&#39; send -X copy-pipe-and-cancel &quot;reattach-to-user-namespace pbcopy&quot;
+bind-key -T copy-mode-vi Escape send -X cancel
+bind-key -T copy-mode-vi V send -X rectangle-toggle
+</code></pre></li>
+<li><p><a href="https://robots.thoughtbot.com/seamlessly-navigate-vim-and-tmux-splits">Vim and tmux Splits</a> </p></li>
+</ul>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Reloading tmux config</a>
+</li>
+<li>
+<a href="#toc_1">Main reference of tmux</a>
+</li>
+</ul>
+
 
 
     
@@ -146,16 +203,16 @@
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14981525245438.html" 
-          title="Previous Post: SSH connections">&laquo; SSH connections</a>
+          <a href="14742423250761.html" 
+          title="Previous Post: technical analysis">&laquo; technical analysis</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742423250614.html" 
-          title="Next Post: giraph">giraph &raquo;</a>
+          <a  href="14742423250782.html" 
+          title="Next Post: vim">vim &raquo;</a>
       
       </p>
         </div>
@@ -253,31 +310,31 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14742423250638.html">git</a>
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14979138208242.html">Gradle</a>
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14981525245438.html">SSH connections</a>
+			        <a href="14858223421956.html">Machine Learning</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14987718493111.html">Git, Mint workflow</a>
+			        <a href="14836486252242.html">aws</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742423250614.html">giraph</a>
+			        <a href="14742423250478.html">bash</a>
 			      </li>
 		     
 		  
