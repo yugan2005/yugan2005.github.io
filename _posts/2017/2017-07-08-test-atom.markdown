@@ -1,8 +1,0 @@
----
-layout: "post"
-title: "test-atom"
-date: "2017-07-08 08:36"
-tag: "test"
----
-
-This is just a test
