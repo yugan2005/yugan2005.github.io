@@ -1,0 +1,642 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  mongodb - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>mongodb</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/12/17</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Pandas and Mongodb</a>
+</li>
+<li>
+<a href="#toc_1">Auto Start MongoDB daemon (mongod) on the background</a>
+</li>
+<li>
+<a href="#toc_2">Hitting the ulimit</a>
+</li>
+<li>
+<a href="#toc_3">sort argument inside find_one method</a>
+</li>
+<li>
+<a href="#toc_4">Indexing and sort in both directions</a>
+</li>
+<li>
+<a href="#toc_5">mongodb locations</a>
+</li>
+<li>
+<a href="#toc_6">check mongodb is running or not</a>
+</li>
+<li>
+<a href="#toc_7">embedded documents</a>
+</li>
+<li>
+<a href="#toc_8">delete a field</a>
+</li>
+<li>
+<a href="#toc_9">sort</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Pandas and Mongodb</h1>
+
+<ul>
+<li>From pandas dataframe to mongodb: use <code>to_dict(&#39;records&#39;)</code>. <font color='red'>Must have the records parameters to get a list of dict, not a nested dict </font>. <a href="http://stackoverflow.com/a/33984472/4229125">Stackoverflow post</a></li>
+</ul>
+
+<pre><code class="language-python">db.timeline.insert_many(yahoo_df[::-1]      #yahoo_df is reversed order
+                        .drop(&#39;Adj Close&#39;, axis=1)      #don&#39;t need the adj close
+                        .to_dict(&#39;records&#39;))            #to mongodb
+</code></pre>
+
+<ul>
+<li>From mongodb to pandas dataframe: use <code>list</code> of the pymonogo&#39;s <code>find</code>&#39;s cursor.  <a href="http://stackoverflow.com/a/17805626/4229125">Stackoverflow post</a></li>
+</ul>
+
+<pre><code class="language-python">from dateutil import parser as dateparser
+
+start_date = dateparser.parse(&#39;2015-01-01&#39;)
+end_date = dateparser.parse(&#39;2016-01-01&#39;)
+mongo_df = pd.DataFrame(list(db.timeline.find({&#39;Date&#39;:{&#39;$lt&#39;:end_date, &#39;$gt&#39;:start_date}})))
+</code></pre>
+
+<ul>
+<li>If it is pymongo&#39;s <code>find_one</code> output, it should convert to <code>pd.Series</code> instead of dataframe</li>
+</ul>
+
+<pre><code class="language-python">import pymongo
+import pandas as pd
+client = pymongo.MongoClient(host=&#39;localhost&#39;, port=27017)
+db = client[&#39;personalTrader&#39;]
+symbol_coll = db[&#39;symbol&#39;]
+stock_info = pd.Series(symbol_coll.find_one({&#39;code&#39;:&#39;600000&#39;}))
+</code></pre>
+
+<h1 id="toc_1">Auto Start MongoDB daemon (mongod) on the background</h1>
+
+<p><a href="http://serverfault.com/a/398366">Stackoverflow post</a></p>
+
+<pre><code class="language-bash">mkdir -p ~/Library/LaunchAgents
+cp /usr/local/Cellar/mongodb/3.2.10/homebrew.mxcl.mongodb.plist ~/Library/LaunchAgents
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+</code></pre>
+
+<p>This will launch mongod in the background now and every time you restart your computer.</p>
+
+<p>The best way to get a program to run at startup on OS X is to create a LaunchDaemon (see <a href="http://developer.apple.com/mac/library/documentation/MacOSX/Conceptual/BPSystemStartup/Articles/LaunchOnDemandDaemons.html">Apple&#39;s docs</a>, and take a look at some of the Apple-supplied daemons in /System/Library/LaunchDaemons) and install it in /Library/LaunchDaemons. <a href="https://sourceforge.net/projects/lingon/files/">Lingon</a> can help you create the .plist file.<br/>
+Note by Y.G <code>Lingon</code> is dead now.</p>
+
+<p><font color='red'><strong>UPDATE</strong></font><br/>
+A easier way is to use the app <code>MongoDB.prefPane</code> <a href="https://www.mongodb.com/blog/post/macosx-preferences-pane-for-mongodb">Official link</a><br/><br/>
+After install this app, the <code>~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist</code> will be replaced by <code>~/Library/LaunchAgents/com.remysaissy.mongodbprefspane.plist</code>. However the content is exactly the same.</p>
+
+<h1 id="toc_2">Hitting the ulimit</h1>
+
+<p><strong><a href="https://github.com/basho/basho_docs/issues/1402">A very good summary post about this</a></strong></p>
+
+<p>mongod silently die, check the log at <code>/usr/local/var/log/mongodb/mongo.log</code> find the following error:</p>
+
+<blockquote>
+<p>2016-12-18T21:44:30.153-0800 W FTDC     [ftdc] Uncaught exception in &#39;FileNotOpen: Failed to open interim file /usr/local/var/mongodb/diagnostic.data/metrics.interim.temp&#39; <br/>
+2016-12-18T21:44:34.930-0800 E STORAGE  [thread1] WiredTiger (24) [1482126274:929985][960:0x700000393000], file:WiredTiger.wt, WT_SESSION.checkpoint: /usr/local/var/mongodb/WiredTiger.turtle: handle-open: open: Too many open files<br/>
+2016-12-18T21:44:34.934-0800 I -        [thread1] Fatal Assertion 28558</p>
+</blockquote>
+
+<p>This is because I have too many collections in the db and hitting the limit of open files.</p>
+
+<ul>
+<li><a href="https://docs.mongodb.com/manual/reference/ulimit/#ulimit">check the current limit</a><br/></li>
+</ul>
+
+<pre><code class="language-bash">ulimit -a  
+</code></pre>
+
+<ul>
+<li><a href="https://docs.mongodb.com/manual/reference/ulimit/#recommended-ulimit-settings">recommended limit</a></li>
+<li>temporary set a higher limit (which will expire when restart)</li>
+</ul>
+
+<pre><code class="language-bash">sudo launchctl limit maxfiles 65536 65536
+sudo launchctl limit maxproc 2048 2048
+ulimit -n 65536
+sudo ulimit -u 2048
+</code></pre>
+
+<p>What I did in the end that works are exactly following the <a href="https://github.com/basho/basho_docs/issues/1402">aforementioned post</a></p>
+
+<ol>
+<li>Changed the limit from the <code>plist</code> file.</li>
+<li>created the two file: <code>/Library/LaunchDaemons/limit.maxfiles.plist</code> and <code>/Library/LaunchDaemons/limit.maxproc.plis</code></li>
+<li>Updated my <code>~/.bashrc</code></li>
+<li>restart</li>
+</ol>
+
+<h1 id="toc_3">sort argument inside find_one method</h1>
+
+<p>In <code>pymongo</code>, it is easy to make bug at the the sort syntax. The correct way of sort and take the first one. (The <code>[]</code> of the sort argument is a must, i.e. sort must be a <strong>list</strong> of <strong>tuple</strong>)</p>
+
+<pre><code class="language-python">first_date = db[ncode].find_one(sort=[(&#39;Date_d&#39;, pymongo.ASCENDING)])[&#39;Date_d&#39;]
+last_date = db[ncode].find_one(sort=[(&#39;Date_d&#39;, pymongo.DESCENDING)])[&#39;Date_d&#39;]
+</code></pre>
+
+<h1 id="toc_4">Indexing and sort in both directions</h1>
+
+<p>MongoDB can scan an index from both directions. MongoDB may also traverse the index in either directions. As a result, for single-field indexes, ascending and descending indexes are interchangeable. This is not the case for compound indexes: in compound indexes, the direction of the sort order can have a greater impact on the results</p>
+
+<h1 id="toc_5">mongodb locations</h1>
+
+<p>After installing MongoDB with <code>Homebrew</code>:</p>
+
+<ul>
+<li>The databases are stored in the <code>/usr/local/var/mongodb/</code> directory</li>
+<li>The <code>mongod.conf</code> file is here: <code>/usr/local/etc/mongod.conf</code></li>
+<li>The mongo logs can be found at <code>/usr/local/var/log/mongodb/</code></li>
+<li>The mongo binaries are here: <code>/usr/local/Cellar/mongodb/[version]/bin</code></li>
+</ul>
+
+<h1 id="toc_6">check mongodb is running or not</h1>
+
+<pre><code class="language-bash">ps -ef | grep mongod | grep -v grep | wc -l | tr -d &#39; &#39;
+</code></pre>
+
+<h1 id="toc_7">embedded documents</h1>
+
+<p>Filter or no filter,there is no difference on performance. See this <a href="http://stackoverflow.com/a/2140125/4229125">post</a>:  </p>
+
+<blockquote>
+<p>There&#39;s currently no way to filter on embedded docs in the way you&#39;re describing. Using the dot notation allows you to match on an embedded doc, but the entire document, parent and all, will still be returned. It&#39;s also possible to select which fields will be returned, but that doesn&#39;t really help your case, either.</p>
+</blockquote>
+
+<p>It doesn&#39;t make difference to filter it inside pandas DataFrame or filter it from the mongodb side.</p>
+
+<p>However, I have some good working examples for the advanced usage of mongodb</p>
+
+<ul>
+<li>put a dataframe into a document as an array of embedded sub-documents</li>
+</ul>
+
+<pre><code class="language-python">code = &#39;600033&#39;
+symbol_coll.update_one({&#39;code&#39;:code}, 
+                       {&#39;$set&#39;: {&#39;fhpg&#39;: [dict(v.dropna()) for k, v in df.iterrows()]}}, 
+                       upsert=False)
+</code></pre>
+
+<p>In the above code, <code>[dict(v.dropna()) for k, v in df.iterrows()]</code> is equivalent to <code>df.to_dict(&#39;records&#39;)</code>, but also skip the field with <code>nan</code> values when insert into the mongodb, i.e. make the database a little bit cleaner.</p>
+
+<ul>
+<li>get the dataframe out from an array of embedded sub-documents inside a document. Need use pipeline (listed two methods below)</li>
+</ul>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_project = {&#39;$project&#39;: {&#39;fhps&#39;:1, &#39;_id&#39;:0}}
+pipeline=[p_match, p_project]
+
+# note the use of [0], because the aggregate result is a list with one element
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline))[0][&#39;fhps&#39;])
+
+# use $unwind, do not need [0] anymore.
+p_unwind = {&#39;$unwind&#39;: {&#39;path&#39;:&#39;$fhps&#39;}}
+pipeline=[p_match, p_project, p_unwind]
+df = pd.DataFrame([record[&#39;fhps&#39;] for record in symbol_coll.aggregate(pipeline)])
+</code></pre>
+
+<ul>
+<li>get only one field (one column) out from an array of embedded sub-documents inside a document.</li>
+</ul>
+
+<p>The trick is inside the <code>$project</code>: using the <a href="https://docs.mongodb.com/manual/reference/glossary/#term-field-path">field path</a> syntax</p>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_unwind = {&#39;$unwind&#39;: {&#39;path&#39;:&#39;$fhps&#39;}}
+# here used field path syntax
+p_project = {&#39;$project&#39;: {&#39;Date&#39;: &#39;$fhps.Date&#39;, &#39;_id&#39;:0}}
+pipeline=[p_match, p_unwind, p_project]
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline)))
+</code></pre>
+
+<ul>
+<li>get some rows out from an array of embedded sub-documents inside a document.</li>
+</ul>
+
+<p>This is much easier to do once we have pandas dataframe. To do it in side mongo actually has no benefit. But document there as a future reference</p>
+
+<p><strong>A pitfall : <code>$elemMatch</code> used with <code>$project</code> only return the <font color='red'>first</font> matching element.</strong> <a href="https://docs.mongodb.com/v3.2/reference/operator/projection/elemMatch/#definition">See reference here</a><br/>
+<strong>The same thing holds true for <code>$</code>, i.e. the positional operator</strong> <a href="https://docs.mongodb.com/v3.2/reference/operator/projection/positional/#proj._S_">reference here</a></p>
+
+<pre><code class="language-python"># only return the first match
+symbol_coll.find_one({&#39;code&#39;:code, 
+                      &#39;fhps.Date&#39;:{&#39;$lt&#39;:date_parser.parse(&#39;2012-06-25&#39;)}},
+                     {&#39;fhps.$&#39;:1, &#39;_id&#39;:0})
+# still only return the first match
+symbol_coll.find_one({&#39;code&#39;: code}, {&#39;fhps&#39;: {&#39;$elemMatch&#39;: {&#39;Fh&#39;: {&#39;$gt&#39;: 0.01}}}, &#39;_id&#39;:0})    
+</code></pre>
+
+<p>Need use <code>$filter</code> method inside the <code>$project</code> pipeline stage (<font color='red'> <code>$filter</code> itself is not a pipeline stage</font>)</p>
+
+<pre><code class="language-python">p_match = {&#39;$match&#39;:{&#39;code&#39;:code}}
+p_project = {&#39;$project&#39;: {&#39;fhps&#39;:{&#39;$filter&#39;:{&#39;input&#39;:&#39;$fhps&#39;, 
+                                             &#39;as&#39;:&#39;fhps_f&#39;,
+                                             &#39;cond&#39;:{&#39;$gt&#39;: [&#39;$$fhps_f.Date&#39;, date_parser.parse(&#39;2012-06-25&#39;)]}}},
+                          &#39;_id&#39;:0}}
+pipeline=[p_match, p_project]
+df = pd.DataFrame(list(symbol_coll.aggregate(pipeline))[0][&#39;fhps&#39;])
+</code></pre>
+
+<p><code>$$</code> in the above code is the syntax to refer a variable, as explained <a href="https://docs.mongodb.com/master/meta/aggregation-quick-reference/#field-path-and-system-variables">in the official document</a></p>
+
+<h1 id="toc_8">delete a field</h1>
+
+<p>I need remove <code>fhps</code> which is an array of embedded sub-documents:</p>
+
+<pre><code class="language-python"># note the empty &#39;&#39; inside the unset
+symbol_coll.update_one({&#39;code&#39;:code}, {&#39;$unset&#39;:{&#39;fhps&#39;:&#39;&#39;}})
+</code></pre>
+
+<h1 id="toc_9">sort</h1>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Pandas and Mongodb</a>
+</li>
+<li>
+<a href="#toc_1">Auto Start MongoDB daemon (mongod) on the background</a>
+</li>
+<li>
+<a href="#toc_2">Hitting the ulimit</a>
+</li>
+<li>
+<a href="#toc_3">sort argument inside find_one method</a>
+</li>
+<li>
+<a href="#toc_4">Indexing and sort in both directions</a>
+</li>
+<li>
+<a href="#toc_5">mongodb locations</a>
+</li>
+<li>
+<a href="#toc_6">check mongodb is running or not</a>
+</li>
+<li>
+<a href="#toc_7">embedded documents</a>
+</li>
+<li>
+<a href="#toc_8">delete a field</a>
+</li>
+<li>
+<a href="#toc_9">sort</a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14742423250680.html" 
+          title="Previous Post: metrics">&laquo; metrics</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14867660612004.html" 
+          title="Next Post: oozie">oozie &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

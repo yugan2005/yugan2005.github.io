@@ -1,0 +1,1206 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  pig - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>pig</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+<li>
+<a href="#toc_14">oneline to order two fields</a>
+</li>
+<li>
+<a href="#toc_15">sort with duplicates</a>
+</li>
+<li>
+<a href="#toc_16">input and output are reserved keyword in pig</a>
+</li>
+<li>
+<a href="#toc_17">Mystery ERROR 2999</a>
+</li>
+<li>
+<a href="#toc_18">Cumsum</a>
+</li>
+<li>
+<a href="#toc_19">A pretty good graph cluster to pair Pig example code</a>
+</li>
+<li>
+<a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
+</li>
+<li>
+<a href="#toc_21">Parameter Substitution in Pig</a>
+</li>
+<li>
+<a href="#toc_22">SUBSTRING function</a>
+</li>
+<li>
+<a href="#toc_23">Nested FOREACH</a>
+</li>
+<li>
+<a href="#toc_24">Function are allowed inside FOREACH</a>
+</li>
+<li>
+<a href="#toc_25">Use Star Expression and Project-Range Expression</a>
+</li>
+<li>
+<a href="#toc_26">Strange bug ERROR 2116 related with compression</a>
+</li>
+<li>
+<a href="#toc_27">Strange Bug with Split of two logic expressions</a>
+</li>
+<li>
+<a href="#toc_28">Use <code>AvroStorage()</code> inside pig</a>
+</li>
+<li>
+<a href="#toc_29">Load Parquet data to pig</a>
+</li>
+<li>
+<a href="#toc_30">A side-by-side datatype comparison among avro, parquet, and pig</a>
+</li>
+<li>
+<a href="#toc_31">More about the parquet</a>
+</li>
+<li>
+<a href="#toc_32">From one relation, put two fields into one bag by FLATTEN</a>
+</li>
+<li>
+<a href="#toc_33">Learning from piggybank <code>HashFNV</code></a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">File Name Pattern Substitution</h1>
+
+<p>Pig is using hadoop file <code>glob</code> utilities to process the file name pattern. It is <font color=red>NOT</font> using shell&#39;s <code>glob</code>. Hadoop&#39;s <code>glob</code> are documented <a href="http://hadoop.apache.org/docs/stable/api/org/apache/hadoop/fs/FileSystem.html#globStatus%28org.apache.hadoop.fs.Path%29">here</a>. Specially, it does not support <code>..</code> operator for a range.</p>
+
+<p><a href="http://stackoverflow.com/questions/3515481/pig-latin-load-multiple-files-from-a-date-range-part-of-the-directory-structur">reference post</a></p>
+
+<h1 id="toc_1"><code>ToDate(milliseconds)</code> gives wrong date</h1>
+
+<p>Bug looks like always return date of some time at <code>1970-01-17</code>. This is because the input is 10 digits in seconds, and input should be in milliseconds. Need \( \times 1000\) on the input to get the correct DateTime.</p>
+
+<h1 id="toc_2">DateTime SimpleDateFormat</h1>
+
+<p>Pig&#39;s <code>DateTime</code> type conforms to the following format:</p>
+
+<pre><code class="language-java">SimpleDateFormat dateFormat = 
+    new SimpleDateFormat(&quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSSXXX&quot;);
+</code></pre>
+
+<p>The string format is: <code>2001-07-04T12:08:56.235-07:00</code><br/>
+<a href="https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">Java official example table</a></p>
+
+<p>[YGMARK] <code>-07:00</code> timezone format is only supported after JDK 7.</p>
+
+<h1 id="toc_3">Parameter substitution Shell Runner subtle bug</h1>
+
+<p>I like to define <code>_</code> as the output file separator. I usually have parameter <code>SEP= &#39;_&#39;</code> in my pig script and shell runner. However, if this parameter is defined inside shell runner, <em>it has to be escaped</em>, like: <code>SEP=&#39;\_&#39;</code>. Otherwise, this mislead error message will show:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.Main - ERROR 1000: Error during parsing. Lexical error at line 1, column 6.  Encountered: <EOF> after : &quot;&quot;  </p>
+</blockquote>
+
+<p>It does not need be escaped if only defined inside pig script.<br/>
+Another side note for seeing the above message. It is very likely caused by unbalanced bracket, quote, <font color='red'>extra space between the bash line separator <code>\</code> and the new line</font> etc.</p>
+
+<h1 id="toc_4">Becareful of <code>DateTime</code> data type in pig</h1>
+
+<p>It is convenient to get the time duration of difference by using the <code>DateTime</code> data type. However, in pig it is a know bug that <a href="https://issues.apache.org/jira/browse/PIG-3953">it can not be compared correctly.</a> Therefore ordering, grouping type of work should use either <code>ToUnixTime()</code> or <code>ToString()</code> before ordering.</p>
+
+<blockquote>
+<p>Error: org.joda.time.DateTime.compareTo ...</p>
+</blockquote>
+
+<h1 id="toc_5">More pitfalls for <code>DateTime</code> data type</h1>
+
+<ul>
+<li>The 2nd argument of <code>ToString(datetime [, format string])</code> is not optional, but a must for pig 0.12 (<a href="https://issues.apache.org/jira/browse/PIG-3805">Bug fixed on 0.13</a>)</li>
+<li>For my case, <code>ToString(date, &#39;yyyyMMdd&#39;)</code> works.</li>
+<li>All capital function name is not accepted, like <code>TOSTRING()</code> fails.</li>
+<li>Also, there is no way to directly read in the <code>DateTime</code> type to pig. It still need be read in as <code>chararray</code>, otherwise it will be just null. (I tested it). <a href="http://stackoverflow.com/a/22052965">Stackoverflow post</a></li>
+<li><code>GetMilliSecond(DateTime datetime)</code> is not the function to get the millisecond from epoch. It ... en, as the name indicates ... just get the millisecond of the time. To get the <strong>second</strong> use <code>ToUnixTime(DateTime datetime)</code>. To get the <strong>millisecond</strong> use <code>ToMilliSeconds(DateTime datetime)</code>.</li>
+</ul>
+
+<h1 id="toc_6">Setting of memory</h1>
+
+<p>In side pig script or grunt:  </p>
+
+<pre><code class="language-bash">SET mapreduce.map.memory.mb 4096;
+SET mapreduce.reduce.memory.mb 8192;
+</code></pre>
+
+<h1 id="toc_7">Pig Unit Test <code>override()</code> method</h1>
+
+<p>Code normally like:  </p>
+
+<pre><code class="language-java">PigTest test = new PigTest(pigScript, parameters);
+test.override(&quot;alias&quot;, &quot;alias = LOAD ...&quot;);
+</code></pre>
+
+<p>Inside the override, can not use variable substitution, otherwise will see error like:  </p>
+
+<blockquote>
+<p>org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1066: Unable to open iterator for alias  </p>
+</blockquote>
+
+<p>Wrong:  </p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;$INPUT&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<p>Should always use actual file path:</p>
+
+<pre><code class="language-java">test.override(&quot;alias&quot;, &quot;alias = LOAD &#39;input.txt&#39; USING PigStorage() AS (...);&quot;);
+</code></pre>
+
+<h1 id="toc_8">Error message for wrong reference operator</h1>
+
+<p>If receive following error message:  </p>
+
+<blockquote>
+<p>Error: Scalar has more than one row in the output.  </p>
+</blockquote>
+
+<p>It is very likely that I got a dot <code>Alias.field</code> where you need a double semi-colon <code>Alias::field</code>.<br/><br/>
+<a href="http://stackoverflow.com/questions/22522155/pig-scalar-has-more-than-one-row-in-the-output">stackoverflow post</a>  </p>
+
+<h1 id="toc_9">Pig Java UDF Unit Test</h1>
+
+<p>Find a good <a href="http://www.crackinghadoop.com/unit-test-java-udfs/">post</a> specifically for Java UDF unit test.<br/><br/>
+The main point is to use <code>DefaultTuple</code> to inject test cases into the UDF.  </p>
+
+<pre><code class="language-java">String inputText = &quot;09/15/2014&quot;;
+DefaultTuple input = new DefaultTuple();
+input.append(inputText);
+</code></pre>
+
+<h1 id="toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></h1>
+
+<ol>
+<li><code>join</code> (more specifically, inner join) acts on more than two relations:<br/>
+<code>X = JOIN A BY fieldA, B BY fieldB, C BY fieldC;</code> </li>
+<li><p><code>join</code> on duplicates gives cross product on the two relations.  </p>
+
+<pre><code class="language-sql">A = LOAD &#39;data1&#39; AS (a1:int,a2:int,a3:int);
+DUMP A;   
+(1,2,3)
+(4,2,1)
+(4,3,3)
+
+B = LOAD &#39;data2&#39; AS (b1:int,b2:int);
+DUMP B;
+(4,6)
+(4,9)
+
+X = JOIN A BY a1, B BY b1;
+DUMP X;
+(4,2,1,4,6)
+(4,3,3,4,6)
+(4,2,1,4,9)
+(4,3,3,4,9)  
+</code></pre></li>
+<li><p><code>join</code> on null disregards (filters out) null values. See the <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_join">official document</a>.  </p></li>
+<li><p><code>cogroup</code> on duplicates gives nested set of tuples for the two relations (a bag for each side of the relation). If <code>flatten</code> is then used, will generate cross product.  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> key, will be grouped together per relation. <a href="https://pig.apache.org/docs/r0.11.1/basic.html#nulls_group">official document</a>  </p></li>
+<li><p><code>cogroup</code> or <code>group</code> for <code>null</code> value, will just keep the empty bag, unless <code>inner</code> keywords is used.  </p></li>
+<li><p><code>flatten</code> of an empty bag will <font color='red'><strong>remove</strong></font> the whole record (for the cross product case of <code>flatten</code> two bags) because <code>flatten</code> an empty bag produces no output. <a href="http://datafu.incubator.apache.org/docs/datafu/guide/more-tips-and-tricks.html">Refer to this post</a> to under this further and a trick (<em>generating a bag with a null tuple</em>) to avoid this behavior for getting &#39;outer join&#39; effect.</p></li>
+</ol>
+
+<h1 id="toc_11">specify function output data type</h1>
+
+<p>No matter whether it is builtin function or UDF, it is always better to specify this function&#39;s output data type.  </p>
+
+<p>This is wrong, because the CONCAT output type is <code>bytearray</code>:    </p>
+
+<pre><code class="language-sql">ip_db = FOREACH ip_db_m3 GENERATE MD5(CONCAT(ip_raw, &#39;umpdmp&#39;)) AS ip;   
+</code></pre>
+
+<p>This is right by specifying clearly that the output data type is <code>chararray</code>:  </p>
+
+<pre><code class="language-sql">ip_db_m3 = FOREACH ip_db_m2 GENERATE CONCAT(ip_raw, &#39;umpdmp&#39;) AS ip:chararray;
+ip_db = FOREACH ip_db_m3 GENERATE MD5(ip) AS ip;   
+</code></pre>
+
+<h1 id="toc_12">using <code>\u0001</code> as the delimiter</h1>
+
+<ul>
+<li>If want to use <code>LzoPigStorage</code> need be careful about in pig, to specify the parameter of the function, you cannot do it at the code where calls this function, but need do it in the <code>DEFINE</code> statement at the beginning, like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">DEFINE LzoPigStorage com.twitter.elephantbird.pig.store.LzoPigStorage(&#39;\u0001&#39;);   
+
+store OUT into &#39;$OUTPUT&#39; using LzoPigStorage();   
+</code></pre>
+
+<ul>
+<li>Note that <code>&#39;^A&#39;</code> will <strong>NOT</strong> work, Only <code>&#39;\u0001&#39;</code> works.<br/></li>
+<li>If use <code>PigStorage</code> just specify it inside the function like below:<br/></li>
+</ul>
+
+<pre><code class="language-sql">A = LOAD &#39;input.txt&#39; USING PigStorage(&#39;,&#39;);   
+STORE A INTO &#39;out&#39; USING PigStorage(&#39;\u0001&#39;);   
+</code></pre>
+
+<h1 id="toc_13">Error with SUBSTRING and SIZE function</h1>
+
+<p>I was trying to remove the leading <code>.</code> of a ip string, and used <code>SUBSTRING(ip, 1, SIZE(ip)) AS ip_fixed:chararray</code>. The error message reads:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1045: Could not infer the matching function for org.apache.pig.builtin.SUBSTRING as multiple or none of them fit. Please use an explicit cast  </p>
+</blockquote>
+
+<p>The reason is because <code>SIZE()</code> function returns <code>long</code> type, but <code>SUBSTRING()</code> function needs <code>int</code> type. The following code passes: <code>SUBSTRING(ip, 1, (int) SIZE(ip)) AS ip_fixed:chararray</code>  </p>
+
+<h1 id="toc_14">oneline to order two fields</h1>
+
+<pre><code class="language-sql">CC_raw = LOAD &#39;$INPUT_CC&#39; USING PigStorage()
+                   AS (id1:chararray, id2:chararray, score:double);
+CC_m0 = FOREACH CC_raw GENERATE 
+            FLATTEN(((id1 &lt; id2) ? (id1, id2) : (id2, id1))) AS (smallID, largeID),
+            score AS score;
+</code></pre>
+
+<p>order the two fields <code>id1</code> and <code>id2</code>.</p>
+
+<h1 id="toc_15">sort with duplicates</h1>
+
+<p>sort with heavily duplicated field sometimes generate highly skewed partitions (they are partitioned based on bins, records with the same value of the sorting field will be inside the same bin). This will reduce the performance dramatically.</p>
+
+<p>Solution is to sort with combined fields like <code>BY (f1, f2)</code> in which, <code>f1</code> is the actual field that need be sorted but with a lot of duplicates, <code>f2</code> is another field that is much more evenly distributed to help reduce the skew.</p>
+
+<p>Thanks for MingYan :)  </p>
+
+<h1 id="toc_16">input and output are reserved keyword in pig</h1>
+
+<p>Do not use <code>input</code> or <code>output</code> as relations name, because they are reserved keyword. Error message is like:  </p>
+
+<blockquote>
+<p>ERROR org.apache.pig.PigServer - exception during parsing: Error during parsing. <file clean_vertex_result.pig, line 3, column 0>  mismatched input &#39;input&#39; expecting EOF</p>
+</blockquote>
+
+<h1 id="toc_17">Mystery ERROR 2999</h1>
+
+<blockquote>
+<p>ERROR 2999: Unexpected internal error. null</p>
+</blockquote>
+
+<p>One case (I wasted one full day on this!) is I used the same name for both a relation and a field!</p>
+
+<p>Solution: add <code>_r</code> for all relation names</p>
+
+<h1 id="toc_18">Cumsum</h1>
+
+<p>use <code>Over, Stitch, ORDER BY</code></p>
+
+<pre><code class="language-sql">REGISTER /home/adsymp/lib/piggybank.jar;
+
+DEFINE OVER org.apache.pig.piggybank.evaluation.Over(&#39;long&#39;);
+DEFINE STITCH org.apache.pig.piggybank.evaluation.Stitch();
+
+output_to_LP_m0 = FOREACH (GROUP pairs_bucketized ALL) {
+                        sorted = ORDER pairs_bucketized BY score_bucket DESC;
+                        GENERATE FLATTEN(STITCH(sorted, OVER(sorted.tp_inbucket, &#39;sum(long)&#39;), OVER(sorted.fp_inbucket, &#39;sum(long)&#39;)));};
+</code></pre>
+
+<ul>
+<li><code>STITCH</code> take bags as input, and its output cannot be directly assigned to a relation, i.e. it has to be inside a <code>FOREACH</code> statement <a href="http://stackoverflow.com/a/27798007">Stackoverflow post</a> </li>
+<li><code>ORDER</code> makes the rows sorted for the <code>cumsum</code></li>
+<li><code>OVER</code> does the <code>cumsum</code> <a href="https://pig.apache.org/docs/r0.12.0/api/org/apache/pig/piggybank/evaluation/Over.html">Official document</a></li>
+<li><code>STITCH</code> make the <code>cumsum</code> one-on-one appending with the correct row.</li>
+<li>When I tried <code>OVER</code> through <code>grunt</code>, I checked the output schema is <code>null</code>. This is not a bug! In fact, if we didn&#39;t input the string of type in the <code>Over()</code> constructor, this <code>piggybank</code> function does not know what is the output schema.</li>
+</ul>
+
+<p>One lesson learned: If it is the logic planning stage error, checking the alias.</p>
+
+<h1 id="toc_19">A pretty good graph cluster to pair Pig example code</h1>
+
+<p><code>/Users/yugan/repo/drawbridge/dpp/workflow-new/miaozhen-scripts/graph/Stats.pig</code></p>
+
+<p>In this code:</p>
+
+<ul>
+<li>use of <code>TOKENIZE</code>, <code>LAST_INDEX_OF</code></li>
+<li>The way of exploding graph <code>cluster</code> into pairs and get the TP/FP with label data is pretty clean and neat.</li>
+<li>use <code>HashString</code> to sample</li>
+</ul>
+
+<h1 id="toc_20">A pretty good Score bucketize and cumsum precision Pig example code</h1>
+
+<p><code>/Users/yugan/repo/drawbridge/dpp/workflow-new/miaozhen-scripts/rank/ToPrec2.pig</code></p>
+
+<p>In this code:</p>
+
+<ul>
+<li>use <code>$SCORE_FACTOR</code> converting double to long for bucketize.</li>
+<li>use of three UDF <code>GetScoreBuckets</code>, <code>AnalyzeScoreBucket</code>, and <code>GetPrecision</code>.</li>
+<li>use <code>HashString</code> to sample</li>
+<li>use <code>replicated</code> mode for the JOIN</li>
+</ul>
+
+<p>But I have also pretty good code using <code>Over</code>, <code>Stitch</code>, <code>ORDER BY</code> to implement cumsum as shown above.</p>
+
+<h1 id="toc_21">Parameter Substitution in Pig</h1>
+
+<p>Official documentation <a href="http://wiki.apache.org/pig/ParameterSubstitution">here</a></p>
+
+<h1 id="toc_22">SUBSTRING function</h1>
+
+<p>It is does not include the second index position<br/>
+<code>SUBSTRING(string, startIndex, stopIndex)</code>, <code>startIndex</code> starts from <code>0</code>, and <code>stopIndex</code> is not included.<br/><br/>
+Given a field named <code>alpha</code> whose value is <code>ABCDEF</code>, to return substring <code>BCD</code> use this statement: <code>SUBSTRING(alpha,1,4)</code>. Note that <code>1</code> is the index of <code>B</code> (the first character of the substring) and <code>4</code> is the index of <code>E</code> (the character <strong>following</strong> the last character of the substring).</p>
+
+<p>Note that the description is different in the official documents both for Pig 0.12:<br/>
+* <a href="https://pig.apache.org/docs/r0.12.0/func.html#substring">Correct official document</a> <br/>
+* <a href="https://pig.apache.org/docs/r0.12.0/api/org/apache/pig/builtin/SUBSTRING.html">Wrong official document</a></p>
+
+<h1 id="toc_23">Nested FOREACH</h1>
+
+<ol>
+<li>Allowed operation are <code>CROSS</code>, <code>DISTINCT</code>, <code>FILTER</code>, <code>FOREACH</code>, <code>LIMIT</code>, <code>ORDER BY</code>, and Project operation. <a href="http://pig.apache.org/docs/r0.15.0/basic.html#foreach">Official Document</a></li>
+<li><code>SPLIT</code> does not work inside nested FOREACH</li>
+</ol>
+
+<h1 id="toc_24">Function are allowed inside FOREACH</h1>
+
+<p><a href="http://stackoverflow.com/a/26996221/4229125">an example of using <code>SUM</code> inside FOREACH from stackoverflow</a>  </p>
+
+<pre><code class="language-sql">file = LOAD &#39;input.txt&#39; USING PigStorage() AS (type: chararray, year: chararray,
+match_count: float, volume_count: float);
+grouped = GROUP file BY type;
+group_operat = FOREACH grouped {
+                                 sum_m = SUM(file.match_count);
+                                 sum_v = SUM(file.volume_count);
+                                 GENERATE group,(float)(sum_m/sum_v) as sum_mv;
+                                }
+</code></pre>
+
+<p>Lesson learned: Do not use 2 levels of <code>FOREACH</code> if it is not absolutely necessary.</p>
+
+<p>Wrong </p>
+
+<pre><code class="language-sql">acookie_log_input = LOAD &#39;$INPUT_ACOOKIE&#39; USING LzoPigStorage()
+                       AS (acookie:chararray, ip:chararray, time_stamp:DateTime, useragent:chararray, browser:chararray,
+                           os:chararray, url:chararray, province:chararray, acookie_daily_tag:chararray,
+                           url_catelevel1:chararray, url_catelevel2:chararray, date:DateTime);
+acookie_log_input_m0 = FOREACH acookie_log_input GENERATE acookie AS acookie, SUBSTRING(province, 0, 2) AS province:chararray;
+acookie_log_input_m1 = FILTER acookie_log_input_m0 BY province IS NOT NULL;
+acookie_log_input_m2 = FOREACH (GROUP acookie_log_input_m1 BY (acookie, province)) GENERATE FLATTEN(group) AS (acookie, province),
+                        COUNT(acookie_log_input_m1) AS acookie_province_cnt;
+-- Does not work from here
+acookie_province = FOREACH (GROUP acookie_log_input_m2 BY acookie) {
+                    total_cnt = SUM(acookie_log_input_m2.acookie_province_cnt);
+                    normalized = FOREACH acookie_log_input_m2 GENERATE (int) (acookie_province_cnt * 100 / total_cnt) AS hist:int;
+                    sorted = ORDER normalized BY hist DESC;
+                    GENERATE group AS acookie, BagToString(sorted.hist) AS hist:chararray;};
+</code></pre>
+
+<p>Correct</p>
+
+<pre><code class="language-sql">acookie_province_m0 = FOREACH (GROUP acookie_log_input_m2 BY acookie) {
+                    total_cnt = SUM(acookie_log_input_m2.acookie_province_cnt);
+                    GENERATE group AS acookie, FLATTEN(acookie_log_input_m2.acookie_province_cnt) AS (acookie_province_cnt),
+                    total_cnt AS total_cnt;};
+acookie_province_m1 = FOREACH acookie_province_m0 GENERATE acookie AS acookie, (int) (acookie_province_cnt*100/total_cnt) AS hist:int;
+acookie_province = FOREACH (GROUP acookie_province_m1 BY acookie) {
+                    sorted = ORDER acookie_province_m1 BY hist DESC;
+                    GENERATE group AS acookie, BagToString(sorted.hist) AS hist:chararray;};
+</code></pre>
+
+<h1 id="toc_25">Use Star Expression and Project-Range Expression</h1>
+
+<p>to avoid copy all the fields again and again.<br/>
+<a href="https://pig.apache.org/docs/r0.12.0/basic.html#expressions">0.12 official documentation</a></p>
+
+<p>Star Expression: <code>*</code><br/>
+Project-Range Expression: <code>..</code></p>
+
+<p>A good example:</p>
+
+<pre><code class="language-sql">
+lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING PigStorage() AS (id1:long, id2:long, c2NumPath:int,
+            c2SumTot:float, c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, 
+            c2MaxS1:float, c2SumS2:float, c2MinS2:float, c2MaxS2:float, c3NumPath:int, 
+            c3NumNoRedundantPath:int, c3NumDistinctID:int, c3SumTot:float, c3MinTot:float, 
+            c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float, c3SumS2:float, 
+            c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float);
+
+-- avoid using duplicated field names!
+lkp_index_table = LOAD &#39;$INPUT_INDEX_TABLE&#39; USING LzoPigStorage() 
+                    AS (id:long, str_id:chararray);
+
+lkp_str_l = FOREACH (JOIN lkp_input BY id1, lkp_index_table BY id) GENERATE
+            str_id AS strId1, id2..c3MaxS3;
+lkp_str = FOREACH (JOIN lkp_str_l BY id2, lkp_index_table BY id) GENERATE
+            strId1 AS strId1, str_id AS strId2, c2NumPath..c3MaxS3;
+
+</code></pre>
+
+<h1 id="toc_26">Strange bug ERROR 2116 related with compression</h1>
+
+<p>Error code like:</p>
+
+<blockquote>
+<p>ERROR 2116:<br/>
+<file lkpAddLabelNoLzo.pig, line 38, column 0> Output Location Validation Failed for: &#39;hdfs://sc2prod/user/yu/linkprediction/processed_full/0.05_0.08_0.005_11/pairsNoLzo</p>
+
+<p>org.apache.pig.impl.plan.VisitorException: ERROR 2116:<br/>
+<file lkpAddLabelNoLzo.pig, line 38, column 0> Output Location Validation Failed for: &#39;hdfs://sc2prod/user/yu/linkprediction/processed_full/0.05_0.08_0.005_11/pairsNoLzo<br/>
+        at org.apache.pig.newplan.logical.rules.InputOutputFileValidator$InputOutputFileVisitor.visit(InputOutputFileValidator.java:75)</p>
+</blockquote>
+
+<p>This error has nothing to do with the output location, but because the wrong compression setting</p>
+
+<p>The wrong one caused the bug</p>
+
+<pre><code class="language-sql">SET output.compression.enabled true;
+</code></pre>
+
+<p>The correct one:</p>
+
+<pre><code class="language-sql">SET mapreduce.output.fileoutputformat.compress true;
+</code></pre>
+
+<h1 id="toc_27">Strange Bug with Split of two logic expressions</h1>
+
+<p>The error message looks like this:</p>
+
+<blockquote>
+<p>2016-11-10 03:38:16,010 WARN [main] org.apache.hadoop.mapred.YarnChild: Exception running child : org.apache.pig.backend.executionengine.ExecException: ERROR 0: Exception while executing (Name: Split - scope-1576 Operator Key: scope-1576): org.apache.pig.backend.executionengine.ExecException: ERROR 0: Error while executing ForEach at [null[-1,-1]]<br/>
+    at ....PhysicalOperator.processInput(PhysicalOperator.java:289)<br/>
+    at ....physicalLayer.relationalOperators.POSplit.getNextTuple(POSplit.java:214)<br/>
+    at ....relationalOperators.POSplit.runPipeline(POSplit.java:255)<br/>
+    ...<br/>
+Caused by: org.apache.pig.backend.executionengine.ExecException: ERROR 0: Error while executing ForEach at [null[-1,-1]]<br/>
+    at ....physicalLayer.relationalOperators.POForEach.getNextTuple(POForEach.java:306)<br/>
+    at ....PhysicalOperator.processInput(PhysicalOperator.java:281)<br/>
+    ... 19 more<br/>
+Caused by: java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.Float<br/>
+    at java.lang.Float.compareTo(Float.java:50)<br/>
+    at ....expressionOperators.NotEqualToExpr.doComparison(NotEqualToExpr.java:113)<br/>
+    at ....expressionOperators.NotEqualToExpr.getNextBoolean(NotEqualToExpr.java:84)<br/>
+    at ....expressionOperators.POAnd.getNextBoolean(POAnd.java:90)</p>
+</blockquote>
+
+<p>This error message is <strong><font color='red'>misleading</font></strong>. There is not <code>ClassCastException</code> issue, it is caused by the <code>Split</code>. I don&#39;t understand how this is happened, but <code>split</code> is merely a syntax sugar, we can just use the <code>filter</code> with the same efficiency.</p>
+
+<p>Problem code:</p>
+
+<pre><code class="language-sql">lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING LzoPigStorage() AS (strID1:chararray, strID2:chararray, c2NumPath:int, c2SumTot:float,
+                    c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, c2MaxS1:float, c2SumS2:float,
+                    c2MinS2:float, c2MaxS2:float, c3NumPath:int, c3NumNoRedundantPath:int, c3NumDistinctID:int,
+                    c3SumTot:float, c3MinTot:float, c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float,
+                    c3SumS2:float, c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float, label:int);
+SPLIT lkp_input INTO
+    c2_only_pairs IF ((c2NumPath != -1) AND (c3NumPath == -1)),
+    c3_only_pairs IF ((c2NumPath == -1) AND (c3NumPath != -1)),
+    c2_c3_pairs OTHERWISE;
+
+c2_all_pairs = FILTER lkp_input BY (c2NumPath != -1);
+c3_all_pairs = FILTER lkp_input BY (c3NumPath != -1);
+</code></pre>
+
+<p>Correct code:</p>
+
+<pre><code class="language-sql">lkp_input = LOAD &#39;$INPUT_PAIR&#39; USING LzoPigStorage() AS (strID1:chararray, strID2:chararray, c2NumPath:int, c2SumTot:float,
+                    c2MinTot:float, c2MaxTot:float, c2SumS1:float, c2MinS1:float, c2MaxS1:float, c2SumS2:float,
+                    c2MinS2:float, c2MaxS2:float, c3NumPath:int, c3NumNoRedundantPath:int, c3NumDistinctID:int,
+                    c3SumTot:float, c3MinTot:float, c3MaxTot:float, c3SumS1:float, c3MinS1:float, c3MaxS1:float,
+                    c3SumS2:float, c3MinS2:float, c3MaxS2:float, c3SumS3:float, c3MinS3:float, c3MaxS3:float, label:int);
+
+c2_only_pairs = FILTER lkp_input BY ((c2NumPath != -1) AND (c3NumPath == -1));
+c3_only_pairs = FILTER lkp_input BY ((c2NumPath == -1) AND (c3NumPath != -1));
+c2_c3_pairs = FILTER lkp_input BY ((c2NumPath != -1) AND (c3NumPath != -1));;
+    
+c2_all_pairs = FILTER lkp_input BY (c2NumPath != -1);
+c3_all_pairs = FILTER lkp_input BY (c3NumPath != -1);
+</code></pre>
+
+<h1 id="toc_28">Use <code>AvroStorage()</code> inside pig</h1>
+
+<p>Need register the following jars</p>
+
+<pre><code class="language-sql">REGISTER /home/adsymp/lib/piggybank.jar;
+REGISTER /home/adsymp/lib/avro-1.7.6.jar;
+REGISTER /home/adsymp/lib/jackson-core-asl-1.7.3.jar;
+REGISTER /home/adsymp/lib/jackson-mapper-asl-1.7.3.jar;
+REGISTER /home/adsymp/lib/json-simple-1.1.jar;
+
+DEFINE AvroStorage org.apache.pig.piggybank.storage.avro.AvroStorage(&#39;no_schema_check&#39;);
+</code></pre>
+
+<p>Also, don&#39;t mess with the <code>float</code> and <code>double</code> types with the AvroStorage input.</p>
+
+<h1 id="toc_29">Load Parquet data to pig</h1>
+
+<p>Need specify the schema string in the constructor</p>
+
+<p>for example the following file:<br/>
+<code>/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet</code></p>
+
+<p>The schema of this parquet data is specified in the source code:<br/>
+<code>/Users/yugan/repo/drawbridge/dpp/spark2/src/main/scala/ge/drawbrid/dpp/spark2/pairing/PairingFormat.scala</code></p>
+
+<pre><code class="language-scala">case class PairData(id1: String, id2: String, id1Type: String, id2Type: String, pairingVersion: String,
+                    id1TotalFrequency: Long, id2TotalFreqency: Long, precision: Double, rfc: Double, scores: scala.collection.Map[String, Double])
+</code></pre>
+
+<p>In order to read this data into pig we should do:</p>
+
+<pre><code class="language-sql">A = LOAD &#39;/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;id1:chararray, id2:chararray, id1Type:chararray, id2Type:chararray, pairingVersion:chararray, id1TotalFrequency:long, id2TotalFrequency:long, precision:double, rfc:double, scores:map[double]&#39;);
+</code></pre>
+
+<p>Don&#39;t mess up the field names and the float/double datatypes. Also pay attention to the <code>:map[double]</code> type specification (refer to the <a href="http://pig.apache.org/docs/r0.12.0/basic.html#schema-complex">pig schema documentation here</a>).</p>
+
+<p><font color='red'><strong>The most important advantage is reading some columns out only</strong></font></p>
+
+<pre><code class="language-sql">A = LOAD &#39;/user/oozie/pairing-modeling-gpairing/2016-12-23/cookie-cookie/mob-mob/output/part-r-00000-0eb9c76c-f170-4d4a-a20b-aa9f72d6654c.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;id1:chararray, id2:chararray, precision:double&#39;);
+</code></pre>
+
+<ul>
+<li><strong>There is another way to load by column position</strong>
+<a href="http://stackoverflow.com/a/32276119/4229125">stackoverflow post</a></li>
+</ul>
+
+<p>As specified in the <a href="https://github.com/Parquet/parquet-mr/blob/master/parquet-pig/src/main/java/parquet/pig/ParquetLoader.java#L119">source code</a>: just add a boolean string as the 2nd argument (I did not try it)</p>
+
+<pre><code class="language-java">ParquetLoader(String requestedSchemaStr, String columnIndexAccess)
+
+ParquetLoader(&#39;n1:int, n2:float, n3:double, n4:long&#39;, &#39;true&#39;)
+</code></pre>
+
+<ul>
+<li><font color='red'><strong>read in the metadata in the pig mr-planning phase</strong></font></li>
+</ul>
+
+<p>when load parquet data into pig, all parquet files&#39; footer, i.e. metadata need be read in first (which in my case takes quite some time) <br/>
+<a href="https://forums.databricks.com/questions/1097/stall-on-loading-many-parquet-files-on-s3.html">Very good reference</a><br/>
+<a href="https://drill.apache.org/docs/optimizing-parquet-metadata-reading/">reference1</a><br/>
+<a href="https://issues.apache.org/jira/browse/SPARK-9347">reference2</a><br/>
+<a href="https://groups.google.com/forum/#!topic/parquet-dev/aQU9Q8f0bPY">reference3</a></p>
+
+<blockquote>
+<p>I might have an explanation. It appears to be because the current Spark/Hadoop versions are not designed to read thousands of tables (a handful of large/small tables instead). Before any job is actually submitted to the cluster, the driver will go through the parquet files one-by-one, reading the footers from each parquet part. If your parts are small, this is tantamount to the driver serially reading all your data from S3 before starting your job.<br/>
+The driver log contains these lines:<br/>
+Jun 27, 2015 8:34:23 PM INFO: parquet.hadoop.ParquetFileReader: Initiating action with parallelism: 5 Jun 27, 2015 8:34:23 PM INFO: parquet.hadoop.SplitStrategy: Using Client Side Metadata Split Strategy Jun 27, 2015 8:34:24 PM INFO: parquet.hadoop.ClientSideMetadataSplitStrategy: There were no row groups that could be dropped due to filter predicates Jun 27, 2015 8:34:24 PM INFO: parquet.hadoop.ParquetInputFormat: Total input paths to process : 14<br/>
+In addition, it appears that opening up parquet files through the newAPIHadoopFile creates a broadcast variable per file: SparkContext: Created broadcast 653 from newAPIHadoopFile at ADAMContext.scala:150<br/>
+The solution would seem to be to both produce parquet files with larger/fewer parts, and to aggregate your parquet files together. Of course doing so means you might have to pay this penalty to simply run the job to aggregate to a single logical parquet file.<br/>
+A _metadata files contains a copy of all the footers of all the files in same directory. To produce efficient splits and do projection push down we read the metadata on the client side. Consolidating the metadata per directory reduces the number of files to open and speeds up that process.If the _metadata file is absent we just fall back to the files footers, also if there are files are missing, we just ignore the information in the _metadata file so you can delete part files or move them around and it still works.</p>
+</blockquote>
+
+<ul>
+<li><strong>Improve the speed of read in the metadata files</strong><br/>
+Currently I have no good ways to generate the common metadata, the only option that I know is to increase the parquet.metadata.read.parallelism<br/></li>
+</ul>
+
+<p><a href="http://stackoverflow.com/questions/33726400/what-is-parquet-read-parallelism">stackoverflow</a></p>
+
+<blockquote>
+<p>increase ParquetFileReader parallelism from default 5 to 30 - with setting &quot;parquet.metadata.read.parallelism&quot;: &quot;30&quot; in newAPIHadoopFile config</p>
+</blockquote>
+
+<p>The way of setting it is like follow:</p>
+
+<pre><code class="language-sql">%default BUCKET_SIZE 981
+
+SET mapred.job.queue.name &#39;datascience&#39;;
+SET parquet.metadata.read.parallelism 50;
+
+REGISTER /home/adsymp/lib/dpp-pig-udf-0.0.1-SNAPSHOT.jar;
+...
+</code></pre>
+
+<p><strong>reference</strong></p>
+
+<ul>
+<li><a href="https://groups.google.com/forum/#!topic/parquet-dev/qyqRrJ3bMew">A code snippet in a google-group&#39;s post</a></li>
+</ul>
+
+<pre><code class="language-sql">REGISTER /xxtech/scenarios/parquet-pig-bundle-1.2.4.jar
+REGISTER $xxtechLocalRepo/xxtechPigExtension.jar
+REGISTER $xxtechLocalRepo/lib/piggybank.jar
+REGISTER $xxtechLocalRepo/lib/joda-time-1.6.jar
+
+SET job.name parquet-store-$record-$parquet.pig;
+
+dataImport = LOAD ‚/xxtech/$record/{%DATE%}/{%HOUR%}/{*}.avro&#39; USING com.xxtech.repo.pig.udf.storage.avro.ExtendedxxtechAvroStorage(&#39;$timestamp&#39;, &#39;-7200&#39;, &#39;missing_input_dir&#39;);
+
+SET parquet.compression snappy
+SET parquet.enable.dictionary true
+SET parquet.block.size 536870912
+
+store dataImport into &#39;/$parquet/xxtech/$record/20131020/10/$record.par&#39; using parquet.pig.ParquetStorer();
+
+parquet.pig:
+
+REGISTER /xxtech/scenarios/parquet-pig-bundle-1.2.4.jar
+
+data = LOAD &#39;/parquet/xxtech/rawlogs/20131020/10/rawlogs.par/part-m-00000.snappy.parquet&#39; USING parquet.pig.ParquetLoader(&#39;SGSHeader: (VersionID: int,SequenceID: long,RecordType: int,TimeStamp: int,GMTOffset: int)&#39;);
+
+a = GROUP data ALL;
+describe a;
+
+
+b = foreach a generate SUM(a.data.RecordType);
+describe b;
+dump b;
+</code></pre>
+
+<ul>
+<li><a href="https://hadoopified.wordpress.com/2013/10/18/parquet-columnar-storage-hadoop/">A blog. By the way this is a good hadoop blog</a></li>
+</ul>
+
+<h1 id="toc_30">A side-by-side datatype comparison among avro, parquet, and pig</h1>
+
+<p><a href="http://alvincjin.blogspot.com/2014/06/convert-same-pig-and-avro-output-schema.html">Not that useful, just a quick reference</a></p>
+
+<h1 id="toc_31">More about the parquet</h1>
+
+<p><strong>some useful command line tools</strong></p>
+
+<pre><code class="language-bash"># showing schema
+hadoop parquet.tools.Main schema /user/oozie/pairing-modeling-gpairing/2016-12-23/dev-cookie/dev-mob/output/part-r-28207-74d4715e-3418-4f39-9519-109c7364f939.snappy.parquet
+
+# Check meta
+hadoop parquet.tools.Main meta ...
+
+# check head
+ hadoop parquet.tools.Main head ...
+</code></pre>
+
+<p>More <a href="https://www.cloudera.com/documentation/enterprise/5-8-x/topics/cdh_ig_parquet.html#parquet_files">here</a></p>
+
+<ul>
+<li>A visual representation of parquet data strcuture</li>
+</ul>
+
+<p><img src="media/14742423250700/14827763637843.jpg" alt=""/></p>
+
+<p><a href="http://grepalex.com/2014/05/13/parquet-file-format-and-object-model/">Original post</a></p>
+
+<h1 id="toc_32">From one relation, put two fields into one bag by FLATTEN</h1>
+
+<p>{A:(id1:chararray, id2:chararray)} → {B:(id:chararray)}, in which B::id is the collection of A::id1 and A::id2.</p>
+
+<p>The following is the code that I tested and works (in hlab &gt; pig-book &gt; script &gt;  collect_one_bag.pig</p>
+
+<pre><code>four_field = LOAD &#39;data_flatten&#39; AS (one:INT, two:INT, three:INT, four:INT);
+one_field = FOREACH four_field GENERATE FLATTEN(TOBAG(one, two, three, four));
+DESCRIBE one_field;
+</code></pre>
+
+<h1 id="toc_33">Learning from piggybank <code>HashFNV</code></h1>
+
+<p>It used a technique to support different function implementations according to the input schema</p>
+
+<p><code>HashFNV</code> has two subclasses <code>HashFNV1</code> and <code>HashFNV2</code>, in which, <code>HashFNV1</code> is used when input only has one argument, i.e. the string need be hashed, and <code>HashFNV2</code> is used when input has two arguments, i.e. the string need be hashed and the integer for the mod operation.</p>
+
+<p>The key implementation method that is called in both the two subclasses <code>HashFNV1</code> and <code>HashFNV2</code> is actually inside <code>HashFNV</code>, and is called <code>hashFnv32(String s)</code></p>
+
+<p>This technique of have different implementations is by overriding method <code>public List&lt;FuncSpec&gt; getArgToFuncMapping()</code>. Official document is at <a href="https://github.com/apache/pig/blob/branch-0.12/src/org/apache/pig/EvalFunc.java#L279">here</a>. And <code>HashFNV</code> is a good example of <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV.java?view=markup#l77">using it</a> </p>
+
+<p>For my case, in Spark, there is already an implementation I can use at <code>ge.drawbrid.dpp.spark2.util.Util#hashFnv32</code></p>
+
+<p>Source code:<br/>
+* <code>HashFNV</code> is at <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV.java?view=markup">here</a><br/>
+* <code>HashFNV1</code> is at <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV1.java?view=markup">here</a><br/>
+* <code>HashFNV2</code> is at <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV2.java?view=markup">here</a></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">File Name Pattern Substitution</a>
+</li>
+<li>
+<a href="#toc_1"><code>ToDate(milliseconds)</code> gives wrong date</a>
+</li>
+<li>
+<a href="#toc_2">DateTime SimpleDateFormat</a>
+</li>
+<li>
+<a href="#toc_3">Parameter substitution Shell Runner subtle bug</a>
+</li>
+<li>
+<a href="#toc_4">Becareful of <code>DateTime</code> data type in pig</a>
+</li>
+<li>
+<a href="#toc_5">More pitfalls for <code>DateTime</code> data type</a>
+</li>
+<li>
+<a href="#toc_6">Setting of memory</a>
+</li>
+<li>
+<a href="#toc_7">Pig Unit Test <code>override()</code> method</a>
+</li>
+<li>
+<a href="#toc_8">Error message for wrong reference operator</a>
+</li>
+<li>
+<a href="#toc_9">Pig Java UDF Unit Test</a>
+</li>
+<li>
+<a href="#toc_10">Duplicates and <code>null</code> behavior for <code>cogroup + flatten</code> and <code>join</code></a>
+</li>
+<li>
+<a href="#toc_11">specify function output data type</a>
+</li>
+<li>
+<a href="#toc_12">using <code>u0001</code> as the delimiter</a>
+</li>
+<li>
+<a href="#toc_13">Error with SUBSTRING and SIZE function</a>
+</li>
+<li>
+<a href="#toc_14">oneline to order two fields</a>
+</li>
+<li>
+<a href="#toc_15">sort with duplicates</a>
+</li>
+<li>
+<a href="#toc_16">input and output are reserved keyword in pig</a>
+</li>
+<li>
+<a href="#toc_17">Mystery ERROR 2999</a>
+</li>
+<li>
+<a href="#toc_18">Cumsum</a>
+</li>
+<li>
+<a href="#toc_19">A pretty good graph cluster to pair Pig example code</a>
+</li>
+<li>
+<a href="#toc_20">A pretty good Score bucketize and cumsum precision Pig example code</a>
+</li>
+<li>
+<a href="#toc_21">Parameter Substitution in Pig</a>
+</li>
+<li>
+<a href="#toc_22">SUBSTRING function</a>
+</li>
+<li>
+<a href="#toc_23">Nested FOREACH</a>
+</li>
+<li>
+<a href="#toc_24">Function are allowed inside FOREACH</a>
+</li>
+<li>
+<a href="#toc_25">Use Star Expression and Project-Range Expression</a>
+</li>
+<li>
+<a href="#toc_26">Strange bug ERROR 2116 related with compression</a>
+</li>
+<li>
+<a href="#toc_27">Strange Bug with Split of two logic expressions</a>
+</li>
+<li>
+<a href="#toc_28">Use <code>AvroStorage()</code> inside pig</a>
+</li>
+<li>
+<a href="#toc_29">Load Parquet data to pig</a>
+</li>
+<li>
+<a href="#toc_30">A side-by-side datatype comparison among avro, parquet, and pig</a>
+</li>
+<li>
+<a href="#toc_31">More about the parquet</a>
+</li>
+<li>
+<a href="#toc_32">From one relation, put two fields into one bag by FLATTEN</a>
+</li>
+<li>
+<a href="#toc_33">Learning from piggybank <code>HashFNV</code></a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14867660612004.html" 
+          title="Previous Post: oozie">&laquo; oozie</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742423250719.html" 
+          title="Next Post: python">python &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

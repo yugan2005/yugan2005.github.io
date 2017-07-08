@@ -1,0 +1,1721 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  python - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>python</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+<li>
+<a href="#toc_3">timezone</a>
+</li>
+<li>
+<a href="#toc_4">From String to timestamp to epoch unix time</a>
+</li>
+<li>
+<a href="#toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</a>
+</li>
+<li>
+<a href="#toc_6">To make a linspace of pd.Timestamp</a>
+</li>
+<li>
+<a href="#toc_7">plotly tick setting: string format, number of ticks and location of ticks.</a>
+</li>
+<li>
+<a href="#toc_8">plotly datetime type tick setting</a>
+</li>
+<li>
+<a href="#toc_9">plotly change the padding size between subplots</a>
+</li>
+<li>
+<a href="#toc_10">read in gz / gzip file</a>
+</li>
+<li>
+<a href="#toc_11">plotly bar chart, use whether value is negative or positive to determine its color</a>
+</li>
+<li>
+<a href="#toc_12">plotly subplot shared axis setting</a>
+</li>
+<li>
+<a href="#toc_13">plotly remove missed dates from time series plot</a>
+</li>
+<li>
+<a href="#toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+</li>
+<li>
+<a href="#toc_15">Use <code>:</code> or <code>slice(None)</code></a>
+</li>
+<li>
+<a href="#toc_16">String for pandas datetime period and frequency</a>
+</li>
+<li>
+<a href="#toc_17">Python Library for Probabilistic Graphical Models</a>
+</li>
+<li>
+<a href="#toc_18">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_19">nohup python that includes a nohup shell script</a>
+</li>
+<li>
+<a href="#toc_20">ipython jupyter notebook pandas showing options</a>
+</li>
+<li>
+<a href="#toc_21">matplotlib style and colors</a>
+</li>
+<li>
+<a href="#toc_22">matplotlib backend choices</a>
+</li>
+<li>
+<a href="#toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</a>
+</li>
+<li>
+<a href="#toc_24">Conda install python package CondaHTTPError Error</a>
+</li>
+<li>
+<a href="#toc_25">utf8 unicode in string formatter &amp; file read/write</a>
+</li>
+<li>
+<a href="#toc_26">Use a relative path in a python module</a>
+</li>
+<li>
+<a href="#toc_27">Mysterious Error pandas groupby error</a>
+</li>
+<li>
+<a href="#toc_28">matplotlib add axes (subplot) on a made figure and sharex</a>
+</li>
+<li>
+<a href="#toc_29">python parse webpage static content</a>
+</li>
+<li>
+<a href="#toc_30">python get and parse webpage dynamic content</a>
+</li>
+<li>
+<a href="#toc_31">python with statement and context manager type</a>
+</li>
+<li>
+<a href="#toc_32">python selenium selector find element by multiple class names</a>
+</li>
+<li>
+<a href="#toc_33">Speed up selenium and Time out</a>
+</li>
+<li>
+<a href="#toc_34">An example of using regex parse table</a>
+</li>
+<li>
+<a href="#toc_35">start and shutdown the selenium-server</a>
+</li>
+<li>
+<a href="#toc_36">phantomJS options</a>
+</li>
+<li>
+<a href="#toc_37">Pycharm unittest not finding the module path</a>
+</li>
+<li>
+<a href="#toc_38">Conda rename environment</a>
+</li>
+<li>
+<a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">shell expansion insdie python with  <code>subprocess.call</code></h1>
+
+<p>For python older than 2.7 (like the default on on DB cluster, but we can change the shebang to specify 2.7), we can only use <code>subprocess.call()</code>.<br/><br/>
+when using shell expansion with this command, need have <code>shell=True</code>. Better way to have shell expansion inside python is to use module <code>glob</code><br/><br/>
+But the following works, because it is not the shell expansion but the <code>imagemagick</code> does the expansion.  </p>
+
+<pre><code class="language-python">subprocess.call([&#39;convert&#39;, &#39;-delay&#39;, &#39;10&#39;, &#39;-loop&#39;, &#39;10&#39;, &#39;temp_1*.png&#39;, &#39;cluster_size_anim.gif&#39;])
+</code></pre>
+
+<h1 id="toc_1">plotly using LaTex</h1>
+
+<p>It is not possible to use LaTex in offline mode. (don&#39;t waste time to figure out a way to do that anymore, maybe wait for newer update)<br/><br/>
+It works when using the online mode.</p>
+
+<h1 id="toc_2">plotly cufflinks pandas dataframe customize the plot</h1>
+
+<ol>
+<li>using the <code>asFigure=True</code> option to get the handle of the figure</li>
+<li>using <code>update</code> method to update the layout python dictionary</li>
+<li>using <code>po.iplot()</code> to plot the figure</li>
+</ol>
+
+<p>Example:  </p>
+
+<pre><code class="language-python">figure = data.iplot(kind=&#39;scatter&#39;, fill=True, asFigure=True)
+figure.layout.update(xaxis=dict(nticks=len(data.asfreq(&#39;M&#39;).index)))
+po.iplot(figure)
+</code></pre>
+
+<h1 id="toc_3">timezone</h1>
+
+<p>A classical scenario is get timestamp in UTC, want to convert to local timezone. Panda can do it for time series</p>
+
+<pre><code class="language-python">ts2 = ts1.
+        tz_localize(&#39;UTC&#39;).
+        tz_convert(&#39;US/Pacific&#39;)
+</code></pre>
+
+<p>the <code>tz_localize(&#39;UTC&#39;)</code> make it timezone aware, the <code>tz_convert(&#39;US/Pacific&#39;)</code> convert it to local timezone.</p>
+
+<h1 id="toc_4">From String to timestamp to epoch unix time</h1>
+
+<p>Use <code>pd.Timestamp()</code> to convert string into pandas timestamp, then use <code>value</code> to epoch unix time in nanosecond</p>
+
+<pre><code class="language-python">pd.Timestamp(&#39;2002-01-01&#39;).value/1e6
+# this convert to epoch microseconds
+</code></pre>
+
+<h1 id="toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</h1>
+
+<p>At least between python and pandas is easy:</p>
+
+<pre><code class="language-python">from dateutil import parser as dateparser
+from datetime import datetime
+
+dt = dateparser.parse(&#39;2015-01-01&#39;) # python datetime
+dt2 = datetime(2015, 1, 1)          # Also python datetime
+ts = pd.to_datetime(dt)             # pandas Timestamp
+dt = ts.to_pydatetime()             # back to python datetime
+</code></pre>
+
+<p>A very good graph to show the converting relationship:</p>
+
+<p><img src="media/14742423250719/14757939209171.jpg" alt=""/></p>
+
+<h1 id="toc_6">To make a linspace of pd.Timestamp</h1>
+
+<p>The <code>pd.date_range(start=None, end=None, periods=None, freq=&#39;D&#39;)</code> method will not work. This method is for different purpose.</p>
+
+<pre><code class="language-python">rng = pd.date_range(&#39;1/1/2011&#39;, periods=72, freq=&#39;H&#39;)
+
+# the same as pd.date_range(start, end, freq=&#39;D&#39;)
+rng = pd.date_range(start, end)
+</code></pre>
+
+<p>To make the linespace of pd.Timestamp:<br/>
+1. convert pd.Timestamp to long type<br/>
+2. use np.linspace to make the array of long<br/>
+3. convert back to pd.Timestamp array<br/>
+4. Special note: If the original timestamp has timezone info, the step 3 need use different method to restore the timezone info</p>
+
+<pre><code class="language-python"># the index of memory_df dataframe is of type pd.Timestamp
+# the ticks_array is what we want linspace array of pd.Timestamp
+# this is for cases without timezone information
+ticks_array = pd.to_datetime(np.linspace(start=memory_df.index[0].value, 
+                                         stop=memory_df.index[-1].value, 
+                                         num=n_ticks, 
+                                         endpoint=True))
+                                         
+# if need keep timezone info, to_datetime() method is not good anymore.
+# for example the index of memory_df dataframe has timezone info
+memory_df.index = memory_df.index.tz_localize(&#39;UTC&#39;).tz_convert(&#39;US/Pacific&#39;)
+
+ticks_array = [pd.Timestamp(timetick, tz=memory_df.index.tz) for timetick in 
+               (np.linspace(start=memory_df.index[0].value,
+                            stop=memory_df.index[-1].value,
+                            num=n_ticks, endpoint=True))]
+</code></pre>
+
+<h1 id="toc_7">plotly tick setting: string format, number of ticks and location of ticks.</h1>
+
+<ul>
+<li>The easiest way to set <code>nticks</code> and <code>tickformat</code>. Like the following example:</li>
+</ul>
+
+<pre><code class="language-python">plot_layout = go.Layout(xaxis=dict(nticks=5,
+                                   tickformat=&#39;.2f&#39;))
+</code></pre>
+
+<ul>
+<li>The hard way is to set <code>tickmode=&#39;array&#39;, ticktext=[...], tickvals=[...]</code>. </li>
+</ul>
+
+<h1 id="toc_8">plotly datetime type tick setting</h1>
+
+<p>directly use <code>datetime</code> datatype and the plotly tick setting options have subtle bugs, especially when dealing with timezone awared data.</p>
+
+<p>The workaround:<br/>
+1. convert the index to string using <code>strftime</code> (these string need to have high enough resolution like <code>&#39;%H:%M:%S:%f&#39;</code>, otherwise, the plot will loose resolution because of having the same xaxis values)<br/>
+2. generating <code>ticktext</code> and <code>tickvals</code>,specifing any format you like for <code>ticktext</code>.  </p>
+
+<p>Look the below example:  </p>
+
+<pre><code class="language-python">def visualization(job_id, basepath=&#39;.&#39;):
+    memory_file = os.sep.join([basepath, &#39;memory_usage_&#39;+job_id+&#39;.csv&#39;])
+    
+    memory_df = pd.read_csv(memory_file)
+    timestamp = pd.to_datetime(memory_df.timestamp, infer_datetime_format=True)
+    memory_df = memory_df.set_index(timestamp).drop(&#39;timestamp&#39;, axis=1)
+    memory_df=memory_df/float(1024*1024*1024*1024)
+    memory_df.index = memory_df.index.tz_localize(&#39;UTC&#39;).tz_convert(&#39;US/Pacific&#39;)
+    
+    # change the index to string for plotting purpose
+    memory_plot_df = memory_df.copy()
+    memory_plot_df.index = pd.Series(data=[ts.strftime(&#39;%H:%M:%S:%f&#39;) for ts in memory_plot_df.index],name=&#39;time&#39;)
+    mem_fig = memory_plot_df.iplot(asFigure=True)
+    
+    # set the xaxis ticks
+    n_ticks = 10
+    picked_tick_index = ((np.linspace(start=0, stop=len(memory_plot_df.index)-1, num=n_ticks, endpoint=True))
+                        .astype(int))
+    ticktext=[&#39;:&#39;.join(ts.split(&#39;:&#39;)[:2]) for ts in memory_plot_df.index[picked_tick_index]] # only take hour and mins
+    tickvals=memory_plot_df.index[picked_tick_index]
+    mem_fig.layout.update(title=&#39;Memory usage for &#39;+job_id,
+                          yaxis=dict(title=&#39;TB&#39;),
+                          xaxis=dict(title=&#39;time&#39;,
+                                     tickmode=&#39;array&#39;,
+                                     ticktext=ticktext,
+                                     tickvals=tickvals))
+
+    po.iplot(mem_fig, show_link=False)
+</code></pre>
+
+<h1 id="toc_9">plotly change the padding size between subplots</h1>
+
+<p>Use <code>specs</code> and <code>vertical_spacing</code> or <code>horizontal_spacing</code> inside <code>tls.make_subplots()</code></p>
+
+<p>Example:  </p>
+
+<pre><code class="language-python">import plotly.tools as tls
+
+figure = tls.make_subplots(rows=2, cols=1, shared_xaxes=True,
+                           specs=[[{}], [{}]],
+                           vertical_spacing=0.01)
+</code></pre>
+
+<h1 id="toc_10">read in gz / gzip file</h1>
+
+<pre><code class="language-python">import gzip
+
+with gzip.open(file_path, &#39;rb&#39;) as f:
+    for line in f:
+</code></pre>
+
+<h1 id="toc_11">plotly bar chart, use whether value is negative or positive to determine its color</h1>
+
+<pre><code class="language-python"># here sh_MACD.ch is a time series, with values can be positive or negative.
+# want to generate the bar chart that is red if its value is positive, or green if negative
+
+colors=(sh_MACD.ch&gt;0).map({True:&#39;red&#39;, False:&#39;green&#39;}).values
+trace_macd = go.Bar(x=sh_MACD.index, y=sh_MACD.ch, name = &#39;MACD&#39;,
+                    marker=dict(color=colors))
+</code></pre>
+
+<p>Key points:<br/>
+* use map to convert logical array to the color literals<br/>
+* use values to get np.ndarray not pd.Series (because plotly need np.ndarray)<br/>
+* use <code>marker</code> filed</p>
+
+<h1 id="toc_12">plotly subplot shared axis setting</h1>
+
+<p>For example, if the subplot is 2 row 1 col, with shared x axis, the axis&#39; names are: [(1,1) x1,y1 ], [(2,1) x1,y2 ]. To set the axis properties in the <code>layout</code> dictionary, using <code>xaxis1</code> instead of <code>xaxis</code>.</p>
+
+<p>The following example is from <code>01-Project/01-Study/PersonalProject/EDA.ipynb</code></p>
+
+<pre><code class="language-python">overlay_plot[&#39;layout&#39;].update(xaxis1=dict(type=&#39;category&#39;))
+</code></pre>
+
+<h1 id="toc_13">plotly remove missed dates from time series plot</h1>
+
+<p>change the xaxis&#39; type to <code>category</code>. (refer to the example above)</p>
+
+<h1 id="toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</h1>
+
+<pre><code>In [65]: df
+Out[65]: 
+                     A         B         C
+first second                              
+bar   one     0.895717  0.410835 -1.413681
+      two     0.805244  0.813850  1.607920
+baz   one    -1.206412  0.132003  1.024180
+      two     2.565646 -0.827317  0.569605
+foo   one     1.431256 -0.076467  0.875906
+      two     1.340309 -1.187678 -2.211372
+qux   one    -1.170299  1.130127  0.974466
+      two    -0.226169 -1.436737 -2.006747
+</code></pre>
+
+<p>select all <code>two</code> data. Two methods:</p>
+
+<ul>
+<li>MultiIndex is tuple, using <code>loc</code> and tuple to select, and use <code>slice(None)</code> inside tuple to represent <code>:</code> that we normally use (because <code>:</code> is not recognized inside tuple). <font color='red'> The dataframe MultiIndex must be sorted first.</font></li>
+</ul>
+
+<pre><code class="language-python">df=df.sort_index()
+selection = df.loc[(slice(None), &#39;two&#39;), :]
+</code></pre>
+
+<ul>
+<li>Use <code>xs</code> method and use <code>level</code> argument to specify the level. (note that <code>xs</code> by default works on rows, if want to use it on columns, use the <code>axis=1</code> argument)<br/></li>
+</ul>
+
+<pre><code class="language-python">selection = df.xs(&#39;two&#39;, level=&#39;second&#39;)
+</code></pre>
+
+<h1 id="toc_15">Use <code>:</code> or <code>slice(None)</code></h1>
+
+<p>They mean the same thing, normally in <code>[ ]</code>, we just use <code>:</code>, like <code>[5, :]</code><br/>
+However, inside tuple, <code>:</code> is not recognized, we have to use <code>slice(None)</code> instead.</p>
+
+<h1 id="toc_16">String for pandas datetime period and frequency</h1>
+
+<p>Useful official documents</p>
+
+<ul>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases">frequency strings</a></li>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#anchored-offsets">Anchored offset frequency strings</a></li>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/timeseries.html#anchored-offset-semantics">Rolling forward or backward to snap on the anchors</a></li>
+</ul>
+
+<h1 id="toc_17">Python Library for Probabilistic Graphical Models</h1>
+
+<p><a href="https://github.com/pgmpy/pgmpy">github link</a></p>
+
+<h1 id="toc_18">Python blocking and non-blocking subprocess calls</h1>
+
+<p><code>Popen</code> is nonblocking; <code>call</code> and <code>check_call</code> are blocking.<br/><br/>
+<a href="http://stackoverflow.com/a/21936682/4229125">A good stackoverflow post explaining this</a></p>
+
+<h1 id="toc_19">nohup python that includes a nohup shell script</h1>
+
+<ul>
+<li>when using nohup with python, the output will be buffered, in order to see the output in real time using <code>python -u</code> option to turn off the output buffering</li>
+</ul>
+
+<pre><code class="language-bash"># calling the nohup python script like this:
+nohup python -u subprocess_test.py 1&gt;py_nohup.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<ul>
+<li>Do not use <code>nohup</code> inside the python script for calling a shell script. Instead using the <code>Popen</code> with <code>shell=True</code> option, and redirects the stdout to a file.</li>
+</ul>
+
+<p>The following example is located at <code>Dropbox/01-Project/01-Study/playground/py_subprocess_call</code></p>
+
+<p>The python script <code>subprocess_test.py</code>:</p>
+
+<pre><code class="language-python">#!/usr/local/bin/python
+
+from subprocess import Popen;
+from time import sleep, strftime, localtime;
+
+Popen(&#39;./keep_logging.sh 1&gt;shell_logging_out 2&gt;&amp;1&#39;, shell=True)
+
+for i in range(20):
+    print &#39;python logging {:d} time&#39;.format(i)
+    print strftime(&quot;%a %b %d %H:%M:%S PDT %Y&quot;, localtime())
+    sleep(3)
+</code></pre>
+
+<p>The called shell script inside python is <code>keep_logging.sh</code>: </p>
+
+<pre><code class="language-bash">for ((c=1;c&lt;=20 ;c++ ))
+do
+        echo &quot;shell logging $c times&quot;
+        date
+        sleep 3
+done
+</code></pre>
+
+<p>The command of running the python script (in turn running the shell script) is:</p>
+
+<pre><code class="language-bash">nohup python -u subprocess_test.py 1&gt;py_nohup.out 2&gt;&amp;1 &amp;
+</code></pre>
+
+<p>Using <code>tail -f</code> for both logging file <code>shell_logging_out</code> and <code>py_nohup.out</code> shows they are <strong>non-blocking</strong> and the output are in real time.</p>
+
+<h1 id="toc_20">ipython jupyter notebook pandas showing options</h1>
+
+<p><a href="http://pandas.pydata.org/pandas-docs/stable/options.html">official documents</a></p>
+
+<ul>
+<li>set jupyter notebook show float in dataframe with 2 digits precision (globally)<br/>
+<code>pd.options.display.float_format = &#39;{:.2f}&#39;.format</code> <a href="http://stackoverflow.com/a/31671975/4229125">stackoverflow reference</a></li>
+<li>get/set number of dataframe rows to show in notebook<br/>
+<code>pd.get_option(&quot;display.max_rows&quot;)</code><br/>
+<code>pd.set_option(&quot;display.max_rows&quot;,999)</code><br/></li>
+</ul>
+
+<h1 id="toc_21">matplotlib style and colors</h1>
+
+<ul>
+<li><a href="https://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html">Here</a> is a good post for showing how all the matplotlib styles look like.</li>
+<li>The recommended way of choosing color is through <code>seaborn</code>. <a href="http://seaborn.pydata.org/tutorial/color_palettes.html">The office document</a> which is very useful.</li>
+<li>To temporarily change the matplotlib&#39;s default <a href="http://seaborn.pydata.org/tutorial/color_palettes.html#palette-contexts">color palette</a> and <a href="http://matplotlib.org/users/style_sheets.html#temporary-styling">style</a>, use <code>with</code>:<br/></li>
+</ul>
+
+<pre><code class="language-python">
+with sns.color_palette(&quot;PuBuGn_d&quot;):
+    # generate some plots with this color_palette
+    
+with plt.style.context((&#39;ggplot&#39;)):
+    # generate some plots using the ggplot style  
+    
+</code></pre>
+
+<h1 id="toc_22">matplotlib backend choices</h1>
+
+<p>If a separate figure window needed (not the jupyter embedded window) use <code>Qt5Agg</code> as:</p>
+
+<pre><code class="language-python">from matplotlib import pyplot as plt
+
+plt.switch_backend(&#39;Qt5Agg&#39;)
+</code></pre>
+
+<p>If want to see the figure embedded inside the jupyter notebook, use magic line will be good enough:</p>
+
+<pre><code class="language-python">%matplotlib notebook
+</code></pre>
+
+<h1 id="toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</h1>
+
+<p><code>mpld3</code> can correctly convert matplotlib twinx figs, plotly cannot</p>
+
+<pre><code class="language-python">import matplotlib as mpl
+from matplotlib import pyplot as plt
+import mpld3
+import plotly.tools as tls
+import plotly.offline as po
+
+%matplotlib notebook
+
+fig, ax = plt.subplots()
+ax2 = ax.twinx()
+ax.plot([1,3,2], &#39;b-&#39;)
+ax2.plot([16, 4, 1], &#39;r:&#39;)
+ax.set_ylabel(&#39;y1&#39;)
+ax2.set_ylabel(&#39;y2&#39;)
+ax2.patch.set_alpha(0.0) # This is the main trick for showing two axes
+ax.set_xlabel(&#39;x&#39;)
+fig.show()
+
+###
+mpld3.display(fig)
+
+###
+po.init_notebook_mode()
+plotly_fig = tls.mpl_to_plotly(fig)
+po.iplot(plotly_fig, show_link=False)
+</code></pre>
+
+<h1 id="toc_24">Conda install python package CondaHTTPError Error</h1>
+
+<p>Mysterious error like:</p>
+
+<blockquote>
+<p>CondaHTTPError: HTTP 404 None<br/>
+for url &lt;None&gt;<br/>
+The remote server could not find the channel you requested.</p>
+</blockquote>
+
+<p>The reason is that some package installed previous changed the <code>~/.condarc</code> setting and added a channel, which <a href="http://conda.pydata.org/docs/config.html?highlight=channel%20url#channel-locations-channels">&quot;Listing channel locations in the .condarc file will override conda defaults&quot;</a></p>
+
+<p>the modified <code>~/.condarc</code> that cause problem:  </p>
+
+<pre><code class="language-bash">channels:
+  - https://repo.continuum.io/pkgs/
+  - defaults
+</code></pre>
+
+<p>just need delete the extra line, make it look like</p>
+
+<pre><code class="language-bash">channels:
+  - defaults
+</code></pre>
+
+<p>Problem solved.</p>
+
+<h1 id="toc_25">utf8 unicode in string formatter &amp; file read/write</h1>
+
+<ul>
+<li>Use the <code>io</code> package for utf8 file read/write</li>
+</ul>
+
+<pre><code class="language-python">import io
+with io.open(filename,&#39;r&#39;,encoding=&#39;utf8&#39;) as f:
+    text = f.read()
+# process Unicode text
+with io.open(filename,&#39;w&#39;,encoding=&#39;utf8&#39;) as f:
+    f.write(text)
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/19591815/4229125">Stackoverflow post</a></p>
+
+<ul>
+<li>Use <code>u</code> for both strings in string formatter</li>
+</ul>
+
+<pre><code class="language-python">s = u&#39;\u2265&#39;
+
+# UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\u2265&#39; in position 0...
+print &#39;{0}&#39;.format(s)
+
+# Correct
+print u&#39;{0}&#39;.format(s)
+</code></pre>
+
+<ul>
+<li>To make the code itself utf8 (such as including chinese characters inside the code), add this line at the beginning of the python file</li>
+</ul>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+</code></pre>
+
+<h1 id="toc_26">Use a relative path in a python module</h1>
+
+<p>Use case: need refer to my personal key which is located in another folder <code>resources</code></p>
+
+<p>Store the absolute path to the module directory at the very beginning of the module:</p>
+
+<pre><code class="language-python">package_directory = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(package_directory, &#39;../resources/tk.key&#39;), &#39;r&#39;) as f:
+    token = f.readline()
+    ts.set_token(token)
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/4187345/4229125">stackoverflow post</a></p>
+
+<p>The same trick can be used for import a relative path module. <a href="http://stackoverflow.com/a/7506029/4229125">This neat trick is from stackoverflow here</a></p>
+
+<p>At the head of the python file:</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import sys, os
+import pymongo
+
+try:
+    import fromTDX
+    from indicators import commonIndicator
+    from Const import Const
+except Exception:
+    sys.path.append(os.path.join(os.path.dirname(__file__), &#39;..&#39;))
+    import fromTDX
+    from indicators import commonIndicator
+    from Const import Const
+</code></pre>
+
+<h1 id="toc_27">Mysterious Error pandas groupby error</h1>
+
+<p>For some version of Pandas actually this error will not occur. (pandas v.18.1 will have error, but v.19 has no problem)  </p>
+
+<ul>
+<li>Symptom:</li>
+</ul>
+
+<blockquote>
+<p>lib/python2.7/site-packages/pandas/core/groupby.pyc in reset_identity(values)<br/>
+AttributeError: &#39;NoneType&#39; object has no attribute &#39;_get_axis&#39;</p>
+</blockquote>
+
+<ul>
+<li><p>Cause:<br/><br/>
+The apply function return <code>None</code>. When groupby then apply this func, this will cause issue.<br/><br/>
+<a href="http://stackoverflow.com/a/20225276/4229125">A similar discussion on stackoverflow</a></p></li>
+<li><p>The fix:</p></li>
+</ul>
+
+<p>The apply func should return empty <code>pd.DataFrame()</code> or empty <code>pd.Series()</code>.   </p>
+
+<p>Wrong:</p>
+
+<pre><code class="language-python">def get_buy_in_grp(self, grp):
+   cond_1_m0 = (grp[&#39;MA_2_&#39; + self.base_period] &gt; grp[&#39;MA_5_&#39; + self.base_period])
+   cond_1 = cond_1_m0 &amp; (~cond_1_m0.shift().astype(bool))
+   cond_2 = (grp[&#39;MA_5_&#39; + self.base_period] &gt;= self.MA5_p * grp[&#39;MA_5_&#39; + self.base_period].shift())
+   cond = cond_1 &amp; cond_2
+
+   if ~(cond.any()):
+       return
+   return grp[cond]
+</code></pre>
+
+<p>Correct:</p>
+
+<pre><code class="language-python">def get_buy_in_grp(self, grp):
+   cond_1_m0 = (grp[&#39;MA_2_&#39; + self.base_period] &gt; grp[&#39;MA_5_&#39; + self.base_period])
+   cond_1 = cond_1_m0 &amp; (~cond_1_m0.shift().astype(bool))
+   cond_2 = (grp[&#39;MA_5_&#39; + self.base_period] &gt;= self.MA5_p * grp[&#39;MA_5_&#39; + self.base_period].shift())
+   cond = cond_1 &amp; cond_2
+
+   if ~(cond.any()):
+       return pd.DataFrame() # return None may cause issues for the groupby().apply() action
+   return grp[cond]     
+</code></pre>
+
+<h1 id="toc_28">matplotlib add axes (subplot) on a made figure and sharex</h1>
+
+<p>Use the <code>fig.add_axes()</code> method <a href="http://matplotlib.org/api/figure_api.html#matplotlib.figure.Figure.add_axes">official document</a></p>
+
+<p>To sharex, just <code>sharex</code> parameter in the method. Note that if <code>adjustable</code> parameter is set, in order to use <code>sharex</code>, <code>adjustable = ‘datalim’</code></p>
+
+<pre><code class="language-python">
+# the fig and ax_close etc are returned by another method
+
+ax_close_pos = ax_close.get_position()
+ax_macd_pos = [ax_close_pos.x0, ax_close_pos.y0, ax_close_pos.width, ax_close_pos.height/5.0]
+ax_macd = fig.add_axes(ax_macd_pos, frameon=True, sharex=ax_close)
+macd_df = (test_record.df[[col_name for col_name in test_record.df.columns
+                           if col_name[-1]==&#39;m&#39;]]
+           .drop_duplicates()
+           .set_index(&#39;Date_m&#39;))
+ax_macd.bar(macd_df[macd_df.MACD_m&gt;0].index.values, 
+            macd_df[macd_df.MACD_m&gt;0].MACD_m.values,
+            width=15, color=&#39;salmon&#39;)
+ax_macd.bar(macd_df[macd_df.MACD_m&lt;0].index.values, 
+            macd_df[macd_df.MACD_m&lt;0].MACD_m.values,
+            width=15, color=&#39;steelblue&#39;)
+ax_macd.grid(True)
+mpld3.display()
+</code></pre>
+
+<h1 id="toc_29">python parse webpage static content</h1>
+
+<p>use <code>requests</code> to get the response from webpage, use <code>BeautifulSoup</code> to parse the returned content</p>
+
+<p>For some webpage, like <code>http://xueqiu.com/</code>, it will check the header of the connect and will reject the connection if no appropriate header specified. The following is the one that I used to access <code>http://xueqiu.com/</code></p>
+
+<pre><code class="language-python">import requests
+import pandas as pd
+import io
+
+hdr = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11&#39;,
+       &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,
+       &#39;Accept-Charset&#39;: &#39;ISO-8859-1,utf-8;q=0.7,*;q=0.3&#39;,
+       &#39;Accept-Encoding&#39;: &#39;none&#39;,
+       &#39;Accept-Language&#39;: &#39;en-US,en;q=0.8&#39;,
+       &#39;Connection&#39;: &#39;keep-alive&#39;}
+url = &#39;http://xueqiu.com/S/SH600033/historical.csv&#39;
+
+with requests.Session() as s:
+   s.headers.update(hdr)
+   r = s.get(url)
+   if r.status_code == 200: # 200 is of type int NOT type string
+       csv = r.content.decode(&#39;utf8&#39;)  # the decode is a must
+       # Must use io.StringIO() to wrap it into a string buffer
+       df = pd.read_csv(io.StringIO(csv), parse_dates=[&#39;date&#39;], infer_datetime_format=True)
+       df = df.drop(&#39;symbol&#39;, axis=1)
+       df.columns = [name.capitalize() for name in df.columns]
+       df = df.set_index(&#39;Date&#39;)
+       return df
+   else:
+       return None
+</code></pre>
+
+<h1 id="toc_30">python get and parse webpage dynamic content</h1>
+
+<p><font color='red'><strong>SELENIUM</strong></font></p>
+
+<p><a href="http://www.seleniumhq.org/docs/03_webdriver.jsp#introducing-the-selenium-webdriver-api-by-example">The best official documentation with python java examples</a></p>
+
+<hr/>
+
+<p>Some webpage&#39;s table is dynamically generated by js, like <code>https://xueqiu.com/S/SH600652/FHPS</code>.<br/>
+Like in this <a href="http://stackoverflow.com/a/25062761/4229125">stackoverflow post</a><br/>
+(Note: this answer has an issue, instead of <code>table.get_attribute(&#39;innerHTML&#39;)</code>, it should be <code>table.get_attribute(&#39;outerHTML&#39;)</code>. Because pandas need the <code>&lt;table&gt; &lt;/table&gt;</code> to understand that it is a table)</p>
+
+<p>So the best solution is to use <code>selenium</code> <a href="http://selenium-python.readthedocs.io/api.html#webdriver-api">WebDriver</a><br/>
+Using conda install like:   </p>
+
+<pre><code class="language-bash">conda install -c clinicalgraphics selenium
+</code></pre>
+
+<p><a href="https://docs.google.com/a/adsymptotic.com/presentation/d/18lrHBU7RhyFBJnSmjlB2gBmzMeP2K4Vo53C1OjRm4D4/edit?usp=sharing">Here is a ppt about using selenium in java</a></p>
+
+<ul>
+<li>To use chrome WebDriver (which is very easy to use) need install ChromeDriver. <a href="http://stackoverflow.com/a/38087347/4229125">Two different ways to get the ChromeDriver</a>,  I used this one:</li>
+</ul>
+
+<pre><code class="language-bash">brew install chromedriver
+</code></pre>
+
+<ul>
+<li>To use firefox WebDriver, need install two things: Firefox and geckodriver. I used this:</li>
+</ul>
+
+<pre><code class="language-bash">brew install Caskroom/cask/firefo
+brew install geckodriver
+</code></pre>
+
+<p>My complete example:</p>
+
+<pre><code class="language-python">import pandas as pd
+from pandas.io import html as pd_html
+
+from contextlib import contextmanager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+
+
+
+@contextmanager
+def wait_for_page_load(driver, timeout=10):
+    # I used chrome to get this xpath
+    check_ele = driver.find_element_by_xpath(&#39;//*[@id=&quot;center&quot;]/div[2]/div[2]/div[2]/div&#39;)
+    check_text = check_ele.text
+    if check_text == u&#39;暂无数据&#39;:
+        old_td = None
+    else:
+        old_td = driver.find_element_by_xpath(&#39;//*[@id=&quot;center&quot;]/div[2]/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]&#39;)
+    yield 
+    # yield nothing, just want keep the current state of old_td 
+    # when exit the with wait_for_page_load block, the next line
+    # make sure that the old_td will be changed, or &#39;no next page&#39; element showing up
+    if old_td:
+        WebDriverWait(driver, timeout=timeout).until(EC.staleness_of(old_td))
+    
+
+@contextmanager
+def open_driver():
+    driver = webdriver.Chrome() # ChromeDriver need be installed by Homebrew
+    driver.implicitly_wait(10) # This line will cause it to wait upto 10 seconds if an element is not there
+    yield driver
+    driver.quit()
+
+
+with open_driver() as driver:
+    url_test = &#39;https://xueqiu.com/S/SZ000547/FHPS&#39;
+    driver.get(url_test)
+
+    dividen_dfs = []
+    while True:
+        with wait_for_page_load(driver):
+            check_ele = driver.find_element_by_xpath(&#39;//*[@id=&quot;center&quot;]/div[2]/div[2]/div[2]/div&#39;)
+            check_text = check_ele.text
+            if check_text == u&#39;暂无数据&#39;:
+                break
+            table = driver.find_element_by_xpath(&#39;//table[@class=&quot;dataTable table table-bordered&quot;]&#39;)
+            table_html = table.get_attribute(&#39;outerHTML&#39;)
+            df = pd_html.read_html(table_html, na_values = &#39;-&#39;)
+
+            # below is just some normal dataframe munging
+            processed_df = df[0].T
+            processed_df.columns = processed_df.iloc[0,:]
+            processed_df = processed_df.drop(0, axis=0)
+            processed_df = processed_df.reset_index(drop=True)
+            dividen_dfs.append(processed_df)
+
+            # get the link and click on the link
+            link = driver.find_element_by_link_text(u&#39;下一页&#39;)
+            link.click()
+        
+dividen_df = pd.concat(dividen_dfs).drop_duplicates().reset_index(drop=True)
+dividen_df
+
+</code></pre>
+
+<p><font color='red'><strong>Some special notes:</strong></font></p>
+
+<ul>
+<li>Why we need wait?  Because if there is asynchronous content like JS modifying the DOM after the initial page load is complete, the driver.get() may miss the target, since the target is loaded later <a href="http://stackoverflow.com/a/16740004/4229125">Stackoverflow post</a>. </li>
+<li>Implicitly_wait(): An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying to find an element or elements if they are not immediately available. The default setting is 0. Once set, the implicit wait is set for the life of the WebDriver object instance.</li>
+<li>Remember to close the <code>driver</code>, otherwise it will have resource leaking</li>
+<li>Chrome has a very cool feature, under <code>inspect</code> mode, use right click you can directly copy <font color='red'><strong>XPath, Selection, Element etc.</strong></font><br/></li>
+</ul>
+
+<p><font color='red'><strong>Updated notes</strong></font></p>
+
+<ul>
+<li>I heavily referred to <a href="http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html">this post</a> for the much improved version of the code. The central idea is by checking <code>EC.staleness_of(old_td)</code> to make sure that the new content has been generated in the <code>wait_for_page_load</code> method.</li>
+<li>In the python binding of <code>selenium</code>, to get the text of the page element, actually need go through the property as <code>.text</code> instead of using method <code>.getText()</code> which is different than the Java binding</li>
+<li>It doesn&#39;t show in the code anymore, but the way of using <code>Locator</code> is construct a tuple, which is kind of confusing. Look at the below code snippet and pay attention to the double bracket</li>
+</ul>
+
+<pre><code class="language-python">from selenium.webdriver.common.by import By
+
+EC.presence_of_element_located((By.ID, &quot;myDynamicElement&quot;))
+</code></pre>
+
+<h1 id="toc_31">python with statement and context manager type</h1>
+
+<p><a href="https://docs.python.org/2.7/library/stdtypes.html#context-manager-types">Official document for Context Manager</a><br/>
+<a href="https://docs.python.org/2.7/reference/datamodel.html#with-statement-context-managers">Official document for with statement Context Manager</a></p>
+
+<p>In the above code snippet, I used the <code>@contextmanager</code> decorator to build the <code>with open_driver() as driver:</code> so that when the block of code exit, the driver will be automatically closed and preventing resource leaking.</p>
+
+<p><a href="http://preshing.com/20110920/the-python-with-statement-by-example/">A good blog post about this</a></p>
+
+<h1 id="toc_32">python selenium selector find element by multiple class names</h1>
+
+<p>Imagine we have few elements as the followings:</p>
+
+<ol>
+<li><code>&lt;div class=&quot;value test&quot; /&gt;</code></li>
+<li><code>&lt;div class=&quot;value test &quot; /&gt;</code></li>
+<li><code>&lt;div class=&quot;first value test last&quot; /&gt;</code></li>
+<li><code>&lt;div class=&quot;test value&quot; /&gt;</code></li>
+</ol>
+
+<p>How XPath matches</p>
+
+<ul>
+<li><p>Match only 1 (exact match)</p>
+
+<pre><code>driver.findElement(By.xpath(&quot;//div[@class=&#39;value test&#39;]&quot;));
+</code></pre></li>
+<li><p>Match 1, 2 and 3 (match class contains <code>value test</code>, class order matters)</p>
+
+<pre><code>driver.findElement(By.xpath(&quot;//div[contains(@class, &#39;value test&#39;)]&quot;));
+</code></pre></li>
+<li><p>Match 1, 2, 3 and 4 (as long as elements have class <code>value</code> and <code>test</code>)</p>
+
+<pre><code>driver.findElement(By.xpath(&quot;//div[contains(@class, &#39;value&#39;) and contains(@class, &#39;test&#39;)]&quot;));
+</code></pre></li>
+</ul>
+
+<p>Also, in cases like this, Css Selector is always in favor of XPath (fast, concise, native).</p>
+
+<ul>
+<li><p>Match 1</p>
+
+<pre><code>driver.findElement(By.cssSelector(&quot;div[class=&#39;value test&#39;]&quot;));
+</code></pre></li>
+<li><p>Match 1, 2 and 3</p>
+
+<pre><code>driver.findElement(By.cssSelector(&quot;div[class*=&#39;value test&#39;]&quot;));
+</code></pre></li>
+<li><p>Match 1, 2, 3 and 4</p>
+
+<pre><code>driver.findElement(By.cssSelector(&quot;div.value.test&quot;));
+</code></pre></li>
+</ul>
+
+<p><a href="http://stackoverflow.com/a/21714006/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_33">Speed up selenium and Time out</h1>
+
+<p>I only tried with Firefox. According to a lot of post, the solution should be using the <code>FirefoxProfile</code> by <code>set_preference(&#39;webdriver.load.strategy&#39;, &#39;unstable&#39;)</code> as shown in <a href="http://stackoverflow.com/a/11455428/4229125">this stackoverflow post</a>. However, as I tested with firefox version 50.x, it does not work. According to <a href="https://github.com/SeleniumHQ/selenium/issues/2873">this issue</a>, it only work for firefox <font color='red'><strong>less than v. 46</strong></font></p>
+
+<p>This still not completely solved. I did find a way to make it a little bit better.</p>
+
+<p>Check the available firefox configuration parameters: open firefox and input <code>about:config</code> in the url address field.</p>
+
+<p>Also there is <a href="http://kb.mozillazine.org/About:config_entries">the official documents for the full list and explainations</a></p>
+
+<p>The useful parameters that I found are:  </p>
+
+<ul>
+<li><code>permissions.default.image, 2</code>, which make the loading of the page much faster</li>
+<li><strong><code>network.http.connection-timeout, 5</code></strong>, this one is very cool. It force the connect to break after the specified amount of time, so you don&#39;t have to wait till the full page to load if you can already find what you need. <a href="http://stackoverflow.com/a/1343963/4229125">Reference to this post, then checked with firefox&#39;s about:config</a></li>
+</ul>
+
+<p>To figure out what is the current firefox profile that the WebDriver is using:</p>
+
+<pre><code class="language-python">firefox_p = webdriver.FirefoxProfile()
+firefox_p.default_preferences # this is a dictionary
+</code></pre>
+
+<p>To do the improvement setting for firefox is:</p>
+
+<pre><code class="language-python">@contextmanager
+def open_fast_driver():
+    firefox_p = webdriver.FirefoxProfile()
+    firefox_p.set_preference(&#39;permissions.default.image&#39;, 2)
+    firefox_p.set_preference(&#39;network.http.connection-timeout&#39;, 1)
+    driver = webdriver.Firefox(firefox_profile=firefox_p)
+    yield driver
+    driver.quit()
+</code></pre>
+
+<p><font color='red'><strong>UPDATE</strong></font><br/>
+I decided to downgrade the firefox to v.46 and see how it goes.</p>
+
+<pre><code class="language-bash">brew cask uninstall firefox # uninstall the previous version
+brew tap goldcaddy77/firefox
+brew cask install firefox-46
+</code></pre>
+
+<p>After install this version of Firefox, need add the following lines when use firefox WebDirver:</p>
+
+<pre><code class="language-python">from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
+firefox_b = FirefoxBinary(r&#39;/Applications/Firefox-46.app/Contents/MacOS/firefox&#39;)
+driver = webdriver.Firefox(firefox_binary=firefox_b)
+</code></pre>
+
+<p>But, hey! You guess what!, it still not working even with Firefox V.46. And it breaks the little trick that I found to disable images too.</p>
+
+<p>I uninstall the V46, and come back to what I did earlier.</p>
+
+<pre><code class="language-bash">cd ~
+brew cask uninstall firefox-4
+brew untap goldcaddy77/firefo
+brew install Caskroom/cask/firefox
+</code></pre>
+
+<p><font color='red'><strong>UPDATE, UPDATE</strong></font></p>
+
+<p>Tried to use Firefox add-on <code>KillSpinners</code> to stop loading the page after some time-out. Not successful. But learned how to use add-on/extension of selenium</p>
+
+<p>For firefox extension on mac, it is located here: <code>~/Library/Application Support/Firefox/Profiles/[profile name]/extensions</code>. For my Mac it is here: </p>
+
+<pre><code class="language-python">firefox_KillSpinners_ext_path = &#39;/Users/yugan/Library/Application Support/Firefox/Profiles/1qvac6rq.default/extensions/killspinners@byo.co.il.xpi&#39;
+</code></pre>
+
+<p>The python code to use this extension is:</p>
+
+<pre><code class="language-python">firefox_p = webdriver.FirefoxProfile()
+firefox_p.add_extension(firefox_KillSpinners_ext_path)
+firefox_p.set_preference(&#39;permissions.default.image&#39;, 2)
+firefox_p.set_preference(&#39;extensions.killspinners.timeout&#39;, 10)
+firefox_p.set_preference(&#39;extensions.killspinners.disablenotify&#39;, True)
+</code></pre>
+
+<p>The two parameters are found in the firefox <code>about:config</code> page.<br/>
+The reason it failed is because this add-on blocked the thread.</p>
+
+<p><font color='red'><strong>UPDATE, UPDATE, UPDATE</strong></font></p>
+
+<p>The best update so far.</p>
+
+<p>The solution is changing the WebDriver. No matter whether it is <code>ChromeDriver</code> or <code>FirefoxDriver</code>, they are too heavy and slow. We should use <font color='red'><strong>non-GUI drivers</strong></font> to speed it up. selenium has excellent support of using the following two non-GUI WebDriver. Check <a href="http://www.seleniumhq.org/docs/03_webdriver.jsp#driver-specifics-and-tradeoffs">the official documents for Selenium-WebDriver support</a></p>
+
+<ul>
+<li>HtmlUnit - <a href="http://www.seleniumhq.org/docs/03_webdriver.jsp#javascript-in-the-htmlunit-driver">need be careful for the javascript handling</a> </li>
+</ul>
+
+<p>In order to use this WebDriver, need install and run Selenium Server:</p>
+
+<pre><code class="language-bash">brew install selenium-server-standalone
+selenium-server -port 4444
+</code></pre>
+
+<p>Then in python code, specify Using Selenium with <font color='red'><strong>remote</strong></font> WebDriver (<a href="http://selenium-python.readthedocs.io/getting-started.html#using-selenium-with-remote-webdriver">See the remote webdriver here</a>), which should connect to: <code>http://127.0.0.1:4444/wd/hub</code>. Specify the desired_capabilities to <code>HTMLUNITWITHJS</code>. The <a href="http://selenium-python.readthedocs.io/api.html#desired-capabilities">desired_capabilities</a> includes all broswers like (chrome, firefox, safari, phantomJS... etc)</p>
+
+<blockquote>
+<p>Note: Always use <code>.copy()</code> on the DesiredCapabilities object to avoid the side effects of altering the Global class instance </p>
+</blockquote>
+
+<p>Also, checking the cmd line output can help find some useful parameters for the WebDrivers</p>
+
+<ul>
+<li><font color='red'>phatomJS</font>- This so far is the best one. It respond the javascript pretty well. I find some configuration parameters which can further speed up the response </li>
+</ul>
+
+<p>install:</p>
+
+<pre><code class="language-bash">brew install phantomjs
+</code></pre>
+
+<p>python code:</p>
+
+<pre><code class="language-python">@contextmanager
+def open_phantomJS_driver():
+    
+    capabilities = webdriver.DesiredCapabilities.PHANTOMJS.copy()
+    capabilities[&#39;phantomjs.page.settings.loadImages&#39;] = False
+    capabilities[&#39;phantomjs.page.settings.webSecurityEnabled&#39;] = False
+    capabilities[&#39;phantomjs.page.settings.javascriptCanOpenWindows&#39;] = False
+    capabilities[&#39;phantomjs.page.settings.javascriptCanCloseWindows&#39;] = False
+    capabilities[&#39;phantomjs.page.settings.userAgent&#39;] = &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/538.1 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/538.1&#39;
+
+    driver = webdriver.Remote(&quot;http://localhost:4444/wd/hub&quot;, capabilities)
+    yield driver
+    driver.quit()
+</code></pre>
+
+<p><a href="https://realpython.com/blog/python/headless-selenium-testing-with-python-and-phantomjs/">A blog for phantomJS</a><br/>
+<strong><a href="https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities">For the Browser Specific DesiredCapabilities, there is an official documents (not exhaustive though)</a></strong><br/>
+<strong><a href="https://sites.google.com/a/chromium.org/chromedriver/capabilities">ChromeDriver available Capabilities and options</a></strong><br/>
+<a href="http://peter.sh/experiments/chromium-command-line-switches/#timeout">List of chrome command line switches, but seems outdated. At least the <code>--timeout</code> switch does not work anymore</a></p>
+
+<p><font color='red'><strong>I tested some config for the HtmlUnit and ChromeOptions, using the above links, but most of them are either not working or not relevant to what I am doing. Just keep these as a record if I need use them in the future</strong></font></p>
+
+<h1 id="toc_34">An example of using regex parse table</h1>
+
+<p>This table is not well formed for pandas to read. Combining use both the <code>split()</code> and regex make it much easier</p>
+
+<pre><code class="language-python">import re
+from dateutil import parser as date_parser
+import pandas as pd
+from contextlib import contextmanager
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+@contextmanager
+def open_fast_driver():
+    firefox_p = webdriver.FirefoxProfile()
+    firefox_p.set_preference(&#39;permissions.default.image&#39;, 2)
+    firefox_p.set_preference(&#39;network.http.connection-timeout&#39;, 1)
+    driver = webdriver.Firefox(firefox_profile=firefox_p)
+    yield driver
+    driver.quit()
+    
+
+zg_re = re.compile(ur&#39;转增(\d+)股&#39;)
+sg_re = re.compile(ur&#39;送(\d+)股&#39;)
+fh_re = re.compile(ur&#39;派息(.+)元&#39;)
+date_re = re.compile(ur&#39;(\d{4}-\d{2}-\d{2})&#39;)
+
+
+base_url = &#39;http://q.stock.sohu.com/cn/{}/fhsp.shtml&#39;
+code = &#39;600589&#39;
+url = base_url.format(code)
+table_xpath = &#39;/html/body/div[4]/div[2]/div[2]/div[2]/div/div[2]/table&#39;
+table = None
+with open_fast_driver() as driver:
+    driver.get(url)
+    d_table = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH,table_xpath)))
+    table = d_table.text
+
+if table:
+    line_iter = iter(table.split(&#39;\n&#39;))
+    records = []
+    while True:
+        record = dict()
+        date_m = None
+        try:
+            line = line_iter.next()
+            tokens = line.strip().split()
+            if len(tokens) == 1:
+                continue
+            if tokens[0] != u&#39;除权除息日&#39;:
+                continue
+            if len(tokens) == 2:
+                next_line = line_iter.next()
+                date_m = date_re.search(next_line)
+            if not date_m:
+                date_m = date_re.search(line)
+            zg_m = zg_re.search(line)
+            sg_m = sg_re.search(line)
+            fh_m = fh_re.search(line)
+            record[&#39;Date&#39;] = date_parser.parse(date_m.group(1))
+            if zg_m:
+                record[&#39;Zg&#39;] = float(zg_m.group(1))/10.
+            if sg_m:
+                record[&#39;Sg&#39;] = float(sg_m.group(1))/10.
+            if fh_m:
+                record[&#39;Fh&#39;] = float(fh_m.group(1))/10.
+            records.append(record)
+        except StopIteration:
+            break
+    fhps_df = pd.DataFrame(records)
+    for field in [&#39;Fh&#39;, &#39;Zg&#39;, &#39;Sg&#39;]:
+        if field not in fhps_df:
+            fhps_df.loc[:, field] = 0.0
+    fhps_df.loc[:, [&#39;Fh&#39;, &#39;Zg&#39;, &#39;Sg&#39;]] = fhps_df.loc[:, [&#39;Fh&#39;, &#39;Zg&#39;, &#39;Sg&#39;]].fillna(0.0)
+    fhps_df.loc[:, &#39;Ps&#39;] = fhps_df[&#39;Zg&#39;]+fhps_df[&#39;Sg&#39;]
+    fhps_df = fhps_df.sort_values(&#39;Date&#39;)
+
+fhps_df[[&#39;Date&#39;, &#39;Fh&#39;, &#39;Ps&#39;]]
+</code></pre>
+
+<h1 id="toc_35">start and shutdown the selenium-server</h1>
+
+<pre><code class="language-python">import subprocess
+import time
+from contextlib import contextmanager
+
+
+@contextmanager
+def open_selenium_server():
+    null_io = open(&#39;/dev/null&#39;)
+    server_proc = subprocess.Popen([&#39;selenium-server&#39;, &#39;-port&#39;, &#39;4444&#39;], stdout=null_io, stderr=null_io)
+    time.sleep(0.5)
+    yield
+    server_proc.terminate()
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/6883164/4229125">referred to this post</a></p>
+
+<h1 id="toc_36">phantomJS options</h1>
+
+<p>In the readme page of <code>ghostdriver</code> project, it gave a section about how to set the webdriver properties of phantomJS. <a href="https://github.com/detro/ghostdriver#what-extra-webdriver-capabilities-ghostdriver-offers">It is a good reference</a></p>
+
+<p>specificially, besides the setting that I figured out randomly before, the following setting seems pretty good:</p>
+
+<pre><code class="language-python"># new settings
+capabilities[&#39;phantomjs.page.settings.resourceTimeout&#39;] = 5000 # 5000 milliseconds
+</code></pre>
+
+<p><a href="http://phantomjs.org/api/webpage/property/settings.html">official list of all properties / settings</a></p>
+
+<h1 id="toc_37">Pycharm unittest not finding the module path</h1>
+
+<p>This is something wrong with Pycharm itself</p>
+
+<p>Error message looks like:</p>
+
+<blockquote>
+<p>RuntimeWarning: Parent module &#39;tests&#39; not found while handling absolute import<br/>
+  import unittest</p>
+</blockquote>
+
+<p>Fix:<br/>
+download the <code>utrunner.py</code> file from <a href="https://youtrack.jetbrains.com/_persistent/utrunner.py?file=74-332199&amp;c=true">here</a><br/>
+copy it to <code>/Applications/PyCharm CE.app/Contents/helpers/pycharm/</code> and overwrite the original <code>utrunner.py</code> file</p>
+
+<p><a href="http://stackoverflow.com/a/38724508/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_38">Conda rename environment</h1>
+
+<p>Not specific command to do that. Just copy and remove like follow</p>
+
+<pre><code class="language-bash">conda create --name personalTrader --clone bktrader
+conda remove --name bktrader --all
+</code></pre>
+
+<p>also need manually remove the list entries inside this file: <code>~/.conda/environments.txt</code>, as referred <a href="https://github.com/conda/conda/issues/2704">here</a></p>
+
+<p><a href="https://github.com/conda/conda/issues/3097">reference post</a></p>
+
+<h1 id="toc_39">Deploy an egg package to distributed nodes on hadoop</h1>
+
+<p>In <code>oozie</code> workflow, use <code>&lt;file&gt;</code> action node to &#39;ship&#39; the egg to distributed nodes</p>
+
+<pre><code class="language-xml">    &lt;action name=&#39;train-cd&#39;&gt;
+        &lt;shell xmlns=&quot;uri:oozie:shell-action:0.1&quot;&gt;
+            &lt;job-tracker&gt;${jobTracker}&lt;/job-tracker&gt;
+            &lt;name-node&gt;${nameNode}&lt;/name-node&gt;
+            &lt;prepare&gt;
+                &lt;delete path=&quot;${nameNode}${modelOut}/CD&quot;/&gt;
+                &lt;mkdir path=&quot;${nameNode}${modelOut}/CD&quot;/&gt;
+            &lt;/prepare&gt;
+            &lt;configuration&gt;
+                &lt;property&gt;
+                    &lt;name&gt;mapred.job.queue.name&lt;/name&gt;
+                    &lt;value&gt;${queueName}&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;oozie.launcher.mapreduce.map.memory.mb&lt;/name&gt;
+                    &lt;value&gt;204800&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;oozie.launcher.mapreduce.map.java.opts&lt;/name&gt;
+                    &lt;value&gt;-Xmx174080m&lt;/value&gt;
+                &lt;/property&gt;
+                &lt;property&gt;
+                    &lt;name&gt;mapreduce.task.timeout&lt;/name&gt;
+                    &lt;value&gt;36000000&lt;/value&gt;
+                &lt;/property&gt;
+            &lt;/configuration&gt;
+            &lt;exec&gt;train.py&lt;/exec&gt;
+            &lt;argument&gt;${rankOut}/features-all/CD&lt;/argument&gt;
+            &lt;argument&gt;${modelOut}/CD&lt;/argument&gt;
+            &lt;env-var&gt;HADOOP_USER_NAME=${wf:user()}&lt;/env-var&gt;
+            &lt;file&gt;${trainScript}#train.py&lt;/file&gt;
+            &lt;file&gt;${lightgbmegg}#lightgbm-0.1-py2.7.egg&lt;/file&gt;
+            &lt;capture-output/&gt;&lt;/shell&gt;
+        &lt;ok to=&quot;pred-cd&quot; /&gt;
+        &lt;error to=&quot;email-error&quot; /&gt;
+    &lt;/action&gt;
+</code></pre>
+
+<p>In python need do two things:</p>
+
+<ol>
+<li>unzip the egg file</li>
+<li>append the <code>cwd</code> to the system path</li>
+</ol>
+
+<pre><code class="language-python">#!/usr/local/bin/python2.7
+
+import sys
+import os
+import pandas as pd
+import cPickle as pickle
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.grid_search import GridSearchCV
+from sklearn.utils import shuffle
+from sklearn.metrics import auc, precision_recall_curve
+from subprocess import call
+call(&#39;unzip lightgbm-0.1-py2.7.egg&#39;, shell=True)
+
+cwd = os.getcwd()
+sys.path.append(cwd)
+
+from lightgbm import LGBMClassifier
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">shell expansion insdie python with  <code>subprocess.call</code></a>
+</li>
+<li>
+<a href="#toc_1">plotly using LaTex</a>
+</li>
+<li>
+<a href="#toc_2">plotly cufflinks pandas dataframe customize the plot</a>
+</li>
+<li>
+<a href="#toc_3">timezone</a>
+</li>
+<li>
+<a href="#toc_4">From String to timestamp to epoch unix time</a>
+</li>
+<li>
+<a href="#toc_5">datetime(python), pd.Timestamp(pandas), np.datetime64(numpy)</a>
+</li>
+<li>
+<a href="#toc_6">To make a linspace of pd.Timestamp</a>
+</li>
+<li>
+<a href="#toc_7">plotly tick setting: string format, number of ticks and location of ticks.</a>
+</li>
+<li>
+<a href="#toc_8">plotly datetime type tick setting</a>
+</li>
+<li>
+<a href="#toc_9">plotly change the padding size between subplots</a>
+</li>
+<li>
+<a href="#toc_10">read in gz / gzip file</a>
+</li>
+<li>
+<a href="#toc_11">plotly bar chart, use whether value is negative or positive to determine its color</a>
+</li>
+<li>
+<a href="#toc_12">plotly subplot shared axis setting</a>
+</li>
+<li>
+<a href="#toc_13">plotly remove missed dates from time series plot</a>
+</li>
+<li>
+<a href="#toc_14">MultiIndex Dataframe select a particular (like the 2nd) level of the MultiIndex</a>
+</li>
+<li>
+<a href="#toc_15">Use <code>:</code> or <code>slice(None)</code></a>
+</li>
+<li>
+<a href="#toc_16">String for pandas datetime period and frequency</a>
+</li>
+<li>
+<a href="#toc_17">Python Library for Probabilistic Graphical Models</a>
+</li>
+<li>
+<a href="#toc_18">Python blocking and non-blocking subprocess calls</a>
+</li>
+<li>
+<a href="#toc_19">nohup python that includes a nohup shell script</a>
+</li>
+<li>
+<a href="#toc_20">ipython jupyter notebook pandas showing options</a>
+</li>
+<li>
+<a href="#toc_21">matplotlib style and colors</a>
+</li>
+<li>
+<a href="#toc_22">matplotlib backend choices</a>
+</li>
+<li>
+<a href="#toc_23">matplotlib with mpld3 <code>twinx</code> two side axes issue</a>
+</li>
+<li>
+<a href="#toc_24">Conda install python package CondaHTTPError Error</a>
+</li>
+<li>
+<a href="#toc_25">utf8 unicode in string formatter &amp; file read/write</a>
+</li>
+<li>
+<a href="#toc_26">Use a relative path in a python module</a>
+</li>
+<li>
+<a href="#toc_27">Mysterious Error pandas groupby error</a>
+</li>
+<li>
+<a href="#toc_28">matplotlib add axes (subplot) on a made figure and sharex</a>
+</li>
+<li>
+<a href="#toc_29">python parse webpage static content</a>
+</li>
+<li>
+<a href="#toc_30">python get and parse webpage dynamic content</a>
+</li>
+<li>
+<a href="#toc_31">python with statement and context manager type</a>
+</li>
+<li>
+<a href="#toc_32">python selenium selector find element by multiple class names</a>
+</li>
+<li>
+<a href="#toc_33">Speed up selenium and Time out</a>
+</li>
+<li>
+<a href="#toc_34">An example of using regex parse table</a>
+</li>
+<li>
+<a href="#toc_35">start and shutdown the selenium-server</a>
+</li>
+<li>
+<a href="#toc_36">phantomJS options</a>
+</li>
+<li>
+<a href="#toc_37">Pycharm unittest not finding the module path</a>
+</li>
+<li>
+<a href="#toc_38">Conda rename environment</a>
+</li>
+<li>
+<a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14742423250700.html" 
+          title="Previous Post: pig">&laquo; pig</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14767220898143.html" 
+          title="Next Post: scala">scala &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

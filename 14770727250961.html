@@ -1,0 +1,758 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  Advanced Analytics with Spark Reading Notes - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>Advanced Analytics with Spark Reading Notes</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/10/21</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='documentation.html'>documentation</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents the reading notes of this book. Keep updating.  </p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Souce Code Link:</a>
+</li>
+<li>
+<a href="#toc_1">Chapter 1 and 2</a>
+<ul>
+<li>
+<a href="#toc_2">Start REPL</a>
+</li>
+<li>
+<a href="#toc_3">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_4">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_5">Note about the <code>getOrElse()</code> method in the above map:</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_6">Chapter 3</a>
+<ul>
+<li>
+<a href="#toc_7">Download dataset and put on HDFS and start REPL</a>
+</li>
+<li>
+<a href="#toc_8">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_9">The use of mllib ALS</a>
+</li>
+<li>
+<a href="#toc_10">Rating</a>
+</li>
+<li>
+<a href="#toc_11">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_12">split into Training set and CV set and calculate the AUC</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Souce Code Link:</h1>
+
+<p><a href="https://github.com/sryza/aas/tree/1st-edition">github</a></p>
+
+<h1 id="toc_1">Chapter 1 and 2</h1>
+
+<h2 id="toc_2">Start REPL</h2>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client
+
+# this works on dblab (this one is already outdated)
+/home/xiaogu/repo/spark-1.6.1-bin-hadoop2.4/bin/spark-shell --queue datascience
+
+# this works on dblab for spark 2.1.0 (Scala 2.11.8, Java 1.7.0_45)
+# the spark-shell is a shell command with necessary parameters for db
+cd ~/spark_pg
+spark-shell
+</code></pre>
+
+<h2 id="toc_3">Quick tricks to use</h2>
+
+<ol>
+<li>help: <code>:help</code></li>
+<li>history / find the variable or function name: <code>:history</code> or <code>:h?</code></li>
+<li>paste code: <code>:paste</code></li>
+</ol>
+
+<h2 id="toc_4">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawblocks = sc.textFile(&quot;linkage/*.csv&quot;)
+rawblocks.first
+val head = rawblocks.take(10)
+head.length
+head foreach println
+
+def isHeader(line:String):Boolean =
+    line.contains(&quot;id_1&quot;)
+
+head filterNot isHeader foreach println
+head filter (ele =&gt; ! isHeader(ele)) foreach println
+head filter (!isHeader(_)) foreach println
+
+// Note that spark RDD does not have filterNot method
+val noheader = rawblocks filter (!isHeader(_))
+
+def toDouble(token:String):Double = {
+    if (token.equals(&quot;?&quot;)) Double.NaN;
+    else token.toDouble;}
+    
+val line = head(5)
+
+def parse(line:String):(Int, Int, Array[Double], Boolean) = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    (id1, id2, scores, matched)}
+
+val tup = parse(line)
+
+case class MatchData(id1:Int, id2:Int, scores:Array[Double], matched:Boolean);
+
+def parse(line:String):MatchData = {
+    val tokens = line split (&#39;,&#39;);
+    val id1 = tokens(0).toInt;
+    val id2 = tokens(1).toInt;
+    val scores:Array[Double] = tokens slice (2, 11) map toDouble;
+    val matched = tokens(11).toBoolean;
+    MatchData(id1, id2, scores, matched)}
+    
+
+val parsed = rawblocks filter (!isHeader(_)) map parse;
+parsed.cache()
+
+val mds = head filterNot isHeader map parse;
+
+val grouped = mds.groupBy(_.matched);
+
+val matchCounts = parsed.map(_.matched).countByValue()
+val matchCountsSeq = matchCounts.toSeq
+
+import java.lang.Double.isNaN
+
+// Using the stats Action on RDD[Double]
+val stats = for (i &lt;- 0 until 9) yield (parsed map 
+                (_.scores(i)) filter (!isNaN(_)) stats)
+                
+// write and load the NAStatCounter.scala
+:load spark_book/NAStatCounter.scala
+
+// use foldLeft, zip, map to build the stat with missing values
+
+val samp_m0 = rawblocks take 10
+val samp_m1 = samp_m0 filterNot isHeader map parse
+
+val sample = samp_m1.foldLeft(samp_m1.head.scores map (x =&gt; new NAStatCounter())) ((statCounterArry, record) =&gt; statCounterArry zip record.scores map {case (preStatCounter, newScore) =&gt; preStatCounter.add(newScore)})
+// Couple things remember:
+// 1. samp_m1.foldLeft()() is correct, do not use infix here, samp_m1 foldLeft () () is wrong!
+// 2. map {case () =&gt;} is correct, do not use map(case ()=&gt;)
+// 3. Using zip to zip up two arrays, that&#39;s how we get the corresponding foldings
+
+// Note foldLeft is in Scala. In spark use aggregate. Need And the aggregate API is different than scala’s foldLeft. here is a good explaination:
+http://cuipengfei.me/blog/2014/10/31/spark-fold-aggregate-why-not-foldleft/
+
+val statsm = statsWithMissing(parsed filter (_.matched) map (_.scores))
+val statsn = statsWithMissing(parsed filter (!_.matched) map (_.scores))
+
+case class Scored(md : MatchData, score : Double)
+val ct = parsed map (row =&gt; Scored(row, (Seq(2,5,6,7,8) map (idx =&gt; if (row.scores(idx).isNaN) 0 else row.scores(idx))).sum))
+ct.cache()
+
+val allTrue = (ct map (_.md.matched)).countByValue.getOrElse(true, 0).asInstanceOf[Number].doubleValue
+
+val allFalse = (ct map (_.md.matched)).countByValue.getOrElse(false, 0).asInstanceOf[Number].doubleValue
+
+// using different score cut threshold to divide true/false matches
+import breeze.linalg._
+val scoreRange = breeze.linalg.linspace( (ct map (_.score)).min, (ct map (_.score)).max, 5)
+
+val truePositive = scoreRange map (cut =&gt; (ct filter (_.score&gt;cut) map (_.md.matched)).countByValue().getOrElse(true, 0).asInstanceOf[Number].doubleValue)
+
+</code></pre>
+
+<h2 id="toc_5">Note about the <code>getOrElse()</code> method in the above map:</h2>
+
+<p>Because what&#39;s in the map (given by <code>countByValue()</code>) is of type <code>Long</code>, and the default value I gave is of type <code>Int</code>, the <code>getOrElse()</code> method returns the super type for both that is <code>AnyVal</code>.</p>
+
+<p><code>AnyVal</code> has no easy way to cast, so far what I found seems the easiest way is to first convert to type <code>Number</code> then cast to <code>Int</code>. <font color='red'> It can not be convert to type <code>Int</code> directly, otherwise exception will be thrown. </font> </p>
+
+<p>put it all together, for a given map:</p>
+
+<pre><code class="language-scala">val value = map.getOrElse(key, 0).asInstanceOf[Number].doubleValue
+</code></pre>
+
+<h1 id="toc_6">Chapter 3</h1>
+
+<h2 id="toc_7">Download dataset and put on HDFS and start REPL</h2>
+
+<p><code>http://bit.ly/1KiJdOR</code></p>
+
+<p>The default spark-shell on hlab has driver memory and executor memory of 512MB, which are not enough for the job that we are doing for this chapter. Use the following setting for setting the memory</p>
+
+<p><a href="http://stackoverflow.com/questions/31463382/increase-java-heap-size-in-spark-on-yarn">stackoverflow post</a></p>
+
+<p><a href="https://spark.apache.org/docs/1.2.0/configuration.html">official spark option list</a></p>
+
+<pre><code class="language-bash"># this works on hlab
+spark-shell --master yarn-client --driver-memory 2g --executor-memory 2g --conf spark.rdd.compress=true
+</code></pre>
+
+<h2 id="toc_8">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">val rawUserArtistData = sc.textFile(&quot;spark_book/user_artist_data.txt&quot;, 20)
+
+val overLimitCnt = (rawUserArtistData map (_.split(&quot;\\s+&quot;) map (_.toLong)) 
+                    filter (arr =&gt; arr(0) &gt; java.lang.Integer.MAX_VALUE 
+                                || arr(1)  &gt; java.lang.Integer.MAX_VALUE)).count()
+//Note that in scala, we use .size, but for spark RDD, we need use .count(), because it is parallel partitioned.
+
+val rawArtistData =sc.textFile(&quot;spark_book/artist_data.txt&quot;, 20)
+
+//note the following is use char of single quote
+val test = rawArtistData take 10
+val line0 = test(0) span (_ != &#39;\t&#39;) match {case (id, name) =&gt; (id.toInt, name.trim)}
+
+//Using the flatMap and Option and pattern match with default to handle the dirty data
+val artistByID = rawArtistData flatMap (_ span (_ != &#39;\t&#39;) 
+                                        match { 
+                                            case(id, name) =&gt; {
+                                                try {
+                                                    Some((id.toInt, name.trim))
+                                                } catch {
+                                                    case e:NumberFormatException =&gt; None
+                                                }}
+                                            case anythingElse =&gt; None})
+                                        
+val rawArtistAlias = sc.textFile(&quot;spark_book/artist_alias.txt&quot;, 20)
+
+//Just as before, using Option to catch exceptions
+val artistAliasOption = (rawArtistAlias map (_ span (_ != &#39;\t&#39;) 
+                                             match {case (id1, id2) 
+                                                      =&gt; try { 
+                                                          (Some(id1.trim.toInt, id2.trim.toInt)) } 
+                                                         catch { 
+                                                          case e: NumberFormatException=&gt;None};
+                                                    case _ =&gt; None}))
+
+//remove Options
+val artistAliasRDD = artistAliasOption flatMap (x=&gt;x)
+
+//collect as Map
+val artistAlias = artistAliasRDD collectAsMap
+
+// pay special attention to the pattern matching of Array
+val formatedUserArtistData =(rawUserArtistData map (_ split(&quot;\\s+&quot;) match 
+    { case Array(id1Str, id2Str, cntStr) =&gt; try {
+                                                Some(Array(id1Str.trim.toInt,
+                                                           id2Str.trim.toInt,
+                                                           cntStr.trim.toInt))
+                                                }
+                                            catch {
+                                                case e:Throwable =&gt; None
+                                                };
+      case _ =&gt; None })) flatMap (x=&gt;x)
+// build the Rating class used in MLLib
+import org.apache.spark.mllib.recommendation._
+// broadcast to save resource and speed up, then clean the alias
+val bArtistAlias = sc.broadcast(artistAlias)
+
+// special note:
+// 1. use the broadcasted thing, need refer to its .value.
+// 2. pay attention to how to use the pattern matching inside map anonymous func
+val cleanedUserArtistData = (formatedUserArtistData map 
+     ({case Array(userId, artistId, cnt) =&gt; 
+       Rating(userId, bArtistAlias.value.getOrElse(artistId, artistId), cnt)
+       })
+    ).cache()
+
+val model = ALS.trainImplicit(cleanedUserArtistData, 10, 5, 0.01, 1.0)                                                 
+
+// see what model looks like
+model.userFeatures take 10 map ({case (userId, scoresArr) =&gt; userId.toString + &quot; : &quot; + scoresArr.mkString(&quot; , &quot;)}) foreach println
+
+model.productFeatures take 10 map ({case (productId, scoresArr) =&gt; productId.toString + &quot; : &quot; + scoresArr.mkString(&quot; , &quot;)}) foreach println
+                                 
+</code></pre>
+
+<h2 id="toc_9">The use of mllib ALS</h2>
+
+<p><a href="http://spark.apache.org/docs/latest/ml-collaborative-filtering.html">Official documents</a></p>
+
+<p>A very good page for explaining the &quot;explicit preference&quot; and &quot;implicit preference&quot; at <a href="http://predictionio.incubator.apache.org/templates/recommendation/training-with-implicit-preference/">PredicctionIO</a></p>
+
+<h2 id="toc_10">Rating</h2>
+
+<p>A more compact class to represent a rating than Tuple3[Int, Int, Double].<br/>
+It is kind of like case class <code>Rating(user: Int, product: Int, rating: Double)</code><br/>
+<a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.mllib.recommendation.Rating">reference</a></p>
+
+<h2 id="toc_11">Inside REPL Follow along</h2>
+
+<pre><code class="language-scala">
+// find the artist list for userID = 2093760
+val targetUserID = 2093760
+val joined = cleanedUserArtistData filter (_.user == targetUserID) map (rateEntry =&gt; (rateEntry.product, rateEntry.rating)) join (artistByID)
+
+// Note that these are RDDs, do not forget the collect!
+(joined map ({case (artistID, (cnt, name)) =&gt; name + &quot; : &quot; + cnt.toInt.toString}) collect) foreach println
+
+
+// make recommendation
+// Note that it is NOT RDD, but regular scala Array
+val recommendations = model.recommendProducts(targetUserID, 5)
+
+val recommendSet = (recommendations map (_.product)).toSet
+
+val relatedArtistNameMap = (artistByID filter (record =&gt; recommendSet.contains(record._1))).collectAsMap
+
+recommendations map (rateEntry =&gt; relatedArtistNameMap.getOrElse(rateEntry.product, &quot;NoName&quot;) + &quot; : &quot; + rateEntry.rating.toString) foreach println
+
+</code></pre>
+
+<h2 id="toc_12">split into Training set and CV set and calculate the AUC</h2>
+
+<pre><code class="language-scala">val Array(trainData, cvData) = cleanedUserArtistData.randomSplit(Array(0.9, 0.1))
+trainData.cache()
+cvData.cache()
+val model = ALS.trainImplicit(trainData, 10, 5, 0.01, 1.0)
+
+// calculate the mean AUC for cvData
+// 1. get the prediction on cvData using the model
+val cvDataOfUserProduct = cvData map (record =&gt; (record.user, record.product))
+// predict take RDD[tuple2]
+val predictRating = model.predict(cvDataOfUserProduct)
+
+// construct (user, wrongproduct)
+val allProduct = (cleanedUserArtistData map (_.product) distinct).collect()
+val allProductSize = allProduct.size
+val bAllProduct = sc.broadcast(allProduct)
+// using mapPartitions and broadcast to save memory, groupBy shuffles the RDD partitions, the shuffled RDD will have the same groupBy key records together inside one partition.
+
+cvData groupBy (_.user) mapPartitions 
+    {case (user, ratings) =&gt; {
+        val correctProductSet = (ratings map (_.product)).collect().toSet
+        var counter = 0
+        val randomGen = new scala.util.Random()
+        val wrongProductArr = new ArrayBuffer[Int]()
+        while (counter &lt; correctProductSet.size) {
+            val productCandidate = bAllProduct.value(randomGen.nextInt(allProductSize))
+            if (!correctProductSet.contains(productCandidate)) {
+                counter += 1
+                wrongProductArr += productCandidate
+            }
+        }
+    }
+    wrongProductArr
+}
+
+        
+            
+            
+                        
+
+
+
+</code></pre>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Souce Code Link:</a>
+</li>
+<li>
+<a href="#toc_1">Chapter 1 and 2</a>
+<ul>
+<li>
+<a href="#toc_2">Start REPL</a>
+</li>
+<li>
+<a href="#toc_3">Quick tricks to use</a>
+</li>
+<li>
+<a href="#toc_4">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_5">Note about the <code>getOrElse()</code> method in the above map:</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_6">Chapter 3</a>
+<ul>
+<li>
+<a href="#toc_7">Download dataset and put on HDFS and start REPL</a>
+</li>
+<li>
+<a href="#toc_8">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_9">The use of mllib ALS</a>
+</li>
+<li>
+<a href="#toc_10">Rating</a>
+</li>
+<li>
+<a href="#toc_11">Inside REPL Follow along</a>
+</li>
+<li>
+<a href="#toc_12">split into Training set and CV set and calculate the AUC</a>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742423250557.html" 
+          title="Next Post: Github Page, Hexo, MWeb, GoDaddy setting">Github Page, Hexo, MWeb, GoDaddy setting &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

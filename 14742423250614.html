@@ -1,0 +1,994 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  giraph - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>giraph</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='tips.html'>tips</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+</li>
+<li>
+<a href="#toc_5">giraph log file memory info free/total/max</a>
+</li>
+<li>
+<a href="#toc_6">Giraph Edge and Message memory optimization</a>
+<ul>
+<li>
+<a href="#toc_7">Edge memory management</a>
+</li>
+<li>
+<a href="#toc_8">Message memory management</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_9">Use MessageStore</a>
+</li>
+<li>
+<a href="#toc_10">The memory cost for java classes</a>
+</li>
+<li>
+<a href="#toc_11">Mutate Graph</a>
+<ul>
+<li>
+<a href="#toc_12">When there is a conflict for the mutate request</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">The timeout parameter for waiting resources</a>
+</li>
+<li>
+<a href="#toc_14">duplicated job tracker setting is a must</a>
+</li>
+<li>
+<a href="#toc_15">Use both Edge Input and Vertex Value Input</a>
+</li>
+<li>
+<a href="#toc_16">Output during computation</a>
+</li>
+<li>
+<a href="#toc_17">A lot of supersteps cause counters.LimitExceededException</a>
+</li>
+<li>
+<a href="#toc_18">giraph jar Hadoop building dependency</a>
+</li>
+<li>
+<a href="#toc_19">CPU bounded computation</a>
+</li>
+<li>
+<a href="#toc_20">Class implements Writable needs empty constructor</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Kill the background job</h1>
+
+<p>logging on sc2-hive1, run the following command to check the running job on background. (It works for both oozie and normal hadoop jobs)  </p>
+
+<pre><code class="language-bash">ps -u yu
+hadoop job -list | grep yu
+</code></pre>
+
+<p>When using the <code>ps</code> command and what to see the detailed command argument, get the <code>pid#</code> and run:  </p>
+
+<pre><code class="language-bash">ps --pid pid#
+</code></pre>
+
+<p>Hadoop YARN command equivalent to <code>hadoop job -list</code>:  </p>
+
+<pre><code class="language-bash">yarn application -appStates RUNNING -list
+</code></pre>
+
+<h1 id="toc_1">giraph Unit testing</h1>
+
+<ul>
+<li>When use <code>InternalVertexRunner</code>, comment out all giraph/hadoop counter logs</li>
+<li>Most of the case, the unit test fails silently. Adding some <code>sout</code> maybe the only way to debug</li>
+<li>the testing string input delimiter should always be <code>space</code> even in reality we can use all kinds of delimiter like <code>\t</code> etc.</li>
+</ul>
+
+<p><strong>wrong</strong></p>
+
+<pre><code class="language-java">// tab &#39;\t&#39; delimited
+String[] edges = new String[] { &quot;0  1&quot;, &quot;0  3&quot;, &quot;1  0&quot;, &quot;1  3&quot;, &quot;1  2&quot;};
+</code></pre>
+
+<p><strong>correct</strong></p>
+
+<pre><code class="language-java">// space delimited
+String[] edges = new String[] { &quot;0 1&quot;, &quot;0 3&quot;, &quot;1 0&quot;, &quot;1 3&quot;, &quot;1 2&quot;};
+</code></pre>
+
+<ul>
+<li><p>The <code>InternalVertexRunner.run(conf, graph)</code> that we call in the unit testing, by default assumes the graph is <code>VertexInputData</code>. If instead we are using <code>EdgeInputData</code>, we should call <code>InternalVertexRunner.run(conf, null, graph)</code>. The complete signature is <code>public static Iterable&lt;String&gt; run(<br/>
+  GiraphConfiguration conf,<br/>
+  String[] vertexInputData,<br/>
+  String[] edgeInputData)</code></p></li>
+<li><p>include the follow in <code>pom.xml</code> in order to use the <code>MockUtils</code> in unit testing</p></li>
+</ul>
+
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/org.apache.giraph/giraph-examples --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.giraph&lt;/groupId&gt;
+    &lt;artifactId&gt;giraph-examples&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<ul>
+<li>The sequence of adding edge is important: Must make the <code>env</code> first before adding <code>edges</code>. Like following:</li>
+</ul>
+
+<pre><code class="language-java">Vertex&lt;LongWritable, FDCVertexValue, FDCEdgeValue&gt; v6 = new DefaultVertex&lt;LongWritable, FDCVertexValue, FDCEdgeValue&gt;();
+FDCVertexValue v6Value = new FDCVertexValue();
+FDCClusterVector v6Cluster = new FDCClusterVector((short) 1, (short) 0, 0, 1, 0.0f, 0.6f);
+v6Value.setClusterVector(v6Cluster);
+v6Value.setClusterId(6L);
+v6Value.setPreClusterId(0);
+LongWritable v6Id = new LongWritable(6L);
+
+WorkerContext workerContext = new FDCWorkerContext();
+
+FDCComputeSS2 computation = new FDCComputeSS2();
+FDCMockUtils.MockedEnvironment&lt;LongWritable, FDCVertexValue, FDCEdgeValue, FDCMessageSS2, FDCMessageSS3&gt; env = FDCMockUtils.prepareVertexAndComputation(
+      v6, v6Id, v6Value, false, computation, 2L, workerContext);
+
+
+FDCEdgeValue edgeValueToV7 = new FDCEdgeValue(0.6f, 7L);
+LongWritable v7Id = new LongWritable(7L);
+Edge&lt;LongWritable, FDCEdgeValue&gt; edgeToV7 = EdgeFactory.create(v7Id, edgeValueToV7);
+
+// This addEdge must be later than creating env
+v6.addEdge(edgeToV7);
+</code></pre>
+
+<ul>
+<li>In the Unit testing <code>setUp()</code>, the <code>computation</code> instance need be separated for each environment <code>env</code>. Otherwise, the environment will be messed up.</li>
+</ul>
+
+<pre><code class="language-java">computationV6 = new FDCComputeSS2();
+v6 = new DefaultVertex&lt;LongWritable, FDCVertexValue, FDCEdgeValue&gt;();
+...
+envV6 = FDCMockUtils.prepareVertexAndComputation(v6, v6Id, v6Value, false, computationV6, superStep, workerContext);
+
+
+computationV4 = new FDCComputeSS2();
+v4 = new DefaultVertex&lt;LongWritable, FDCVertexValue, FDCEdgeValue&gt;();
+...
+envV4 = FDCMockUtils.prepareVertexAndComputation(v4, v4Id, v4Value, false, computationV4, superStep, workerContext);
+
+</code></pre>
+
+<h1 id="toc_2">giraph edge value not Mutable in place</h1>
+
+<p>edges are just a reference, it can not be changed in place.<br/>
+After mutate the edge value, use <code>vertex.setEdgeValue(targetVertexId, edgeValue)</code> to change it.<br/>
+<a href="https://giraph.apache.org/apidocs/org/apache/giraph/graph/Vertex.html#setEdgeValue-I-E-">Official Document</a></p>
+
+<h1 id="toc_3">giraph shell runner / command line</h1>
+
+<p>This is one file for running giraph with MasterCompute, Aggregator, etc.  </p>
+
+<pre><code class="language-bash">WORKER=177
+MEM=5120
+HEAP=4352
+#zoo keeper
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+hadoop jar dpp-giraph-0.0.1-with-giraph-core.jar \
+        com.adsymp.dpp.giraph.lp.LPRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dmapreduce.map.memory.mb=$MEM \
+        -Dmapreduce.task.timeout=1800000 \
+        -Dmapred.task.timeout=1800000 \
+        -Dmapreduce.map.java.opts=-Xmx${HEAP}m \
+        -Dgiraph.zkList=$ZKLIST \
+        com.adsymp.dpp.giraph.lp.WeightedLPComputation \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        -mc com.adsymp.dpp.giraph.lp.ClusterHistogramMC \
+        -aw org.apache.giraph.aggregators.TextAggregatorWriter \
+        -ca giraph.textAggregatorWriter.frequency=1 \
+        -vif com.adsymp.dpp.giraph.lp.LongScoredValueFloatAdjacencyListVertexInputFormat \
+        -vip $ADJ \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op $OUT \
+        -w $WORKER -ca giraph.SplitMasterWorker=true \
+        -ca giraph.zkSessionMsecTimeout=360000 \
+        -ca giraph.zkOpsMaxAttempts=20 \
+        -ca giraph.zkOpsRetryWaitMsecs=10000 \
+        -ca mapred.job.tracker=sc2-rm1:8088 \
+        -ca mapreduce.job.tracker=sc2-rm1:8088 \
+        -ca com.adsymp.giraph.max.cd=8 \
+        -ca giraph.waitingRequestMsecs=300000 \
+        -ca com.adsymp.giraph.max.cc=100 \
+        -ca com.adsymp.giraph.max.dd=8 \
+        -ca com.adsymp.giraph.max.degree=80 \
+        -ca com.adsymp.giraph.ignore.dev.types=false \
+        -ca com.adsymp.giraph.weight.threshold=0.4 \
+        -ca giraph.jobRetryCheckerClass=com.adsymp.dpp.giraph.RetryThriceChecker \
+        -ca mapred.job.queue.name=datascience \
+        -ca mapred.output.compress=true \
+        -ca mapred.task.timeout=1800004 \
+        -ca mapreduce.map.memory.mb=$MEM \
+        -ca mapreduce.map.java.opts=-Xmx${HEAP}m
+</code></pre>
+
+<p>Couple important points:<br/>
+1. the line breaker <code>\</code>: must have one space before it and <strong>no</strong> space after it, and every broken line must have it.<br/>
+2. Pay special attention to the sequence of the arguments, some of them matters.<br/>
+3. The zookeeper list after the line of the Computation class is a must!  </p>
+
+<p>This one file is for running giraph with jython:  </p>
+
+<pre><code class="language-bash">hdfs dfs -rm -r giraph-jython/output
+ZKLIST=sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181
+
+yarn jar giraph-jython-1.0-SNAPSHOT-jar-with-dependencies.jar \
+        com.adsymp.dpp.giraph.jython.GiraphJythonRunner \
+        -Dmapred.job.queue.name=datascience \
+        -Dgiraph.zkList=$ZKLIST \
+        graph-distance.py \
+        sc2-hmr101.drawbrid.ge:2181,sc2-hmr102.drawbrid.ge:2181,sc2-hmr103.drawbrid.ge:2181,sc2-hmr104.drawbrid.ge:2181,sc2-hmr105.drawbrid.ge:2181 \
+        --jythonClass GraphDistance \
+        --typesHolder com.adsymp.dpp.giraph.jython.JythonTypes \
+        -eif org.apache.giraph.io.formats.IntNullTextEdgeInputFormat \
+        -eip giraph-jython/input/tiny_graph \
+        -vof org.apache.giraph.io.formats.IdWithValueTextOutputFormat \
+        -op giraph-jython/output \
+        -w 1 \
+        -ca giraph.SplitMasterWorker=false
+</code></pre>
+
+<h1 id="toc_4">Unsolved problem with the input string split in InputFormat class</h1>
+
+<p>My input file is delimited by <code>^A</code> (i.e.<code>\u0001</code>). Tried to change the <code>LongNullTextEdgeInputFormat.LongNullTextEdgeReader#preprocessLine</code> for splitting by <code>\u0001</code>. Failed.</p>
+
+<p>Temporary workaround is wrote another pig script to convert the input file schema.</p>
+
+<h1 id="toc_5">giraph log file memory info free/total/max</h1>
+
+<p>In the log file of each individual worker, we see the following lines about the real time memory usage: </p>
+
+<blockquote>
+<p>2016-10-21 21:35:44,615 INFO [compute-0] org.apache.giraph.graph.ComputeCallable: call: Completed 18 partitions, 159 remaining Memory (free/total/max) = 6154.37M / 16748.50M / 27079.00M.  </p>
+</blockquote>
+
+<p>This log is generated by the class: <code>org.apache.giraph.utils.MemoryUtils</code> <a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/utils/MemoryUtils.java">source code here</a></p>
+
+<p>this class calls <code>java.lang.Runtime</code> class and use the method <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#freeMemory()"><code>freeMemory()</code></a>, <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#maxMemory()"><code>maxMemory()</code></a>, <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runtime.html#totalMemory()"><code>totalMemory()</code></a> to get the real time memory usage stats</p>
+
+<ul>
+<li>free<br/>
+the amount of free memory in the Java Virtual Machine. Calling the <code>gc</code> method may result in increasing the value returned by freeMemory. <strong>an approximation to the total amount of memory currently available for future allocated objects</strong></li>
+<li>max<br/>
+the maximum amount of memory that the Java virtual machine will attempt to use. If there is no inherent limit then the value Long.MAX_VALUE will be returned. <strong>the maximum amount of memory that the virtual machine will attempt to use</strong> </li>
+<li>total<br/>
+the total amount of memory in the Java virtual machine. The value returned by this method may vary over time, depending on the host environment. (Note that the amount of memory required to hold an object of any given type may be implementation-dependent.) <strong>the total amount of memory currently available for current and future objects</strong></li>
+</ul>
+
+<h1 id="toc_6">Giraph Edge and Message memory optimization</h1>
+
+<p>From the book chapter 11:</p>
+
+<blockquote>
+<p>Giraph does some memory management on its own. For instance, it stores some of the data, like edges, messages and vertex values, serialized inside of byte arrays that it allocates at the beginning of the computation. Still, it offers a pure Java object-oriented API. To achieve this abstraction, Giraph keeps a number of objects around, internally called representative objects, which it reinitializes with data coming from these binary arrays before passing them to the user, and which it serializes back to the arrays after the user is done with them. This mechanism is used, for example, for the Iterable containing the messages passed to the compute function, or the default implementation of the OutEdges interface where edges are stored for each vertex.</p>
+</blockquote>
+
+<p>With this said, it is different between edges and messages.</p>
+
+<h2 id="toc_7">Edge memory management</h2>
+
+<p>Edge in its full name should be <code>Edge&lt;I,E&gt;</code> in which <code>I</code> is the vertexID type (which is the vertexIDs that the edge is pointing to, i.e. <code>OutEdges</code>) and <code>E</code> is the edgeValue type. So we need have a data structure that builds the 1-1 corresponds between the pointing-to ID and the corresponding edgeValue.</p>
+
+<p>The naive way of implementing it is just a <code>List&lt;I, E&gt;</code> or <code>Map&lt;I, E&gt;</code>,  the first one only provides iterator but is cheaper, and the second one provides random access efficiently but is more expensive.</p>
+
+<p>Actually, the two different real implementations are: </p>
+
+<ol>
+<li>Provides only Iterable - <code>ByteArrayEdges</code>
+
+<ol>
+<li>Use a reusable <code>edge&lt;I,E&gt;</code> object for iterating all edges </li>
+<li>The underlying data structure is byte array. Every time, it is deserialized (or serialized) to the byte array</li>
+<li>It is already the most memory efficient implementation. The cons are: Not random access, CPU intensive<br/></li>
+</ol></li>
+<li>Provide random access - <code>OpenHashMapOutedges</code>
+
+<ol>
+<li>Can not use byte array anymore, because the edgeValue changes, not fix length of the byte array anymore.</li>
+<li>For each vertex, all the edges are save in one Map, using pointing-to ID as the key, and the edgeValue as the Map value.</li>
+<li>Use <code>fastutil</code> primitive map type.</li>
+<li>Still using a reusable <code>edge&lt;I,E&gt;</code> object for iterating all edges.</li>
+<li>Efficient <code>getEdgeValue</code> and <code>setEdgeValue</code> methods.</li>
+</ol></li>
+</ol>
+
+<p><strong><font color='red'>Special Notes:</font></strong>  </p>
+
+<ul>
+<li>Can I use <code>ByteArrayEdges</code> but instructing the Map inside <code>compute</code> method for fast random access? It has pros and cons. 
+
+<ul>
+<li>Pros: the edges are saved in memory efficient byte arrays for all vertexes. Otherwise, for each vertex, it needs a map. Because in a giraph worker thread, the graph is processed partition after partition, and in a partition, the graph is processed vertex after vertex, so at a single time, for one worker thread, there will be only one map. </li>
+<li>Cons: Stressed on CPU for creating and destroying a lot of maps. Also serialize and deserializes.<br/></li>
+</ul></li>
+<li>Hashmap actually is quite expensive w.r.t the memory usage, because of the load factor and avoid collision</li>
+<li>When using the default <code>ByteArrayEdges</code>, and called <code>getEdgeValue</code> and <code>setEdgeValue</code> method, under the hood, for the <code>getEdgeValue</code>, it just scan through the immutable edges iterator, and for the  <code>setEdgeValue</code> it scan through the <code>MutableEdge</code> iterator.<br/></li>
+</ul>
+
+<blockquote>
+<p>If the VertexEdges implementation has a specialized random-access method, we use that; otherwise, we scan the edges.</p>
+</blockquote>
+
+<h2 id="toc_8">Message memory management</h2>
+
+<p>Different than the Edges, Message are always stored in a <strong>serialized format inside of byte arrays</strong>. We are using the same concept of re-usable iterator to pass the messages to the compute method.</p>
+
+<p>Each giraph <strong>worker</strong> has one <strong>MessageStore</strong>, which is the message &#39;inbox&#39; for <strong>all</strong> the vertexes of this <strong>worker</strong>.</p>
+
+<p>So, the message store, is organized by <strong>Partition index</strong> then further organized by <strong>Vertex index</strong>, essentially a nested map, with partitions as keys of the outer map, and vertex IDs as keys of the inner maps.</p>
+
+<p>The default implementation of giraph uses <strong>original java HashMap</strong> and is not very efficient. There is some space of saving by using the <code>fastutil</code>. (comparing <code>long</code>: 8 bytes, and <code>Long</code>:24 bytes)</p>
+
+<p>This optimization should be done always, because it only sacrifices generality of the partition ID and vertex ID type.</p>
+
+<p><strong><font color='red'><a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/comm/messages/primitives/long_id/LongByteArrayMessageStore.java">ALREADY HAVE A IMPLEMENTATION</a>: Just use <code>LongByteArrayMessageStore</code> </font></strong></p>
+
+<h1 id="toc_9">Use MessageStore</h1>
+
+<p><strong><font color=red>The book&#39;s content is outdated as of giraph v1.1</font></strong></p>
+
+<p>According to the book, I must first write a class that implements <code>MessageStoreFactory</code> interface, and this factory generates the <code>MessageStore</code> implementation that I need.</p>
+
+<p>Then specify the parameter of <code>giraph.messageStoreFactoryClass</code> to let giraph know.</p>
+
+<p>But actually, the default giraph already implemented the <code>LongByteArrayMessageStore</code></p>
+
+<ol>
+<li><a href="http://giraph.apache.org/options.html">the default configuration</a> lists: 
+
+<ol>
+<li><code>messageEncodeAndStoreType</code> = <code>BYTEARRAY_PER_PARTITION</code></li>
+<li><code>messageStoreFactoryClass</code> = <code>InMemoryMessageStoreFactory</code></li>
+</ol></li>
+<li>The <a href="https://github.com/apache/giraph/blob/release-1.1/giraph-core/src/main/java/org/apache/giraph/comm/messages/InMemoryMessageStoreFactory.java#L131">source code</a> of <code>InMemoryMessageStoreFactory</code> shows for vertexID <code>LongWritable</code>, <code>messageEncodeAndStoreType</code> = <code>BYTEARRAY_PER_PARTITION</code>, <code>messageStore = new LongByteArrayMessageStore()</code></li>
+</ol>
+
+<h1 id="toc_10">The memory cost for java classes</h1>
+
+<p>Remember the load factors for Hash*** stuff, which make it expensive.</p>
+
+<p>A good series posts here:<br/>
+<a href="http://java-performance.info/overview-of-memory-saving-techniques-java/">An overview of memory saving techniques in Java</a><br/>
+<a href="http://java-performance.info/memory-consumption-of-java-data-types-1/">Memory consumption of popular Java data types – part 1</a><br/>
+<a href="http://java-performance.info/memory-consumption-of-java-data-types-2/">Memory consumption of popular Java data types – part 2</a></p>
+
+<h1 id="toc_11">Mutate Graph</h1>
+
+<p>Three different mechanism of mutating a graph</p>
+
+<p>It is in the book of chapter 8</p>
+
+<h2 id="toc_12">When there is a conflict for the mutate request</h2>
+
+<p>It is resolved by <code>VertexResolver</code></p>
+
+<blockquote>
+<p>The default vertex resolver performs the following operations: </p>
+
+<ol>
+<li>If there were any edge removal requests, first apply these removals. </li>
+<li>If there was a request to remove the vertex, then remove it. This is achieved by setting the return Vertex object to null . </li>
+<li>If there was a request to add the vertex, and it does not exist, then create the vertex. </li>
+<li>If the vertex has messages sent to it, and it does not exist, then create the vertex. </li>
+<li>If there was a request to add edges to the vertex, if the vertex does not exist, first create and then add the edges; otherwise, simply add the edges. </li>
+</ol>
+
+<p>The order of this list is important because it defines exactly the way that Giraph resolves any conflicts by default. This means that if, for instance, there is request to remove a vertex and at the same time a request to add it, then because the default resolver checks the vertex creation after it does the deletion, it ends up creating the vertex.</p>
+</blockquote>
+
+<p><code>-ca giraph.vertexResolverClass=MyVertexResolver</code></p>
+
+<h1 id="toc_13">The timeout parameter for waiting resources</h1>
+
+<pre><code class="language-bash">-Dgiraph.maxMasterSuperstepWaitMsecs=18700000 \
+</code></pre>
+
+<h1 id="toc_14">duplicated job tracker setting is a must</h1>
+
+<p>In <code>oozie</code> or just run in command line, for certain version of giraph, we must specify both <code>mapred.job.tracker</code> and <code>mapreduce.job.tracker</code> parameters</p>
+
+<p>Otherwise, there is be error message looks like below:</p>
+
+<blockquote>
+<p>java.lang.IllegalArgumentException: checkLocalJobRunnerConfiguration: When using LocalJobRunner, must have only one worker since only 1 task at a time!</p>
+</blockquote>
+
+<p>This bug actually is reported <a href="https://issues.apache.org/jira/browse/GIRAPH-1001">here</a></p>
+
+<h1 id="toc_15">Use both Edge Input and Vertex Value Input</h1>
+
+<p>EdgeInput to build edges, and vertex value input to attach vertex information to the vertexes.</p>
+
+<p>From <a href="http://giraph.apache.org/io.html">Giraph official document</a> </p>
+
+<blockquote>
+<p>To summarize, VertexInputFormat is usually used by itself, whereas EdgeInputFormat may be used in combination with VertexValueInputFormat.</p>
+</blockquote>
+
+<p>The way of specifying <code>VertexValueInputFormat</code> in the command line parameter is exactly the same as using <code>VertexInputFormat</code></p>
+
+<p>The schema of EdgeInput is: <code>VId1, VId2, EdgeValue</code> \(\rightarrow\) type info: <code>&lt;I, E&gt;</code><br/>
+The schema of VertexValueInput is : <code>VId, VValue</code> \(\rightarrow\) type info: <code>&lt;I, V&gt;</code></p>
+
+<p>See my latest push of <code>algo-109-v1</code> for example <code>VIF=&#39;com.adsymp.dpp.giraph.jython.inputformats.LongTextTextVertexValueInputFormat&#39;</code></p>
+
+<h1 id="toc_16">Output during computation</h1>
+
+<p>The main class is <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/GiraphTextOutputFormat.java">GiraphTextOutputFormat</a></p>
+
+<ol>
+<li>Set <code>giraph.doOutputDuringComputation</code> <a href="http://giraph.apache.org/options.html">doc</a></li>
+<li>Change behavior of <code>ImmutableClassesGiraphConfiguration</code>
+
+<ol>
+<li>generate <code>SynchronizedSuperstepOutput</code> as <code>SuperstepOutput</code>, the <code>ImmutableClassesGiraphConfiguration</code> is passed to <code>SynchronizedSuperstepOutput</code> constructor <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L462">doc</a></li>
+<li>Inside <code>SynchronizedSuperstepOutput</code>, the <code>ImmutableClassesGiraphConfiguration</code> also create <code>WrappedVertexOutputFormat</code>. <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/superstep_output/SynchronizedSuperstepOutput.java#L64">doc</a></li>
+<li>The <code>WrappedVertexOutputFormat</code> wraps <code>VertexOutputFormat</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L386">doc</a></li>
+<li>The <code>VertexOutputFormat</code> is created by <font color='salmon'><strong>User specified Vertex Output Format Class</strong></font> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/ImmutableClassesGiraphConfiguration.java#L357">doc</a></li>
+<li>The <code>WrappedVertexOutputFormat</code> uses the wrapped <code>VertexOutputFormat</code> class&#39;s method <code>createVertexWriter</code> <font color='salmon'><strong>This is the place we can hook up the logic of creating SS aware outputpaht</strong></font>to create the base <code>VertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/internal/WrappedVertexOutputFormat.java#L68">doc</a>, and then wrap on this base <code>VertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/internal/WrappedVertexOutputFormat.java#L71">doc</a></li>
+</ol></li>
+<li><code>VertexWriter</code> has following abstract method: 
+
+<ol>
+<li>itself has <code>initialize</code> and <code>close</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/VertexWriter.java">doc</a>. </li>
+<li>It also inherit from interface <code>SimpleVertexWriter</code> with method <code>writeVertex</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/SimpleVertexWriter.java#L43">doc</a></li>
+<li>It also inherit from concrete class <code>DefaultImmutableClassesGiraphConfigurable</code> with method <code>setConf</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/conf/DefaultImmutableClassesGiraphConfigurable.java#L39">doc</a></li>
+</ol></li>
+<li>Assume that we are using <code>org.apache.giraph.io.formats.IdWithValueTextOutputFormat</code> as the Vertex Output Format class. 
+
+<ol>
+<li>Its <code>createVertexWriter</code> methods gives <code>IdWithValueVertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/IdWithValueTextOutputFormat.java#L54">doc</a></li>
+<li>This Vertex Output Format class extends <code>TextVertexOutputFormat</code> and its writer extends <code>TextVertexWriterToEachLine</code>. </li>
+</ol></li>
+<li>The <code>TextVertexOutputFormat</code> extends <code>VertexOutputFormat</code> and its <code>TextVertexWriterToEachLine</code> extends <code>TextVertexWriter</code> <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L148">doc</a>, which is also defined in the same class <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L87">doc</a></li>
+<li>The <code>TextVertexOutputFormat</code> delegate <code>GiraphTextOutputFormat</code> to get the <code>OutputCommitter</code>, which defines the output path in Hadoop <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/TextVertexOutputFormat.java#L49">doc</a></li>
+<li>The real work of generate the output path inside <code>GiraphTextOutputFormat</code> is <a href="https://github.com/apache/giraph/blob/release-1.2/giraph-core/src/main/java/org/apache/giraph/io/formats/GiraphTextOutputFormat.java#L60">here</a></li>
+</ol>
+
+<p>DAMN! I wasted a lot of time. Actually, the output is just appended in the output folder. That&#39;s it.</p>
+
+<h1 id="toc_17">A lot of supersteps cause counters.LimitExceededException</h1>
+
+<p>Because by default, giraph use Hadoop counters to record giraph stats, like how many messages, how many vertexes, edges etc. in each superstep, if the superstep is very large, we will have error like this:</p>
+
+<blockquote>
+<p>.MasterThread: masterThread: Master algorithm failed with LimitExceededException<br/>
+org.apache.hadoop.mapreduce.counters.LimitExceededException: Too many counters: 1025 max=1024</p>
+</blockquote>
+
+<p>The way of fixing it is to set <code>-ca giraph.useSuperstepCounters=false</code> in the runner to turn off the recording mechanism for every superstep.</p>
+
+<h1 id="toc_18">giraph jar Hadoop building dependency</h1>
+
+<p>When build the giraph jar, correct Hadoop version dependency is a must. For my case, the main cluster run at <code>Hadoop 2.5.0-cdh5.3.0</code> </p>
+
+<p>When I use <code>pom.xml</code> like follow, it fails: (This pom was supposed to be used for a different client&#39;s Hadoop environment)  </p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;
+  &lt;version&gt;2.6.4&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-mapreduce-client-jobclient&lt;/artifactId&gt;
+  &lt;version&gt;2.6.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>And the error message is very confusing: </p>
+
+<blockquote>
+<p>2017-03-23 00:24:03,717 INFO [main] org.apache.hadoop.mapreduce.v2.jobhistory.JobHistoryUtils: Default file system [hdfs://sc2prod:8020]<br/>
+2017-03-23 00:24:03,718 INFO [main] org.apache.hadoop.service.AbstractService: Service JobHistoryEventHandler failed in state INITED; cause: java.lang.IllegalArgumentException: Wrong FS: hdfs://sc2prod:8020/user/yu/.staging/job_1489616796019_14222, expected: hdfs://sc2prod<br/>
+java.lang.IllegalArgumentException: Wrong FS: hdfs://sc2prod:8020/user/yu/.staging/job_1489616796019_14222, expected: hdfs://sc2prod<br/>
+    at org.apache.hadoop.fs.FileSystem.checkPath(FileSystem.java:645)<br/>
+    at org.apache.hadoop.fs.FileSystem.makeQualified(FileSystem.java:465)<br/>
+    at org.apache.hadoop.mapreduce.jobhistory.JobHistoryEventHandler.serviceInit(JobHistoryEventHandler.java:143)<br/>
+    at org.apache.hadoop.service.AbstractService.init(AbstractService.java:163)</p>
+</blockquote>
+
+<p>My guess is that for the wrong hadoop dependency, the jar can not find the correct hadoop config path/file for the configurations. Then it just uses the default, which is not right.</p>
+
+<p>After I changed the <code>pom.xml</code> to below, it works fine.</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-mapreduce-client-jobclient&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><strong>Note</strong> The newly added <code>hadoop-client</code> is a must, otherwise will have error like follow:</p>
+
+<blockquote>
+<p>2017-03-23 06:22:00,622 FATAL [main] org.apache.hadoop.mapreduce.v2.app.MRAppMaster: Error starting MRAppMaster<br/>
+java.lang.NoSuchMethodError: org.apache.hadoop.ipc.RPC.getServer(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;IIZLorg/apache/hadoop/conf/Configuration;Lorg/apache/hadoop/security/token/SecretManager;)Lorg/apache/hadoop/ipc/RPC$Server;<br/>
+    at org.apache.hadoop.mapred.TaskAttemptListenerImpl.startRpcServer(TaskAttemptListenerImpl.java:121)</p>
+</blockquote>
+
+<p>As noted in <a href="http://stackoverflow.com/questions/39574202/java-lang-nosuchmethoderror-org-apache-hadoop-ipc-rpc-getproxy-while-creating-h">this stackoverflow post</a>, the <code>hadoop-client</code> dependency need be added.</p>
+
+<h1 id="toc_19">CPU bounded computation</h1>
+
+<p>Adding parallelism for computation intense algorithm like <code>FDC</code> need set the following two options:</p>
+
+<ol>
+<li><code>-ca giraph.numComputeThreads=${giraphComputeThreads}</code> (by default it is 1) </li>
+<li><code>-ca mapreduce.map.cpu.vcores=${giraphComputeThreads}</code></li>
+</ol>
+
+<p>Note: the second line can not be set inside <code>oozie</code> and must be set inside giraph arguments.</p>
+
+<p>This does <strong>NOT</strong> work:</p>
+
+<pre><code class="language-xml">&lt;property&gt;
+    &lt;name&gt;oozie.launcher.mapreduce.map.cpu.vcores&lt;/name&gt;
+    &lt;value&gt;${giraphComputeThreads}&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+
+<h1 id="toc_20">Class implements Writable needs empty constructor</h1>
+
+<p>Because the serialization and deserialization will call the empty constructor (<code>non-parameterized</code>) constructor, we should always write one!</p>
+
+<p>I made the same bug a lot of times...</p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Kill the background job</a>
+</li>
+<li>
+<a href="#toc_1">giraph Unit testing</a>
+</li>
+<li>
+<a href="#toc_2">giraph edge value not Mutable in place</a>
+</li>
+<li>
+<a href="#toc_3">giraph shell runner / command line</a>
+</li>
+<li>
+<a href="#toc_4">Unsolved problem with the input string split in InputFormat class</a>
+</li>
+<li>
+<a href="#toc_5">giraph log file memory info free/total/max</a>
+</li>
+<li>
+<a href="#toc_6">Giraph Edge and Message memory optimization</a>
+<ul>
+<li>
+<a href="#toc_7">Edge memory management</a>
+</li>
+<li>
+<a href="#toc_8">Message memory management</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_9">Use MessageStore</a>
+</li>
+<li>
+<a href="#toc_10">The memory cost for java classes</a>
+</li>
+<li>
+<a href="#toc_11">Mutate Graph</a>
+<ul>
+<li>
+<a href="#toc_12">When there is a conflict for the mutate request</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">The timeout parameter for waiting resources</a>
+</li>
+<li>
+<a href="#toc_14">duplicated job tracker setting is a must</a>
+</li>
+<li>
+<a href="#toc_15">Use both Edge Input and Vertex Value Input</a>
+</li>
+<li>
+<a href="#toc_16">Output during computation</a>
+</li>
+<li>
+<a href="#toc_17">A lot of supersteps cause counters.LimitExceededException</a>
+</li>
+<li>
+<a href="#toc_18">giraph jar Hadoop building dependency</a>
+</li>
+<li>
+<a href="#toc_19">CPU bounded computation</a>
+</li>
+<li>
+<a href="#toc_20">Class implements Writable needs empty constructor</a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14742423250523.html" 
+          title="Previous Post: bayesian statistics">&laquo; bayesian statistics</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742423250588.html" 
+          title="Next Post: giraph with jython">giraph with jython &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,517 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  bayesian statistics - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>bayesian statistics</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2016/9/18</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='theory.html'>theory</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>This documents my personal understandings about bayesian, keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
+<li>
+<a href="#toc_1">MLE maximum Likelihood Estimation</a>
+</li>
+<li>
+<a href="#toc_2">Gamma distribution in <code>scipy</code></a>
+</li>
+<li>
+<a href="#toc_3">Exponential distribution</a>
+</li>
+<li>
+<a href="#toc_4">Normal distribution</a>
+<ul>
+<li>
+<a href="#toc_5">Known std of $sigma<sup>2$</sup></a>
+</li>
+<li>
+<a href="#toc_6">Unknown std of $sigma<sup>2$</sup></a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">pdf, pmf, cdf, ppf explained</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Likelihood function is not a pdf</h1>
+
+<p>(We are here only talking about continuous distribution case since I used pdf here.)<br/><br/>
+Let the observation as \(O\) and the parameters as \(\theta\), the probability of seeing \(O\) given \(\theta\) is \(p(O|\theta)\). This is a pdf. It is a function of \(O\), and \(\int_{O}{p(O|\theta)\ dO}=1\), which means integrate through all possible observation \(O\), the sum of probability should be 1.<br/><br/>
+The likelihood is the other way around as: given the observation \(O\) that we have seen, the likelihood that the parameter is value \(\theta\).<br/>
+\[L(O|\theta)=p(O|\theta)\]<br/>
+If we do an integration over all possible \(\theta\), \(\int_{\theta}{L(O|\theta)\ d\theta}\neq1\)<br/><br/>
+<a href="http://stats.stackexchange.com/questions/2641/what-is-the-difference-between-likelihood-and-probability">post on stackoverflow about the difference between likelihood and probability</a><br/>
+<a href="http://stats.stackexchange.com/questions/31238/what-is-the-reason-that-a-likelihood-function-is-not-a-pdf">post on stackoverflow about likelihood and pdf</a>  </p>
+
+<h1 id="toc_1">MLE maximum Likelihood Estimation</h1>
+
+<p><a href="https://onlinecourses.science.psu.edu/stat504/node/28">Here</a> is a clear explained MLE course page. It gives Binomial distribution example and Poisson example</p>
+
+<h1 id="toc_2">Gamma distribution in <code>scipy</code></h1>
+
+<p><a href="https://en.wikipedia.org/wiki/Gamma_distribution">Wiki page</a></p>
+
+<p>There are different ways to specify the gamma distribution, which all use two shape parameters:</p>
+
+<ol>
+<li><p>\(\alpha\) and \(\beta\) (\(\beta\) is called <code>rate</code>)<br/>
+\[\Gamma(\alpha, \beta): pdf \rightarrow f(x; \alpha,\beta)=\frac{\beta^{\alpha}x^{\alpha-1}e^{-x\beta}}{\Gamma(\alpha)}\]<br/>
+mean: \(\frac{\alpha}{\beta}\)<br/>
+std: \(\frac{\sqrt{\alpha}}{\beta}\)</p></li>
+<li><p>\(k\) and or \(\theta\) <br/>
+\(\alpha=k\)<br/>
+\(\theta=\frac{1}{\beta}\), and it is called <code>scale</code>.<br/>
+\[\Gamma(k, \theta): pdf \rightarrow f(x; k,\theta)=\frac{1}{\theta}\frac{\frac{x}{\theta}^{k-1}e^{-\frac{x}{\theta}}}{\Gamma(k)}\]</p></li>
+</ol>
+
+<p>In <code>scipy.stats.gamma</code>, it uses the 2nd form, and the shape parameter <code>a</code> is \(k\), the <code>scale</code> is \(\theta\), for default value of <code>scale=1</code>, the pdf reduce to:<br/>
+\[\Gamma(a, 1): pdf \rightarrow f(x; a,1)=\frac{x^{a-1}e^{-x}}{\Gamma(a)}\]<br/>
+as shown on the <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html#scipy.stats.gamma">scipy page</a></p>
+
+<h1 id="toc_3">Exponential distribution</h1>
+
+<p>like waiting for bus, earthquake, etc.  </p>
+
+<p>We know it is exponential distribution: \( pdf(x) = \lambda e^{-\lambda x}\)<br/>
+and we observer \(n\) observations: \(\tilde X ={x_1, x_2, ... x_n}\)<br/>
+Now we want to get the estimate of \(\lambda\) (because its mean, i.e. expected value is \( \frac{1}{\lambda}\)).</p>
+
+<ul>
+<li><p>Likelihood function<br/>
+\[ L(\tilde X | \lambda) = \Pi_{i=1}^{n}\lambda e^{-\lambda x_i} = \lambda^{n}e^{-\lambda \Sigma_{i=1}^{n}x_i}\] </p></li>
+<li><p>Conjugate prior for \(\lambda\): </p>
+
+<ul>
+<li>Prior: \(pdf_{prior}(\lambda) = \Gamma(\alpha, \beta)\)</li>
+<li>\(\alpha\) in the exponential-gamma model means the sample size (which is different than the poisson-gamma model, in which, \(\beta\) means the sample size)</li>
+<li>mean and std are still the same for gamma distribution as before.</li>
+<li>Posterior: \(pdf_{posterior}(\lambda) = \Gamma(\alpha+num_{newSample},  \beta+\Sigma(newSample))\)$</li>
+</ul></li>
+<li><p>If we have obtained the posterior and want to use the posterior to get the possibility density function pdf of random variable \(X\):<br/>
+\[pdf_{posterior}(x) = \int pdf(x)* pdf_{posterior}(\lambda) d\lambda\]</p></li>
+</ul>
+
+<h1 id="toc_4">Normal distribution</h1>
+
+<p>It mostly come from Central Limit Theorem.</p>
+
+<h2 id="toc_5">Known std of \(\sigma^2\)</h2>
+
+<p>We know it is normal distribution: \(pdf(x)=N(x|\mu,\sigma_0^2)\)<br/>
+and we observer \(n\) observations: \(\tilde X ={x_1, x_2, ... x_n}\)<br/>
+Now we want to get the estimate of \(\mu\)</p>
+
+<ul>
+<li><p>Likelihood function<br/>
+\[ L(\tilde X | \mu ) = \Pi_{i=1}^{n}N(x_i|\mu,\sigma_0^2)\]</p></li>
+<li><p>Conjugate prior for \(\mu\):</p>
+
+<ul>
+<li>Prior: \(pdf_{prior}(\mu)=N(\mu|m_0, s_0^2)\)</li>
+<li>effective sample size of the prior: \(\frac{\sigma_0^2}{s_0^2}\)</li>
+<li>Posterior: \(pdf_{posterior}(\mu)=N(\mu|(\frac{n}{n+\frac{\sigma_0^2}{s_0^2}}\bar x + \frac{\frac{\sigma_0^2}{s_0^2}}{n+\frac{\sigma_0^2}{s_0^2}}m_0 ), (\frac{1}{\frac{n}{\sigma_0^2}+\frac{1}{s_0^2}}))\)</li>
+</ul></li>
+<li><p>If we have obtained the posterior and want to use the posterior to get the possibility density function pdf of random variable \(X\):<br/>
+\[pdf_{posterior}(x) = \int pdf(x)* pdf_{posterior}(\mu) d\mu\]<br/>
+<strong>A quick way of calculation:</strong><br/>
+\[\int N(x|\mu,\sigma_0^2)* N(\mu|m_0, s_0^2) d\mu=N(x|m_0, (s_0^2+\sigma_0^2))\]</p></li>
+</ul>
+
+<h2 id="toc_6">Unknown std of \(\sigma^2\)</h2>
+
+<h1 id="toc_7">pdf, pmf, cdf, ppf explained</h1>
+
+<ul>
+<li>continuous distribution does not have point probabilities. pdf is the density function for a continuous distribution, and it is not defined for discrete distribution.
+\[ P(x_1&lt;=X &lt;= x_2) = \int_{x_1}^{x_2} pdf(x)dx\]</li>
+<li>pmf is the point probabilities of discrete distribution, and it is not defined for continuous distribution.
+\[ P(X=x_1) = pmf(x_1)\]</li>
+<li>cdf gives the accumulated probabilities, and it is defined for both the continuous and discrete distributions
+\[ P(X&lt;=x_1) = cdf(x_1)\]</li>
+<li>ppf is the inverse of cdf, and is mostly used to calculate the confidence interval. The result of ppf is <strong>not</strong> probability but the actual value of the random variable \(X\).
+\[ P(X&lt;=ppf(\beta)) = \beta\]</li>
+</ul>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Likelihood function is not a pdf</a>
+</li>
+<li>
+<a href="#toc_1">MLE maximum Likelihood Estimation</a>
+</li>
+<li>
+<a href="#toc_2">Gamma distribution in <code>scipy</code></a>
+</li>
+<li>
+<a href="#toc_3">Exponential distribution</a>
+</li>
+<li>
+<a href="#toc_4">Normal distribution</a>
+<ul>
+<li>
+<a href="#toc_5">Known std of $sigma<sup>2$</sup></a>
+</li>
+<li>
+<a href="#toc_6">Unknown std of $sigma<sup>2$</sup></a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">pdf, pmf, cdf, ppf explained</a>
+</li>
+</ul>
+
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="14742423250478.html" 
+          title="Previous Post: bash">&laquo; bash</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14742423250614.html" 
+          title="Next Post: giraph">giraph &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14858223421956.html">Machine Learning</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>
