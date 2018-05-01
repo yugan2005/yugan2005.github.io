@@ -4,7 +4,7 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2017-07-08T10:11:37-07:00</updated>
+  <updated>2017-07-08T10:12:38-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -13,7 +13,7 @@
   <generator uri="http://www.mweb.im/">MWeb</generator>
   
   <entry>
-    <title type="html"><![CDATA[Advanced Analytics with Spark Reading Notes]]></title>
+    <title type="html"><![CDATA[advanced Analytics with Spark Reading Notes]]></title>
     <link href="www.echo-ohce.com/14770727250961.html"/>
     <updated>2016-10-21T10:58:45-07:00</updated>
     <id>www.echo-ohce.com/14770727250961.html</id>
@@ -428,206 +428,6 @@ cvData groupBy (_.user) mapPartitions
 </li>
 </ul>
 
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Github Page, Hexo, MWeb, GoDaddy setting]]></title>
-    <link href="www.echo-ohce.com/14742423250557.html"/>
-    <updated>2016-09-18T16:45:25-07:00</updated>
-    <id>www.echo-ohce.com/14742423250557.html</id>
-    <content type="html"><![CDATA[
-<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
-</li>
-<li>
-<a href="#toc_1">Github page</a>
-</li>
-<li>
-<a href="#toc_2">Hexo</a>
-</li>
-<li>
-<a href="#toc_3">Freemind Hexo theme</a>
-</li>
-<li>
-<a href="#toc_4">Mweb</a>
-</li>
-<li>
-<a href="#toc_5">GoDaddy</a>
-</li>
-<li>
-<a href="#toc_6">Hexo works with MathJax / LaTex</a>
-</li>
-<li>
-<a href="#toc_7">Future work</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
-
-<p>The most important steps are:<br/>
-1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
-2. Generate two separate ssh keys and put them in the folder <code>~/.ssh/</code><br/>
-3. The main account is set by <code>git config --global</code> and the other account is set by locally <code>git config</code> overridden. </p>
-
-<p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
-
-<h1 id="toc_1">Github page</h1>
-
-<p>Nothing special, just first need first create an empty repository using the unique name required.</p>
-
-<h1 id="toc_2">Hexo</h1>
-
-<p>Hexo is used to build everything and managers everything. <br/>
-It sets the local folder structures, manages the style / theme / plugin, generates the sites, publish to the github pages. Some important things about hexo</p>
-
-<ol>
-<li><a href="">hexo installation and integration with github pages</a></li>
-<li><a href="https://hexo.io/docs/index.html">Hexo basic commands</a></li>
-<li><a href="https://hexo.io/docs/front-matter.html">Hexo Front-matter</a>. The <code>freemind</code> theme that I am using provides extra Front-matter: <code>toc</code> and <code>top</code></li>
-<li>[YGMARK] in <code>_config.yml</code> setting, after <code>key:</code> a space must be used, otherwise all sorts of bugs.</li>
-</ol>
-
-<h1 id="toc_3">Freemind Hexo theme</h1>
-
-<ul>
-<li><a href="https://github.com/wzpan/hexo-theme-freemind/">Installation Official</a></li>
-<li><a href="http://baoxiehao.com/2014/05/17/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/">非常好的一篇博客，详细说明了Freemind Hexo的优化。有时间再仔细看</a></li>
-<li><a href="http://masikkk.com/blog/hexo-4-usage-of-hexo-theme/">一篇中文的博客，更详细，并提到freemind search engine的设置</a></li>
-</ul>
-
-<h1 id="toc_4">Mweb</h1>
-
-<p>Mweb is simply the Markdown writing program.<br/>
-It has a very good full <a href="http://www.mweb.im/markdown-syntax-guide-full-version.html">Markdown syntax guide</a>.<br/>
-打开MWeb, ​Command + E 切换到外部模式(使用cmd + L可以切回默认的library模式), 然后把hexo下的source目录拖到左边, 设置它的Display name为github blog(随意), 最重要一点是设置Media Save Path为Absolute, 这样就可以直接使用MWeb的粘贴图片功能.<br/><br/>
-<img src="media/14742423250557/14742438643424.jpg" alt=""/></p>
-
-<h1 id="toc_5">GoDaddy</h1>
-
-<ul>
-<li>Add a <code>CNAME</code> file in the <code>source</code> folder: <code>www.echo-ohce.com</code></li>
-<li><p>Go to GoDaddy and config the domain name</p>
-
-<ul>
-<li><p>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code><br/>
-<img src="media/14742423250557/14742439346348.png" alt=""/></p></li>
-<li><p>Create a CNAME record<br/><br/>
-<img src="media/14742423250557/14742439461628.png" alt=""/></p></li>
-</ul></li>
-<li><p><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></p></li>
-<li><p><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></p></li>
-<li><p>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</p></li>
-</ul>
-
-<h1 id="toc_6">Hexo works with MathJax / LaTex</h1>
-
-<ul>
-<li>install plugin <a href="https://github.com/akfish/hexo-math">hexo-math</a> at the root folder of the blog <code>npm install hexo-math --save</code></li>
-<li>Update the root <code>_config.xml</code> append the following:</li>
-</ul>
-
-<pre><code class="language-xml"># Math
-math:
-  engine: &#39;mathjax&#39;
-  mathjax:
-    src: &quot;//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;
-    config:
-      tex2jax:
-        inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ]
-        skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
-        processEscaps: true
-      TeX:
-        equationNumbers:
-          autoNumber: &quot;AMS&quot;
-</code></pre>
-
-<ul>
-<li>Inline LaTex <code>$...$</code>: \(x \rightarrow y\)</li>
-<li>Block <code>$$...$$</code>:  \[\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1\]</li>
-<li>Multiple lines <code>{% math %} ... {% endmath %}</code>:</li>
-</ul>
-
-<p>{% math %}<br/>
-\begin{aligned}<br/>
-\dot{x} &amp; = \sigma(y-x) \<br/>
-\dot{y} &amp; = \rho x - y - xz \<br/>
-\dot{z} &amp; = -\beta z + xy<br/>
-\end{aligned}<br/>
-{% endmath %}</p>
-
-<h1 id="toc_7">Future work</h1>
-
-<p>GitHub  \(\rightarrow\)  GitLab <br/>
-1. <a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a><br/>
-2. <a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
-</li>
-<li>
-<a href="#toc_1">Github page</a>
-</li>
-<li>
-<a href="#toc_2">Hexo</a>
-</li>
-<li>
-<a href="#toc_3">Freemind Hexo theme</a>
-</li>
-<li>
-<a href="#toc_4">Mweb</a>
-</li>
-<li>
-<a href="#toc_5">GoDaddy</a>
-</li>
-<li>
-<a href="#toc_6">Hexo works with MathJax / LaTex</a>
-</li>
-<li>
-<a href="#toc_7">Future work</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Machine Learning]]></title>
-    <link href="www.echo-ohce.com/14858223421956.html"/>
-    <updated>2017-01-30T16:25:42-08:00</updated>
-    <id>www.echo-ohce.com/14858223421956.html</id>
-    <content type="html"><![CDATA[
-<p>This documents my personal understandings about bayesian, keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<ul>
-<li>
-<a href="#toc_0">An interesting illustration</a>
-</li>
-</ul>
-
-
-<hr/>
-
-<h1 id="toc_0">An interesting illustration</h1>
-
-<p><img src="media/14858223421956/14858223844745.jpg" alt=""/></p>
-
-<p><a href="http://radimrehurek.com/data_science_python/">From this post</a></p>
 
 ]]></content>
   </entry>
@@ -2331,21 +2131,13 @@ for id1, id2 in itertools.combinations(newSeenIds, 2):
 <a href="#toc_12">Github page</a>
 </li>
 <li>
-<a href="#toc_13">Git/Mint workflow @ In</a>
-<ul>
-<li>
-<a href="#toc_14">Rebase</a>
+<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Squash local commits</a>
+<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
 </li>
 <li>
-<a href="#toc_16">Personal branches</a>
-</li>
-<li>
-<a href="#toc_17">From BeeChung set multiple upstreams</a>
-</li>
-</ul>
+<a href="#toc_15">Git/Mint workflow @ In</a>
 </li>
 </ul>
 
@@ -2470,17 +2262,114 @@ git stash pop
 
 <p>Nothing special, just first need first create an empty repository using the unique name required.</p>
 
-<h1 id="toc_13">Git/Mint workflow @ In</h1>
+<h1 id="toc_13">Quick way of adding untracked files into .gitignore:</h1>
+
+<pre><code class="language-bash">git status --porcelain | grep &#39;^??&#39; | cut -c4- &gt;&gt; .gitignore
+</code></pre>
+
+<p>Or just hide it in the view for this time:</p>
+
+<pre><code class="language-bash">git status -uno
+</code></pre>
+
+<p><a href="https://stackoverflow.com/a/15142010/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_14">Git revert to a previous commit both locally and remotely</h1>
+
+<ul>
+<li>first find the commit SHA by: <code>git log --all</code>, or <code>git l</code></li>
+<li>check current branch is <code>ygdev</code></li>
+<li>revert locally: <code>git revert --hard SHA</code></li>
+<li>revert remotely: <code>git push -f upstream ygdev</code>. Need use <code>-f</code> to force update</li>
+</ul>
+
+<h1 id="toc_15">Git/Mint workflow @ In</h1>
 
 <p>The main part is based on <a href="https://iwww.corp.linkedin.com/wiki/cf/display/TOOLS/Git+Workflow#GitWorkflow-historyline">this wiki page</a></p>
 
-<h2 id="toc_14">Rebase</h2>
+<p>using the <code>seas-activities</code> MP as the example. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Run+Galene+Locally">This is the tutorial, that I am following, but with my own workflow</a></p>
 
-<h2 id="toc_15">Squash local commits</h2>
+<p><font color='salmon'>Update: found this <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/NYC+Data+Team+New+Hire+Onboarding+Guide#NYCDataTeamNewHireOnboardingGuide-3.VersionControl">git workflow doc</a>. it is very clear. </font></p>
 
-<h2 id="toc_16">Personal branches</h2>
+<p><strong>For the first machine (mac):</strong></p>
 
-<h2 id="toc_17">From BeeChung set multiple upstreams</h2>
+<ol>
+<li><code>mint checkout</code> checkout the multiproduct</li>
+<li><code>git remote -v</code> show the remote </li>
+<li>go to <a href="https://gitli.corp.linkedin.com/ygan-inlabs">my personal project</a> and add a new repo <code>seas-activities</code> under my personal project</li>
+<li>The upstream corresponding to my own repo is <code>git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code>.</li>
+<li>Add the upstream to this git: 
+<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
+<li>push the <code>master</code> branch to the <code>upstream</code>:
+<code>git push upstream master</code></li>
+<li>checkout a <code>ygdev</code> branch: <code>git checkout -b ygdev</code></li>
+<li>push the <code>ygdev</code> branch to the <code>upstream</code>:
+<code>git push upstream</code> </li>
+<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
+<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
+</ol>
+
+<p><strong>For the second machine (linux):</strong></p>
+
+<ol>
+<li><code>mint checkout</code> checkout the multiproduct</li>
+<li><code>git remote -v</code> show the remote </li>
+<li>Add the upstream to this git: 
+<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
+<li>fetch from upstream: <code>git fetch upstream</code></li>
+<li>checkout my <code>dev</code> branch from my personal repo: <code>git checkout ygdev</code></li>
+<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
+<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
+</ol>
+
+<p><strong>After dev job done and prepare for review</strong></p>
+
+<ol>
+<li>first push to upstream ygdev: <code>git push upstream ygdev</code></li>
+<li>checkout master: <code>git checkout master</code></li>
+<li>update master: <code>mint update</code></li>
+<li>checkout dev: <code>git checkout ygdev</code></li>
+<li>rebase my dev: <code>git rebase master</code></li>
+<li>check whether need <code>squash</code> or not by: <code>git l</code>. Making sure there is only 1 commit. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Craftsmanship+-+One+Git+commit+per+push">ref1</a>, <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a></li>
+<li><font color='salmon'><strong>Note that from <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a>, seems we should create review from my personal branch. But this time I did it on the master branch. Should try next time</strong></font></li>
+<li><code>git review create --open</code></li>
+</ol>
+
+<p><strong>After rb gets <code>Ship it!</code></strong></p>
+
+<ol>
+<li>checkout master branch: <code>git checkout master</code></li>
+<li>update: <code>mint update</code></li>
+<li>checkout dev: <code>git checkout ygdev</code></li>
+<li>rebase my dev: <code>git rebase master</code></li>
+<li>update upstream dev: <code>git push -f upstream ygdev</code></li>
+<li>Now the <code>git l</code> should show one single line with only one commit</li>
+<li>checkout master: <code>git checkout master</code></li>
+<li><code>git review dcommit -r &lt;rb#&gt;</code></li>
+<li>check again <code>git l</code></li>
+<li><code>git push</code></li>
+</ol>
+
+<p><strong>After checkin, PCL failed</strong></p>
+
+<ol>
+<li>Due to other irrelevant cause</li>
+<li>The committed version got automatically reverted</li>
+<li><code>git checkout master</code></li>
+<li><code>mint update</code></li>
+<li><code>git checkout ygdev</code></li>
+<li><code>git rebase master</code></li>
+<li><code>git cherry-pick &lt;SHA&gt;</code></li>
+<li><code>git commit --amend</code></li>
+<li>Add the reason into the commit message: <em>resubmit due to irrelevant PCL failure</em></li>
+<li><code>git push upstream ygdev</code></li>
+<li><code>git checkout master</code></li>
+<li><code>git rebase ygdev</code></li>
+<li><code>git push upstream master</code></li>
+<li><code>git push</code></li>
+</ol>
+
+<p><a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/git+primer%3A+basic+LI+workflow">A good internal summary git post</a></p>
 
 <hr/>
 
@@ -2525,21 +2414,185 @@ git stash pop
 <a href="#toc_12">Github page</a>
 </li>
 <li>
-<a href="#toc_13">Git/Mint workflow @ In</a>
-<ul>
-<li>
-<a href="#toc_14">Rebase</a>
+<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Squash local commits</a>
+<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
 </li>
 <li>
-<a href="#toc_16">Personal branches</a>
-</li>
-<li>
-<a href="#toc_17">From BeeChung set multiple upstreams</a>
+<a href="#toc_15">Git/Mint workflow @ In</a>
 </li>
 </ul>
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[github Page, Hexo, MWeb, GoDaddy setting]]></title>
+    <link href="www.echo-ohce.com/14742423250557.html"/>
+    <updated>2016-09-18T16:45:25-07:00</updated>
+    <id>www.echo-ohce.com/14742423250557.html</id>
+    <content type="html"><![CDATA[
+<p>I tried to use MWeb + Hexo to setup this blog, but it does not work out well. Give this up, turn back to MWeb only</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
+
+<p>The most important steps are:<br/>
+1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
+2. Generate two separate ssh keys and put them in the folder <code>~/.ssh/</code><br/>
+3. The main account is set by <code>git config --global</code> and the other account is set by locally <code>git config</code> overridden. </p>
+
+<p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
+
+<h1 id="toc_1">Github page</h1>
+
+<p>Nothing special, just first need first create an empty repository using the unique name required.</p>
+
+<h1 id="toc_2">Hexo</h1>
+
+<p>Hexo is used to build everything and managers everything. <br/>
+It sets the local folder structures, manages the style / theme / plugin, generates the sites, publish to the github pages. Some important things about hexo</p>
+
+<ol>
+<li><a href="">hexo installation and integration with github pages</a></li>
+<li><a href="https://hexo.io/docs/index.html">Hexo basic commands</a></li>
+<li><a href="https://hexo.io/docs/front-matter.html">Hexo Front-matter</a>. The <code>freemind</code> theme that I am using provides extra Front-matter: <code>toc</code> and <code>top</code></li>
+<li>[YGMARK] in <code>_config.yml</code> setting, after <code>key:</code> a space must be used, otherwise all sorts of bugs.</li>
+</ol>
+
+<h1 id="toc_3">Freemind Hexo theme</h1>
+
+<ul>
+<li><a href="https://github.com/wzpan/hexo-theme-freemind/">Installation Official</a></li>
+<li><a href="http://baoxiehao.com/2014/05/17/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/">非常好的一篇博客，详细说明了Freemind Hexo的优化。有时间再仔细看</a></li>
+<li><a href="http://masikkk.com/blog/hexo-4-usage-of-hexo-theme/">一篇中文的博客，更详细，并提到freemind search engine的设置</a></li>
+</ul>
+
+<h1 id="toc_4">Mweb</h1>
+
+<p>Mweb is simply the Markdown writing program.<br/>
+It has a very good full <a href="http://www.mweb.im/markdown-syntax-guide-full-version.html">Markdown syntax guide</a>.<br/>
+打开MWeb, ​Command + E 切换到外部模式(使用cmd + L可以切回默认的library模式), 然后把hexo下的source目录拖到左边, 设置它的Display name为github blog(随意), 最重要一点是设置Media Save Path为Absolute, 这样就可以直接使用MWeb的粘贴图片功能.<br/><br/>
+<img src="media/14742423250557/14742438643424.jpg" alt=""/></p>
+
+<h1 id="toc_5">GoDaddy</h1>
+
+<ul>
+<li>Add a <code>CNAME</code> file in the <code>source</code> folder: <code>www.echo-ohce.com</code></li>
+<li><p>Go to GoDaddy and config the domain name</p>
+
+<ul>
+<li><p>Add an &quot;A (Host)&quot; record with &quot;host&quot; = <code>@</code> and &quot;Points to&quot; = <code>192.30.252.153</code> or <code>192.30.252.154</code><br/>
+<img src="media/14742423250557/14742439346348.png" alt=""/></p></li>
+<li><p>Create a CNAME record<br/><br/>
+<img src="media/14742423250557/14742439461628.png" alt=""/></p></li>
+</ul></li>
+<li><p><a href="https://help.github.com/articles/setting-up-an-apex-domain/">Official help page</a></p></li>
+<li><p><a href="http://andrewsturges.com/blog/jekyll/tutorial/2014/11/06/github-and-godaddy.html">My reference post</a></p></li>
+<li><p>Specical Notes: 在CNAME中的域名不需要<code>http://</code>。</p></li>
+</ul>
+
+<h1 id="toc_6">Hexo works with MathJax / LaTex</h1>
+
+<ul>
+<li>install plugin <a href="https://github.com/akfish/hexo-math">hexo-math</a> at the root folder of the blog <code>npm install hexo-math --save</code></li>
+<li>Update the root <code>_config.xml</code> append the following:</li>
+</ul>
+
+<pre><code class="language-xml"># Math
+math:
+  engine: &#39;mathjax&#39;
+  mathjax:
+    src: &quot;//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;
+    config:
+      tex2jax:
+        inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ]
+        skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;, &#39;code&#39;]
+        processEscaps: true
+      TeX:
+        equationNumbers:
+          autoNumber: &quot;AMS&quot;
+</code></pre>
+
+<ul>
+<li>Inline LaTex <code>$...$</code>: \(x \rightarrow y\)</li>
+<li>Block <code>$$...$$</code>:  \[\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1\]</li>
+<li>Multiple lines <code>{% math %} ... {% endmath %}</code>:</li>
+</ul>
+
+<p>{% math %}<br/>
+\begin{aligned}<br/>
+\dot{x} &amp; = \sigma(y-x) \<br/>
+\dot{y} &amp; = \rho x - y - xz \<br/>
+\dot{z} &amp; = -\beta z + xy<br/>
+\end{aligned}<br/>
+{% endmath %}</p>
+
+<h1 id="toc_7">Future work</h1>
+
+<p>GitHub  \(\rightarrow\)  GitLab <br/>
+1. <a href="https://yudachi.biz/2016/05/27/moving-to-gitlab-pages/">中文的 GitLab and Hexo</a><br/>
+2. <a href="http://blog.vanjor.com/2016/05/hexo-github-blog-install.html">代码双线托管，域名DNS双线解析</a></p>
+
+<hr/>
+
+<ul>
+<li>
+<a href="#toc_0">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+</li>
+<li>
+<a href="#toc_1">Github page</a>
+</li>
+<li>
+<a href="#toc_2">Hexo</a>
+</li>
+<li>
+<a href="#toc_3">Freemind Hexo theme</a>
+</li>
+<li>
+<a href="#toc_4">Mweb</a>
+</li>
+<li>
+<a href="#toc_5">GoDaddy</a>
+</li>
+<li>
+<a href="#toc_6">Hexo works with MathJax / LaTex</a>
+</li>
+<li>
+<a href="#toc_7">Future work</a>
 </li>
 </ul>
 
@@ -2778,6 +2831,34 @@ jar {
 </ul></li>
 <li>Go to the previous/next occurrence of the word. This feature is called <code>Find Word at Caret</code> <a href="http://stackoverflow.com/a/18404014/4229125">stackoverflow post</a>. I set it as <code>Ctrl+,</code></li>
 </ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[machine Learning]]></title>
+    <link href="www.echo-ohce.com/14858223421956.html"/>
+    <updated>2017-01-30T16:25:42-08:00</updated>
+    <id>www.echo-ohce.com/14858223421956.html</id>
+    <content type="html"><![CDATA[
+<p>This documents my personal understandings about bayesian, keep updating.</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">An interesting illustration</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">An interesting illustration</h1>
+
+<p><img src="media/14858223421956/14858223844745.jpg" alt=""/></p>
+
+<p><a href="http://radimrehurek.com/data_science_python/">From this post</a></p>
 
 ]]></content>
   </entry>
@@ -6169,7 +6250,7 @@ import matplotlib.pyplot as plt
 po.init_notebook_mode()
 cf.set_config_file(theme=&#39;white&#39;)
 pd.set_option(&#39;precision&#39;, 3) # printing precision
-np.set_printoptions(precision=3) # printing precision 
+np.set_printoptions(precision=3) # printing precision
 cf.go_offline() # using cufflinks at offline mode
 </code></pre>
 

@@ -172,21 +172,13 @@
 <a href="#toc_12">Github page</a>
 </li>
 <li>
-<a href="#toc_13">Git/Mint workflow @ In</a>
-<ul>
-<li>
-<a href="#toc_14">Rebase</a>
+<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Squash local commits</a>
+<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
 </li>
 <li>
-<a href="#toc_16">Personal branches</a>
-</li>
-<li>
-<a href="#toc_17">From BeeChung set multiple upstreams</a>
-</li>
-</ul>
+<a href="#toc_15">Git/Mint workflow @ In</a>
 </li>
 </ul>
 
@@ -311,17 +303,114 @@ git stash pop
 
 <p>Nothing special, just first need first create an empty repository using the unique name required.</p>
 
-<h1 id="toc_13">Git/Mint workflow @ In</h1>
+<h1 id="toc_13">Quick way of adding untracked files into .gitignore:</h1>
+
+<pre><code class="language-bash">git status --porcelain | grep &#39;^??&#39; | cut -c4- &gt;&gt; .gitignore
+</code></pre>
+
+<p>Or just hide it in the view for this time:</p>
+
+<pre><code class="language-bash">git status -uno
+</code></pre>
+
+<p><a href="https://stackoverflow.com/a/15142010/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_14">Git revert to a previous commit both locally and remotely</h1>
+
+<ul>
+<li>first find the commit SHA by: <code>git log --all</code>, or <code>git l</code></li>
+<li>check current branch is <code>ygdev</code></li>
+<li>revert locally: <code>git revert --hard SHA</code></li>
+<li>revert remotely: <code>git push -f upstream ygdev</code>. Need use <code>-f</code> to force update</li>
+</ul>
+
+<h1 id="toc_15">Git/Mint workflow @ In</h1>
 
 <p>The main part is based on <a href="https://iwww.corp.linkedin.com/wiki/cf/display/TOOLS/Git+Workflow#GitWorkflow-historyline">this wiki page</a></p>
 
-<h2 id="toc_14">Rebase</h2>
+<p>using the <code>seas-activities</code> MP as the example. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Run+Galene+Locally">This is the tutorial, that I am following, but with my own workflow</a></p>
 
-<h2 id="toc_15">Squash local commits</h2>
+<p><font color='salmon'>Update: found this <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/NYC+Data+Team+New+Hire+Onboarding+Guide#NYCDataTeamNewHireOnboardingGuide-3.VersionControl">git workflow doc</a>. it is very clear. </font></p>
 
-<h2 id="toc_16">Personal branches</h2>
+<p><strong>For the first machine (mac):</strong></p>
 
-<h2 id="toc_17">From BeeChung set multiple upstreams</h2>
+<ol>
+<li><code>mint checkout</code> checkout the multiproduct</li>
+<li><code>git remote -v</code> show the remote </li>
+<li>go to <a href="https://gitli.corp.linkedin.com/ygan-inlabs">my personal project</a> and add a new repo <code>seas-activities</code> under my personal project</li>
+<li>The upstream corresponding to my own repo is <code>git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code>.</li>
+<li>Add the upstream to this git: 
+<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
+<li>push the <code>master</code> branch to the <code>upstream</code>:
+<code>git push upstream master</code></li>
+<li>checkout a <code>ygdev</code> branch: <code>git checkout -b ygdev</code></li>
+<li>push the <code>ygdev</code> branch to the <code>upstream</code>:
+<code>git push upstream</code> </li>
+<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
+<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
+</ol>
+
+<p><strong>For the second machine (linux):</strong></p>
+
+<ol>
+<li><code>mint checkout</code> checkout the multiproduct</li>
+<li><code>git remote -v</code> show the remote </li>
+<li>Add the upstream to this git: 
+<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
+<li>fetch from upstream: <code>git fetch upstream</code></li>
+<li>checkout my <code>dev</code> branch from my personal repo: <code>git checkout ygdev</code></li>
+<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
+<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
+</ol>
+
+<p><strong>After dev job done and prepare for review</strong></p>
+
+<ol>
+<li>first push to upstream ygdev: <code>git push upstream ygdev</code></li>
+<li>checkout master: <code>git checkout master</code></li>
+<li>update master: <code>mint update</code></li>
+<li>checkout dev: <code>git checkout ygdev</code></li>
+<li>rebase my dev: <code>git rebase master</code></li>
+<li>check whether need <code>squash</code> or not by: <code>git l</code>. Making sure there is only 1 commit. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Craftsmanship+-+One+Git+commit+per+push">ref1</a>, <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a></li>
+<li><font color='salmon'><strong>Note that from <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a>, seems we should create review from my personal branch. But this time I did it on the master branch. Should try next time</strong></font></li>
+<li><code>git review create --open</code></li>
+</ol>
+
+<p><strong>After rb gets <code>Ship it!</code></strong></p>
+
+<ol>
+<li>checkout master branch: <code>git checkout master</code></li>
+<li>update: <code>mint update</code></li>
+<li>checkout dev: <code>git checkout ygdev</code></li>
+<li>rebase my dev: <code>git rebase master</code></li>
+<li>update upstream dev: <code>git push -f upstream ygdev</code></li>
+<li>Now the <code>git l</code> should show one single line with only one commit</li>
+<li>checkout master: <code>git checkout master</code></li>
+<li><code>git review dcommit -r &lt;rb#&gt;</code></li>
+<li>check again <code>git l</code></li>
+<li><code>git push</code></li>
+</ol>
+
+<p><strong>After checkin, PCL failed</strong></p>
+
+<ol>
+<li>Due to other irrelevant cause</li>
+<li>The committed version got automatically reverted</li>
+<li><code>git checkout master</code></li>
+<li><code>mint update</code></li>
+<li><code>git checkout ygdev</code></li>
+<li><code>git rebase master</code></li>
+<li><code>git cherry-pick &lt;SHA&gt;</code></li>
+<li><code>git commit --amend</code></li>
+<li>Add the reason into the commit message: <em>resubmit due to irrelevant PCL failure</em></li>
+<li><code>git push upstream ygdev</code></li>
+<li><code>git checkout master</code></li>
+<li><code>git rebase ygdev</code></li>
+<li><code>git push upstream master</code></li>
+<li><code>git push</code></li>
+</ol>
+
+<p><a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/git+primer%3A+basic+LI+workflow">A good internal summary git post</a></p>
 
 <hr/>
 
@@ -366,21 +455,13 @@ git stash pop
 <a href="#toc_12">Github page</a>
 </li>
 <li>
-<a href="#toc_13">Git/Mint workflow @ In</a>
-<ul>
-<li>
-<a href="#toc_14">Rebase</a>
+<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Squash local commits</a>
+<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
 </li>
 <li>
-<a href="#toc_16">Personal branches</a>
-</li>
-<li>
-<a href="#toc_17">From BeeChung set multiple upstreams</a>
-</li>
-</ul>
+<a href="#toc_15">Git/Mint workflow @ In</a>
 </li>
 </ul>
 
@@ -402,8 +483,8 @@ git stash pop
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14979138208242.html" 
-          title="Next Post: gradle">gradle &raquo;</a>
+          <a  href="14742423250557.html" 
+          title="Next Post: github Page, Hexo, MWeb, GoDaddy setting">github Page, Hexo, MWeb, GoDaddy setting &raquo;</a>
       
       </p>
         </div>
@@ -501,19 +582,7 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14858223421956.html">Machine Learning</a>
+			        <a href="14770727250961.html">advanced Analytics with Spark Reading Notes</a>
 			      </li>
 		     
 		  
@@ -526,6 +595,18 @@ var disqus_config = function () {
 		      
 			      <li class="post">
 			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250523.html">bayesian statistics</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
