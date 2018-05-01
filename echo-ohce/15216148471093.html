@@ -1,0 +1,654 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    
+  Finite State - Echo-ohcE
+  
+  </title>
+  
+  
+  <link href="atom.xml" rel="alternate" title="Echo-ohcE" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+  function before_search(){
+    var searchVal = 'site:www.echo-ohce.com ' + document.getElementById('search_input').value;
+    document.getElementById('search_q').value = searchVal;
+    return true;
+  }
+</script>
+  </head>
+  <body class="antialiased hide-extras">
+    
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+
+
+  <section class="top-bar-section">
+  <div class="row">
+      <div style="position: relative;width:100%;"><div style="position: absolute; width:100%;">
+        <ul id="main-menu" class="left">
+        
+        <li id=""><a target="self" href="index.html">Home</a></li>
+        
+        <li id=""><a target="_self" href="archives.html">Archives</a></li>
+        
+        </ul>
+
+        <ul class="right" id="search-wrap">
+          <li>
+<form target="_blank" onsubmit="return before_search();" action="http://google.com/search" method="get">
+    <input type="hidden" id="search_q" name="q" value="" />
+    <input tabindex="1" type="search" id="search_input"  placeholder="Search"/>
+</form>
+</li>
+          </ul>
+      </div></div>
+  </div>
+  </section>
+
+</nav>
+
+        <nav class="tab-bar show-for-small">
+  <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+    <span> &nbsp; Echo-ohcE</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+      <ul class="off-canvas-list">
+       
+       <li><a href="index.html">HOME</a></li>
+    <li><a href="archives.html">Archives</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+
+    <li><label>Categories</label></li>
+
+        
+            <li><a href="tips.html">tips</a></li>
+        
+            <li><a href="documentation.html">documentation</a></li>
+        
+            <li><a href="expired.html">expired</a></li>
+        
+            <li><a href="stock.html">stock</a></li>
+        
+            <li><a href="theory.html">theory</a></li>
+         
+
+      </ul>
+    </aside>
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section id="main-content" role="main" class="scroll-container">
+        
+       
+
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>Finite State</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2018/3/20</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='theory.html'>theory</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>For Finite State Automata and Finite State Transducer and their application in NLP</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">FSA</a>
+<ul>
+<li>
+<a href="#toc_1">Motivation, Why Automata?</a>
+</li>
+<li>
+<a href="#toc_2">Theory — Finite State Automata and You!</a>
+</li>
+<li>
+<a href="#toc_3">In Practice — An Automaton as a data structure</a>
+</li>
+<li>
+<a href="#toc_4">Teh Codez — Building an Automaton</a>
+</li>
+<li>
+<a href="#toc_5">Automaton Creation Considerations</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_6">Finite-State-Transducers</a>
+<ul>
+<li>
+<a href="#toc_7">Quick Primer on Finite State Machines</a>
+</li>
+<li>
+<a href="#toc_8">FSMs for Language Processing</a>
+</li>
+<li>
+<a href="#toc_9">Finite State Transducers</a>
+</li>
+<li>
+<a href="#toc_10">Converting Rules to FSTs</a>
+</li>
+<li>
+<a href="#toc_11">Extending the FSTs</a>
+</li>
+<li>
+<a href="#toc_12">Composing a single FST</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">Using Finite State Transducers in Lucene</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">FSA</h1>
+
+<p><a href="https://opensourceconnections.com/blog/2013/02/21/lucene-4-finite-state-automaton-in-10-minutes-intro-tutorial/">This article</a> is intended to help you bootstrap your ability to work with Finite State Automata (note automata == plural of automaton). Automata are a unique data structure, requiring a bit of theory to process and understand. Hopefully what’s below can give you a foundation for playing with these fun and useful Lucene data structures!</p>
+
+<h2 id="toc_1">Motivation, Why Automata?</h2>
+
+<p>When working in search, a big part of the job is making sense of loosely-structured text. For example, suppose we have a list of about 1000 valid first names and 100,000 last names. Before ingesting data into a search application, we need to extract first and last names from free-form text.</p>
+
+<p>Unfortunately the data sometimes has full names in the format “LastName, FirstName” like “Turnbull, Doug”. In other places, however, full names are listed “FirstName LastName” like “Doug Turnbull”. Add a few extra representations, and to make sense out of what strings represent valid names becomes a chore.</p>
+
+<p>This becomes especially troublesome when we’re depending on these as natural identifiers for looking up or joining across multiple data sets. Each data set might textually represent the natural identifier in subtly different ways. We want to capture the representations across multiple data sets to ensure our join works properly.</p>
+
+<p>So… Whats a text jockey to do when faced with such annoying inconsistencies?</p>
+
+<p>You might initially think “regular expression”. Sadly, a normal regular expression can’t help in this case. Just trying to write a regular expression that allows a controlled vocabulary of 100k valid last names but nothing else is non-trivial. Not to mention the task of actually using such a regular expression.</p>
+
+<p>But there is one tool that looks promising for solving this problem. Lucene 4.0’s new Automaton API. Lets explore what this API has to offer by first reminding ourselves about a bit of CS theory.</p>
+
+<h2 id="toc_2">Theory — Finite State Automata and You!</h2>
+
+<p>Lucene’s Automaton API provides a way to create and use Finite State Automata(FSAs). For those who don’t remember their senior level computer science, FSA is a computational model whereby input symbols are read by the computer — the automaton — to drive a state machine. The state machine is simply a graph with nodes and labeled, directed edges. Each node in the graph is a state, and each edge is a transition labeled with a potential input symbol. By matching the current node’s edges to the current input symbol, the automaton follows edges to the next state. The next input symbol is read, and based on the transitions of the new state, we transition to yet another state, so-on and so-forth.</p>
+
+<p>More importantly here, FSA’s are a way of specifying a Regular Language. If we think of all the input symbols as elements of a language, we can use an FSA to specify a language and determine if a given input string is valid for the language. We do this by processing the input string, following the transitions of an FSA until we reach a terminus node. If we exhaust the input symbols at such a node, then the string of symbols can be said to match the language. Otherwise, we can say the input string does not match the language.</p>
+
+<p>So for example, in the figure below. The string “nice” that is the sequence of symbols “n”, “i”, “c”, “e” are accepted as a member of the language. All other strings are rejected:</p>
+
+<p><img src="media/15216148471093/15216152173144.jpg" alt=""/><br/>
+<em>An FSA specifying a language that accepts the word &quot;nice&quot;</em></p>
+
+<p>A regular language could be just a set of valid strings. Or, it could be something a bit fuzzier like a Levenshtein distance or regular expression which as it turns out can be represented in a regular language. But even more powerfully, it can be a concatenation, union, or intersection of all of these.</p>
+
+<h2 id="toc_3">In Practice — An Automaton as a data structure</h2>
+
+<p>In practice, Lucene automata are useful as as a data structure that bridges between a traditional Set&lt;&gt; and hand-written regular expression. When compared to a HashSet or TreeSet the memory representation (can be) much, much smaller, with very fast lookups. Moreover, Automata give you fuzzier features like regular expression matching.</p>
+
+<p>Its not a general purpose set replacement, however. For an automaton, the set is all the strings of symbols that match the language. However, due to all the fuzzy matching potentially using “regular expressions” enumerating all the input strings that match the language, that is enumerating the members of the set, is non-trivial and might never terminate. Think about it this way, traversal involves manually traversing a graph, so every node, whether a terminus or not, must be visited. This traversal might never terminate because you could have a * regular expression. So enumerating the strings that match the language will involve infinitely repeating the pattern before the *.</p>
+
+<p>Another factor to consider is that while lookup time and memory usage are much, much smaller when compared to a Set&lt;&gt;, indexing can be very time consuming. For the use case of creating an automaton up front to specify a relatively static language once this isn’t a big deal. But for data structures that change frequently, automatons shouldn’t be the first choice.</p>
+
+<p>When compared to a regular expression, the Automaton lends itself to being able to hold more complex regular languages than the ones you could specify in a traditional regular expression. For example, it would be difficult to specify a regular expression that had 500,000 potential first names followed by 1,000 last names unioned with 1,000 last names, a comma, followed by one of 500,000 first names. That’s Perl that’s not even write only. Automaton’s give you the ability to effectively write an extremely rich and large a “regular expression” in readable code in a way that won’t make generating/parsing such a regular expression a giant chore.</p>
+
+<p>Next, lets see how we actually build a useful automaton</p>
+
+<h2 id="toc_4">Teh Codez — Building an Automaton</h2>
+
+<p>(Note all code below can be found at <a href="https://github.com/o19s/lucene_automata_tutorial">this</a> github repo)</p>
+
+<p>To show off the API, lets take the example we discussed at the outset. Lets say our language allows two forms of full names “FirstName LastName” and “LastName, FirstName”. For simplicity, lets validate only a set of names. First Names: {&quot;Doug&quot;, &quot;John&quot;} and last names {&quot;Berryman&quot;, &quot;Turnbull&quot;}. So in our world all the valid names are “Doug Berryman”, “Doug Turnbull”, “John Berryman”, and “John Turnbull”. Forms where last name comes first followed by a comma, followed by the first name (ie “Turnbull, Doug”) are also considered valid.</p>
+
+<p>So how do we use the Lucene API to build at Automaton to validate this syntax?</p>
+
+<p>There are two key classes that you’ll use over-and-over for building meaningful automata. First the BasicAutomata class provides static methods for constructing automata out of simple building blocks (in our case individual strings). Second the BasicOperations class provides utility methods for combining Automata into unions, intersections, or concatenations of other automata.</p>
+
+<p>Outside of these two central classes, we can also fold in additional automata from other classes. For example, regular expressions via the RegExp class.</p>
+
+<p>Ok, now lets actually start putting together some code. Lets first look at the form “FirstName LastName”. We want to specify a language that takes any of our first names {“John”, “Doug”}, followed by some number of whitespace characters, then followed by any of our last names {“Turnbull”, “Berryman”}.</p>
+
+<p>Our first piece of code forms the foundation for all of our other automata. One of the basic automata we need to build is simply one built from a set of valid strings. For example, an automaton for last names that says “Turnbull” is valid, “Berryman” is valid, but “Pugh” is not.</p>
+
+<p>As this task is going to be a pretty common, occurrence, we’ll be using this utility function that builds an automaton for accepting only the values from the passed in String array:</p>
+
+<pre><code class="language-java">/**
+ * @param strs
+ *   All the strings that we want to allow in the returned language
+ * @return
+ *   An automaton that allows only the passed in strings
+ */
+public static Automaton stringUnionAutomaton(String[] strs) {
+    Automaton strUnion = null;
+    // Simply loop through the strings and place them in the automaton
+    for (String str: strs) {
+        // Basic building block, make an automaton that accepts a singl
+        // string
+        Automaton currStrAutomaton = BasicAutomata.makeString(str);
+        if (strUnion == null) {
+            strUnion = currStrAutomaton;
+        }
+        else {
+            // Combine the current string with the Automata for the
+            // previous string, saying that this new string is also valid
+            strUnion = BasicOperations.union(strUnion, currStrAutomaton);
+        }
+    }
+    return strUnion;
+}
+</code></pre>
+
+<p>Notice how on every iteration, we create an automaton for the current string. The first iteration initializes the resulting automaton(strUnion) to the current string’s automata (currStrAutomaton&#39;). On subsequent iterations, we set the resultingstrUnionto the union ofcurrStrAutomatonand itself. Finally returningstrUnion` as the union of all the strings passed in.</p>
+
+<p>With this building block, we can build up a more complex Automaton for our FirstName LastName form:</p>
+
+<pre><code class="language-java">/**
+ * @param firstNames
+ *   Set of allowable first names
+ * @param lastNames
+ *   Set of allowable last names
+ * @return
+ *   An automaton that allows FirstName\s+LastName
+ */
+public static Automaton createFirstBeforeLastAutomaton(String[] firstNames, String[] lastNames) {
+    List&lt;Automaton&gt; allAutomatons = new ArrayList&lt;Automaton&gt;();
+    // Use our builder to create an automaton that allows all the first names
+    allAutomatons.add(stringUnionAutomaton(firstNames));
+
+    // Add in an Automaton that allows any whitespace by using
+    // the regular expression
+    RegExp anyNumberOfSpaces = new RegExp(&quot;[ \t]+&quot;);
+    Automaton anySpaces = anyNumberOfSpaces.toAutomaton();
+    allAutomatons.add(anySpaces);
+
+    // Add in an Automaton that allows all our last names
+    allAutomatons.add(stringUnionAutomaton(lastNames));
+
+    // Return the concatenation off all these automatons
+    return BasicOperations.concatenate(allAutomatons);
+}
+</code></pre>
+
+<p>In this code, we’re building three automata and returning the concatenation of all three. So to be a member of the concatenated automaton’s language, if a string passes the first automaton, then with additional characters passes the second automaton, and finally as characters are exhausted finishes the last automaton, we’ll consider this a valid member of this language.</p>
+
+<p>Note the use of the RegExp class. This class supports basic regular-expression matching and allows us to match one-or-more tabs or spaces in the input.</p>
+
+<p>The LastName, FirstName form is similar:</p>
+
+<pre><code class="language-java">public static Automaton createLastBeforeFirstAutomaton(String[] firstNames, String[] lastNames) {
+    List&lt;Automaton&gt; allAutomatons = new ArrayList&lt;Automaton&gt;();
+    allAutomatons.add(stringUnionAutomaton(lastNames));
+
+    RegExp commaPlusAnyNumberOfSpaces = new RegExp(&quot;,[ \t]+&quot;);
+    allAutomatons.add(commaPlusAnyNumberOfSpaces.toAutomaton());
+    allAutomatons.add(stringUnionAutomaton(firstNames));
+    return BasicOperations.concatenate(allAutomatons);
+}
+</code></pre>
+
+<p>The only difference here is we’re validating last names before first and our regex separator now has a comma. Otherwise, this is very similar to the other form.</p>
+
+<p>To finish things off, we simply have to create an automata that takes the union of both forms, allowing strings of either language to be valid in the resulting language:</p>
+
+<pre><code class="language-java">public static Automaton createNameValidator(String[] firstNames,
+                                            String[] lastNames) {
+    return BasicOperations.union(createFirstBeforeLastAutomaton(firstNames, lastNames),
+                                 createLastBeforeFirstAutomaton(firstNames, lastNames));
+}
+</code></pre>
+
+<p>Woohoo! You should be ready to go! Just keep in mind one or two things when building more complex automata:</p>
+
+<h2 id="toc_5">Automaton Creation Considerations</h2>
+
+<p>One of the things that makes the Automaton special is the potential minimal in-memory representation of the data structure. This gives you powerful lookup capabilities against a complex language with a large vocabulary, but noticeably increases index time when compared to a traditional data structure.</p>
+
+<p>To ensure the minimal representation of an Automaton, its important to note that Lucene may not be always keeping the most optimal representation of the data structure in memory. Without minimizing, you could have problems with lookup speed and will certainly have problems exhausting the jvm heap.</p>
+
+<p>For example, if we said that “Ed” and “Eddy” are valid strings in our language, we might initially have something like:</p>
+
+<pre><code>         []---E---&gt;[]---d---[*]
+          \
+           ---E---&gt;[]---d---[]---d---[]---y---[*]
+</code></pre>
+
+<p>Add this up over time, and we end up with a horrendous looking graph that leaves you wondering why anyone would ever bother using Automata!</p>
+
+<p>Part of the secret sauce to Lucene’s Automaton’s is minimizations. Instead of representing the graph as a gnarly web of duplicated gobbly, gook, we can perform the minimization operation on the graph above to be simply:</p>
+
+<pre><code>         []---E---&gt;[]---d---[*]
+                        \
+                         d---[]---y---[*]
+</code></pre>
+
+<p>By periodically calling Automata.minimize you can reduce the memory footprint of your automaton.</p>
+
+<p>You can track roughly how big your automaton is getting with Automata.getNumberOfStates() and Automata.getNumberOfTransitions. Its generally a good idea to keep an eye on the size of your automaton and deal with any bloat that occurs during indexing.</p>
+
+<h1 id="toc_6">Finite-State-Transducers</h1>
+
+<p><a href="http://infolocata.com/mirovia/finite-state-transducers-for-natural-language-processing/">Finite State Transducers</a> provide a method for performing mathematical operations on ordered collections of context-sensitive rewrite rules such as those commonly used to implement fundamental natural language processing tasks. Multiple rules may be composed into a single pass, mega rule, significantly increasing the efficiency of rule-based systems.</p>
+
+<h2 id="toc_7">Quick Primer on Finite State Machines</h2>
+
+<p>A finite-state machine (FSM) or automata is an abstract mathematical model of computation that is capable of storing a status or state and changing this state based on input. While not as powerful as other computational models such as Turing machines due to their limited memory, FSMs are applicable to a number of electronic modeling, engineering, and language processing problems. An FSM can be represented as a set of nodes representing the various states of the system and labeled edges between these nodes where the edges represent transitions from one state to another and the labels represent conditions on these transitions. A stream of input (an input tape containing a string) is then ‘processed’ by the FSM, potentially causing a number of state transitions. The simple FSM example below is a remarkably accurate computational model for a ferret:</p>
+
+<p><img src="media/15216148471093/15216155212383.jpg" alt=""/></p>
+
+<p>The daily behavior of my ferret, Pangur Bán, would best be represented by an input tape containing the string, ‘tired,tired,tired,tired,hungry,tired,tired,tired,bored,tired,tired,tired’:</p>
+
+<h2 id="toc_8">FSMs for Language Processing</h2>
+
+<p>In language processing, an FSM containing a start state (node) and an end state can be used to generate or recognize a language defined by all possible combinations of symbols (conditional labels) on each of the edges generated by traversing the FSM from the start state to the end state. The class of languages generated by finite automata is known as the class of regular languages.</p>
+
+<h2 id="toc_9">Finite State Transducers</h2>
+
+<p>A finite state transducer (FST) is a special type of finite state machine. Specifically, an FST has two tapes, an input string and an output string. Rather than just traversing (and accepting or rejecting) an input string, an FST translates the contents of its input string to its output string. Or put another way, it accepts a string on its input tape and generates another string on its output tape.</p>
+
+<p>Context-Sensitive Rules<br/>
+FSTs are particularly useful in the implementation of certain natural language processing tasks. Context-sensitive rewriting rules (ex: ax → bx) are adequate for implementing certain computational linguistic tasks such as morphological stemming and part-of-speech tagging. Such rewrite rules are also computationally equivalent to finite-state transducers, providing a unique path for optimizing rule based systems.</p>
+
+<p>Take, for example, the following set of ordered context-sensitive rules:</p>
+
+<p>1)  change ‘c’ to ‘b’ if followed by ‘x’       cx → bx<br/>
+2)  change ‘a’ to ‘b’ if preceded by ‘rs’      rsa → rsb<br/>
+3)  change ‘b’ to ‘a’ if preceded by ‘rs’ and followed by ‘xy’     rsbxy → rsaxy<br/>
+Given the following string on the input tape:</p>
+
+<p>rsaxyrscxy</p>
+
+<p>the application of the given rule set would proceed as follows:</p>
+
+<p>1) rsaxyrscxy → rsaxyrsbxy<br/>
+2) rsaxyrsbxy → rsbxyrsbxy<br/>
+3) rsbxyrsbxy → rsaxyrsaxy</p>
+
+<p>The time required to apply a sequence of context-sensitive rules is dependent upon the number of rules, the size of the context window, and the number of characters in the input string. The inefficiencies  in such an implementation are highlighted in this example by the multi-step transformation required to translate ‘c‘ to ‘b‘ then ‘b‘ to ‘a‘ by rules 1 and 3, and the redundant transformation of ‘a‘ to ‘b‘ and back to ‘a‘ by rules 2 and 3. Finite State Transducers provide a path to eliminate these inefficiencies. But first we need to convert the rules to State Machines.</p>
+
+<h2 id="toc_10">Converting Rules to FSTs</h2>
+
+<p>To do this, we simple represent each rule as an FST where each link between states represent the acceptance of an input character and the expression of the corresponding output character. This input / output combination is denoted within an FST by labeling edges with both the input and output character separated by the ‘/’ character. Following is an FST for each of the above rules:<br/>
+<img src="media/15216148471093/15216155691636.jpg" alt=""/></p>
+
+<h2 id="toc_11">Extending the FSTs</h2>
+
+<p>While the FSTs above represent our set of context-sensitive rules, they would be of little use in matching against an input string as each is designed to process exactly the context widow described in its corresponding rule. To make each FST applicable to a string of arbitrary length and perform the necessary translation each time the rule is fired, we will need to extend each of the Transducers. We do this by allowing for every possible input in our language at each state. For example, rule 1 must be able to handle the string rsaxyrscxy. Since rule 1 matches the string ‘cx‘ and outputs the string ‘bx‘, it must handle the characters ‘r‘, ‘s‘, ‘a‘, ‘x‘, ‘y‘, ‘r‘, and ‘s‘ before finally encountering ‘c‘ and ‘x‘. Then it must handle the final ‘y‘ character. Each of these characters (and all other possible characters) could be explicitly listed on its own individual edge, but to simplify, we can create a single edge labeled with ‘?/?‘, to match and output any character not already represented on another edge leading from that state. FST extension of rules with a trailing context will also require the use of edges with an input but no output (labeled with ‘ε‘ for output) and edges with multiple outputs. Following is the extension for each of the above FSTs:<br/>
+<img src="media/15216148471093/15216156059817.jpg" alt=""/></p>
+
+<h2 id="toc_12">Composing a single FST</h2>
+
+<p>One of the operations that can be performed on a pair of FSTs is composition. The composition operation will take two deterministic FSTs, A and B, and combine their nodes and edges into a single deterministic FST. The resulting Transducer will accept an input string of arbitrary length and output the equivalent of applying Transducer A followed by Transducer B. A full explanation of the FST composition algorithm is beyond the scope of this write-up. Following is the FST resulting from the composition of FSTs 1 and 2 followed by the composition of the resulting FST and FST 3:<br/>
+<img src="media/15216148471093/15216156228351.jpg" alt=""/></p>
+
+<p>Note that while the output of applying the final FST to the input string ‘rsaxyrscxy’ is exactly equivalent to the output of applying each of the individual context-sensitive rules (‘rsaxyrsaxy‘), the transformation required only a single pass through the FST and did not result in any inefficient transformations. While the time required to apply the original rules was dependent upon the number of rules, the size of the context window, and the number of characters on the input tape, application time of the final FST is dependent only upon the number of characters on the input tape.</p>
+
+<h1 id="toc_13">Using Finite State Transducers in Lucene</h1>
+
+<p><a href="http://blog.mikemccandless.com/2010/12/using-finite-state-transducers-in.html">FSTs</a> are finite-state machines that map a term (byte sequence) to an arbitrary output. They also look cool:<br/>
+<img src="media/15216148471093/15216158111078.jpg" alt=""/><br/>
+That FST maps the sorted words mop, moth, pop, star, stop and top to their ordinal number (0, 1, 2, ...). As you traverse the arcs, you sum up the outputs, so stop hits 3 on the s and 1 on the o, so its output ordinal is 4. The outputs can be arbitrary numbers or byte sequences, or combinations, etc. -- it&#39;s pluggable.</p>
+
+<p>Essentially, an FST is a SortedMap<ByteSequence,SomeOutput>, if the arcs are in sorted order. With the right representation, it requires far less RAM than other SortedMap implementations, but has a higher CPU cost during lookup. The low memory footprint is vital for Lucene since an index can easily have many millions (sometimes, billions!) of unique terms.</p>
+
+<p>There&#39;s a great deal of theory behind FSTs. They generally support the same operations as FSMs (determinize, minimize, union, intersect, etc.). You can also compose them, where the outputs of one FST are intersected with the inputs of the next, resulting in a new FST.</p>
+
+<p>There are some nice general-purpose FST toolkits (OpenFst looks great) that support all these operations, but for Lucene I decided to implement this neat algorithm which incrementally builds up the minimal unweighted FST from pre-sorted inputs. This is a perfect fit for Lucene since we already store all our terms in sorted (unicode) order.</p>
+
+<p>The resulting implementation (currently a patch on LUCENE-2792) is fast and memory efficient: it builds the 9.8 million terms in a 10 million Wikipedia index in ~8 seconds (on a fast computer), requiring less than 256 MB heap. The resulting FST is 69 MB. It can also build a prefix trie, pruning by how many terms come through each node, with even less memory.</p>
+
+<p>Note that because addition is commutative, an FST with numeric outputs is not guaranteed to be minimal in my implementation; perhaps if I could generalize the algorithm to a weighted FST instead, which also stores a weight on each arc, that would yield the minimal FST. But I don&#39;t expect this will be a problem in practice for Lucene.</p>
+
+<p>In the patch I modified the SimpleText codec, which was loading all terms into a TreeMap mapping the BytesRef term to an int docFreq and long filePointer, to use an FST instead, and all tests pass!</p>
+
+<p>There are lots of other potential places in Lucene where we could use FSTs, since we often need map the index terms to &quot;something&quot;. For example, the terms index maps to a long file position; the field cache maps to ordinals; the terms dictionary maps to codec-specific metadata, etc. We also have multi-term queries (eg Prefix, Wildcard, Fuzzy, Regexp) that need to test a large number of terms, that could work directly via intersection with the FST instead (many apps could easily fit their entire terms dict in RAM as an FST since the format is so compact). The FST could be used for a key/value store. Lots of fun things to try!</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="14770727250961.html" 
+          title="Next Post: advanced Analytics with Spark Reading Notes">advanced Analytics with Spark Reading Notes &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//echo-ohce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <h1>Echo-ohcE</h1>
+                <div class="site-des">Code For Big Data</div>
+                <div class="social">
+
+
+
+
+
+
+
+
+
+
+
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="tips.html"><strong>tips</strong></a>
+        
+            <a href="documentation.html"><strong>documentation</strong></a>
+        
+            <a href="expired.html"><strong>expired</strong></a>
+        
+            <a href="stock.html"><strong>stock</strong></a>
+        
+            <a href="theory.html"><strong>theory</strong></a>
+         
+        </p>
+
+
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="15216148471093.html">Finite State</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14770727250961.html">advanced Analytics with Spark Reading Notes</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14836486252242.html">aws</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250523.html">bayesian statistics</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+    <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+
+  </body>
+</html>

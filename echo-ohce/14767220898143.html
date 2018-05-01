@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  ssh @ In - Echo-ohcE
+  scala - Echo-ohcE
   
   </title>
   
@@ -107,10 +107,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>ssh @ In</h1>
+          <h1>scala</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2017/7/3</span>
+          <span class="date">2016/10/17</span>
 
           <span>posted in&nbsp;</span> 
           
@@ -127,62 +127,243 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
+      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.  </p>
 
 <span id="more"></span><!-- more -->
 
-<h1 id="toc_0">Set the <code>ssh</code> from MacBook to linux desktop</h1>
-
 <ul>
-<li><code>seas</code> MP must be build on Linux box, so we have to able to ssh to desktop</li>
-<li>Enable desktop ssh Server <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-ssh-configuration-sshd.html">Reference</a>:
-
-<ul>
-<li>start <code>sshd</code> from command line: <code>service sshd start</code></li>
-<li>start daemon automatically: <code>chkconfig sshd on</code></li>
-</ul></li>
-<li><p>Set the public and private key pairs</p>
-
-<ul>
-<li><code>scp</code> the <code>ygan_at_linkedin.com_ssh_key.pub</code>(public) from MacBook to Linux box and save it @ <code>~/.ssh/authorized_keys</code>, change mode to <code>600</code> <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-ssh-configuration-keypairs.html">reference</a></li>
-<li><p>The following are for avoiding enter passphrase every time</p>
-
-<ul>
-<li>Set the following lines in <code>.bash_profile</code> on both the MacBook and the linux box <a href="https://iwww.corp.linkedin.com/wiki/cf/pages/viewpage.action?pageId=683">reference</a></li>
+<li>
+<a href="#toc_0">Convert between regular collection and parallel collection</a>
+</li>
+<li>
+<a href="#toc_1">function / method handler</a>
+</li>
+<li>
+<a href="#toc_2">Get the type of variable in REPL</a>
+</li>
+<li>
+<a href="#toc_3">Span method</a>
+</li>
+<li>
+<a href="#toc_4">flatMap and Option</a>
+</li>
+<li>
+<a href="#toc_5">Patter Matching with default</a>
+</li>
+<li>
+<a href="#toc_6">Pattern matching in array assignment, variable name must start with lower case letter</a>
+</li>
+<li>
+<a href="#toc_7">read and write to file</a>
+</li>
+<li>
+<a href="#toc_8">string formatter</a>
+</li>
+<li>
+<a href="#toc_9">regex option</a>
+</li>
 </ul>
 
-<pre><code class="language-bash">if [ -x /usr/bin/keychain ] ; then
-  MYNAME=`/usr/bin/whoami`
-  if [ -f ~/.ssh/${MYNAME}_at_linkedin.com_ssh_key ] ; then
-        /usr/bin/keychain ~/.ssh/${MYNAME}_at_linkedin.com_ssh_key
-              . ~/.keychain/`hostname`-sh
-  fi
-fi
+
+<hr/>
+
+<h1 id="toc_0">Convert between regular collection and parallel collection</h1>
+
+<p>Using Seq as example. Use <code>.par</code> to convert from regular to parallel, and use <code>.seq</code> to convert back from parallel to regular.</p>
+
+<p>Special note that <code>.toSeq</code>, <code>toMap</code> or <code>toSet</code> are converting between various collection but stay in the same parallel or regular domain.</p>
+
+<p><a href="http://stackoverflow.com/a/12023096/4229125">stackoverflow post</a></p>
+
+<h1 id="toc_1">function / method handler</h1>
+
+<p>look at the following example:</p>
+
+<pre><code class="language-scala">val test = Array(&quot;1.0&quot;, &quot;2.5&quot;, &quot;3.14159&quot;)
+
+//Wrong
+test map toDouble
+// Because this is wrong
+toDouble(test(2))
+//correct
+test map (_.toDouble)
+// Because this is correct
+test(2).toDouble
+
+//Wrong
+test map parseDouble
+//correct
+test map java.lang.Double.parseDouble
+// Because this is correct
+java.lang.Double.parseDouble(test(2))
 </code></pre>
 
+<h1 id="toc_2">Get the type of variable in REPL</h1>
+
+<p><code>variableName.getClass.getSimpleName</code></p>
+
+<h1 id="toc_3">Span method</h1>
+
+<p><a href="https://www.garysieling.com/blog/scala-span-example">A good post</a><br/>
+The span method lets you split a stream into two parts, by providing a function that detects the dividing line where you want the split to occur. What this doesn’t let you do is to sift through the stream and move each record into the a or b side – you can’t use this to separate even and odd numbers, for instance.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-scala">var (a, b) = Stream.from(1).span(_ &lt; 10)
+a: scala.collection.immutable.Stream[Int] = Stream(1, ?)
+b: scala.collection.immutable.Stream[Int] = Stream(10, ?)
+</code></pre>
+
+<p>From this, it appears that it has actually run through 10 elements immediately, not waiting until you actually need one.</p>
+
+<p>We can see it returns what we’d expect:</p>
+
+<pre><code class="language-scala">scala&gt; a.take(10).toList
+res26: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+scala&gt; b.take(10).toList
+res27: List[Int] = List(10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
+</code></pre>
+
+<p>To show that the even/odd filtering doesn’t work, see the example below. Since the first element is “1” (odd) it automatically goes to the “b” side, and you get an empty list for “a”.</p>
+
+<pre><code class="language-scala">scala&gt; var (a, b) = Stream.from(1).span(_ % 2 == 0)
+a: scala.collection.immutable.Stream[Int] = Stream()
+b: scala.collection.immutable.Stream[Int] = Stream(1, ?)
+</code></pre>
+
+<h1 id="toc_4">flatMap and Option</h1>
+
+<p><code>flatMap</code> on <code>Seq[Option]</code> effectively filter out the <code>None</code>s.<br/>
+The keypoint of understanding Option is consider it as a Collection with 1 or 0 element. When using the <code>flatMap</code> it explode the inner collection and put all elements from the inner collection into the one big outer collection.</p>
+
+<p><a href="http://danielwestheide.com/blog/2012/12/19/the-neophytes-guide-to-scala-part-5-the-option-type.html">A good reference post</a></p>
+
+<h1 id="toc_5">Patter Matching with default</h1>
+
+<pre><code class="language-scala">something match {
+    case &quot;val&quot; =&gt; &quot;default&quot;
+    case default =&gt; somefunction(default)
+}
+</code></pre>
+
+<p>It is not a keyword, just an alias, so this will work as well:</p>
+
+<pre><code class="language-scala">something match {
+    case &quot;val&quot; =&gt; &quot;default&quot;
+    case everythingElse =&gt; somefunction(everythingElse)
+}
+</code></pre>
+
+<p>Or using <code>_</code></p>
+
+<pre><code class="language-scala">something match {
+    case &quot;val&quot; =&gt; &quot;default&quot;
+    case _ =&gt; doSomething()
+}
+</code></pre>
+
+<h1 id="toc_6">Pattern matching in array assignment, variable name must start with lower case letter</h1>
+
+<p><a href="http://stackoverflow.com/a/8204231/4229125">stackoverflow post</a></p>
+
+<p>If the variable name starts with capital letter, Scala treat it as a Constant</p>
+
+<p>Wrong:</p>
+
+<pre><code class="language-scala">val Array(trainData, CVData) = cleanedUserArtistData.randomSplit(Array(0.9, 0.1))
+</code></pre>
+
+<p>Correct:</p>
+
+<pre><code class="language-scala">val Array(trainData, cvData) = cleanedUserArtistData.randomSplit(Array(0.9, 0.1))
+</code></pre>
+
+<h1 id="toc_7">read and write to file</h1>
+
+<p>Scala doesn’t offer any special file writing capability, so fall back and use the Java <code>PrintWriter</code> or <code>FileWriter</code> approaches</p>
+
+<pre><code class="language-scala">// PrintWriter
+import java.io._
+val pw = new PrintWriter(new File(&quot;hello.txt&quot; ))
+pw.write(&quot;Hello, world&quot;)
+pw.close
+
+// FileWriter
+val file = new File(canonicalFilename)
+val bw = new BufferedWriter(new FileWriter(file))
+bw.write(text)
+bw.close()
+</code></pre>
+
+<p><a href="https://www.safaribooksonline.com/library/view/scala-cookbook/9781449340292/ch12s03.html">reference</a></p>
+
+<p>Read in utilities can be found in package <code>scala.io.Source</code> (<a href="http://www.scala-lang.org/api/current/scala/io/Source.html">both the class and its companion object</a></p>
+
+<h1 id="toc_8">string formatter</h1>
+
+<p><a href="http://docs.scala-lang.org/overviews/core/string-interpolation.html">reference here</a></p>
+
+<p>This is very useful feature, make the mixing of string and variables much easier, and also handling the escape characters well.</p>
+
 <ul>
-<li>Every session (Maybe every reboot?) add the identity to the ssh-agent:</li>
+<li><code>s</code></li>
+<li><code>f</code></li>
+<li><code>raw</code></li>
 </ul>
 
-<pre><code class="language-bash"># starting the ssh-agent
-eval $(ssh-agent) 
+<h1 id="toc_9">regex option</h1>
 
-# add the private key to ssh-agent. Will be asked for passphrase once for all.
-ssh-add ~/.ssh/ygan_at_linkedin.com_ssh_key
-</code></pre></li>
-</ul></li>
-</ul>
+<p><code>i</code> - case insensitive<br/>
+<code>d</code> - only unix lines are recognized as end of line<br/>
+<code>m</code> - enable multiline mode<br/>
+<code>s</code> - <code>.</code> matches any characters including line end<br/>
+<code>u</code> - Enables Unicode-aware case folding<br/>
+<code>x</code> - Permits whitespace and comments in pattern</p>
 
-<h1 id="toc_1">The final solution for vnc (remote desktop)</h1>
+<p>The way of specifying it like follow:<br/>
+<code>&quot;&quot;&quot;(?i)the \w+?(?=\W)&quot;&quot;&quot;.r</code><br/>
+The <code>&quot;&quot;&quot;</code> means raw string. No need to double the <code>\</code><br/>
+and the <code>(?i)</code> at the beginning gives the option of case insensitive</p>
+
+<p><a href="http://daily-scala.blogspot.com/2010/01/regular-expression-2-rest-regex-class.html">reference here</a><br/>
+<a href="http://www.scala-lang.org/api/rc2/scala/util/matching/Regex.html">official document</a></p>
+
+<hr/>
 
 <ul>
-<li>Mac use system default app <code>screen sharing</code></li>
-<li>Linux (redhat 6) installed:<code>sudo yum install tigervnc-server</code></li>
-<li>(maybe optional) Disabled all firewall on Linux <code>sudo service iptables stop</code></li>
-<li>I setup a separate user #2. Every time after system reboot need run this on Linux: <code>vncserver :2</code></li>
-<li>The connection on Mac is <code>ygan-ld1.linkedin.biz:5902</code></li>
-<li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/chap-TigerVNC.html">Official Reference</a></li>
+<li>
+<a href="#toc_0">Convert between regular collection and parallel collection</a>
+</li>
+<li>
+<a href="#toc_1">function / method handler</a>
+</li>
+<li>
+<a href="#toc_2">Get the type of variable in REPL</a>
+</li>
+<li>
+<a href="#toc_3">Span method</a>
+</li>
+<li>
+<a href="#toc_4">flatMap and Option</a>
+</li>
+<li>
+<a href="#toc_5">Patter Matching with default</a>
+</li>
+<li>
+<a href="#toc_6">Pattern matching in array assignment, variable name must start with lower case letter</a>
+</li>
+<li>
+<a href="#toc_7">read and write to file</a>
+</li>
+<li>
+<a href="#toc_8">string formatter</a>
+</li>
+<li>
+<a href="#toc_9">regex option</a>
+</li>
 </ul>
+
 
 
     
@@ -193,16 +374,16 @@ ssh-add ~/.ssh/ygan_at_linkedin.com_ssh_key
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="14865029971468.html" 
-          title="Previous Post: spark">&laquo; spark</a>
+          <a href="14742423250719.html" 
+          title="Previous Post: python">&laquo; python</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
       
-          <a  href="14742423250761.html" 
-          title="Next Post: technical analysis">technical analysis &raquo;</a>
+          <a  href="14742423250740.html" 
+          title="Next Post: setting">setting &raquo;</a>
       
       </p>
         </div>
@@ -300,19 +481,13 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
-			        <a href="14770727250961.html">Advanced Analytics with Spark Reading Notes</a>
+			        <a href="15216148471093.html">Finite State</a>
 			      </li>
 		     
 		  
 		      
 			      <li class="post">
-			        <a href="14742423250557.html">Github Page, Hexo, MWeb, GoDaddy setting</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14858223421956.html">Machine Learning</a>
+			        <a href="14770727250961.html">advanced Analytics with Spark Reading Notes</a>
 			      </li>
 		     
 		  
@@ -325,6 +500,12 @@ var disqus_config = function () {
 		      
 			      <li class="post">
 			        <a href="14742423250478.html">bash</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="14742423250523.html">bayesian statistics</a>
 			      </li>
 		     
 		  
@@ -400,7 +581,7 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
     </script>
 
     <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
 
   </body>

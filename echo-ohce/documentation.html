@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  gradle - Echo-ohcE
+  documentation - Echo-ohcE
   
   </title>
   
@@ -98,173 +98,99 @@
        
 
  <script type="text/javascript">
-  $(function(){
-    $('#menu_item_index').addClass('is_active');
-  });
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
 </script>
 <div class="row">
-  <div class="large-8 medium-8 columns">
-      <div class="markdown-body article-wrap">
-       <div class="article">
-          
-          <h1>gradle</h1>
-     
-        <div class="read-more clearfix">
-          <span class="date">2017/7/3</span>
-
-          <span>posted in&nbsp;</span> 
-          
-              <span class="posted-in"><a href='tips.html'>tips</a></span>
-           
-         
-          <span class="comments">
-            
-
-            
-          </span>
-
-        </div>
-      </div><!-- article -->
-
-      <div class="article-content">
-      <p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h1 id="toc_0">DB gradle build jar without testing</h1>
-
-<pre><code class="language-bash"># delete previous built jars
-gradle clean
-
-gradle build -x test
-</code></pre>
-
-<h1 id="toc_1">Gradle build jar with dependencies self contained</h1>
-
-<p>For this simple purpose, do not need use <code>shadowJar</code> plugin</p>
-
-<p>My example is trying to include <a href="https://mvnrepository.com/artifact/org.uaparser/uap-scala_2.11"><code>group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;</code></a> in my <code>spark2.jar</code>, and of course all dependencies of the <code>uaparser</code> jar</p>
-
-<pre><code class="language-gradle">...
-
-configurations {
-    // configuration that holds jars to include in the jar
-    extraLibs
-}
-dependencies {
-    ...
-    extraLibs group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;
-    configurations.compile.extendsFrom(configurations.extraLibs)
-    ...
-}
-
-...
-
-jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-</code></pre>
-
-<p>Now what you put behind <code>extraLibs</code> will be both compiled and included into your jar as a dependency.</p>
-
-<p>The command for building the jar is:   </p>
-
-<pre><code class="language-bash">gradle jar   
-</code></pre>
-
-<p>This is because <code>jar</code> is an task, and the <code>fatJar</code> is created at <code>build/libs/</code></p>
-
-<p><a href="https://discuss.gradle.org/t/how-to-include-dependencies-in-jar/19571/5">reference</a></p>
-
-<p>My own example is at <code>repo/drawbridge/dpp/spark2/build.gradle</code> and the git branch <code>ali2</code></p>
-
-<h1 id="toc_2">Avro auto-generated source code and IntelliJ</h1>
-
-<p>Need do the following three things for IntelliJ to pickup the source code and recognize the auto-generated source files.</p>
-
-<ol>
-<li>Install the <code>Apache Avro™ Support</code> plugin</li>
-<li><code>mint checkout ***</code> checkout the multi-product</li>
-<li><code>mint build</code></li>
-<li><code>mint idea</code></li>
-<li>open it in IntelliJ</li>
-</ol>
-
-<p>The above <strong>order</strong> matters. <a href="https://github.com/commercehub-oss/gradle-avro-plugin#intellij-integration">Official plugin reference</a></p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">DB gradle build jar without testing</a>
-</li>
-<li>
-<a href="#toc_1">Gradle build jar with dependencies self contained</a>
-</li>
-<li>
-<a href="#toc_2">Avro auto-generated source code and IntelliJ</a>
-</li>
-</ul>
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="14770727250961.html">
+                
+                  <h1>advanced Analytics with Spark Reading Notes</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents the reading notes of this book. Keep updating.  </p>
 
 
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14770727250961.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/10/21</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='documentation.html'>documentation</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
-    
-
-      </div>
-
-      <div class="row">
-        <div class="large-6 columns">
-        <p class="text-left" style="padding:15px 0px;">
-      
-          <a href="14742423250557.html" 
-          title="Previous Post: github Page, Hexo, MWeb, GoDaddy setting">&laquo; github Page, Hexo, MWeb, GoDaddy setting</a>
-      
-        </p>
-        </div>
-        <div class="large-6 columns">
-      <p class="text-right" style="padding:15px 0px;">
-      
-          <a  href="14773416332741.html" 
-          title="Next Post: graphviz Dot">graphviz Dot &raquo;</a>
-      
-      </p>
-        </div>
-      </div>
-      <div class="comments-wrap">
-        <div class="share-comments">
-          <div id="disqus_thread"></div>
-<script>
-
-/**
- *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
- *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-/*
-var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = '//echo-ohce.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-          
-
-          
-        </div>
-      </div>
-    </div><!-- article-wrap -->
-  </div><!-- large 8 -->
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="14742423250740.html">
+                
+                  <h1>setting</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<p>This documents various settings that I normally use. Keep updating.  </p>
 
 
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                   <a href="14742423250740.html">Read more</a>&nbsp;&nbsp; 
+                    <span class="date">2016/9/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='documentation.html'>documentation</a></span>
+          				   
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
+
+
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
+		</div>
+	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
@@ -325,6 +251,12 @@ var disqus_config = function () {
 	      
 		      
 			      <li class="post">
+			        <a href="15216148471093.html">Finite State</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="14770727250961.html">advanced Analytics with Spark Reading Notes</a>
 			      </li>
 		     
@@ -344,12 +276,6 @@ var disqus_config = function () {
 		      
 			      <li class="post">
 			        <a href="14742423250523.html">bayesian statistics</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="14742423250614.html">giraph</a>
 			      </li>
 		     
 		  
@@ -425,7 +351,7 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
     </script>
 
     <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
 
   </body>

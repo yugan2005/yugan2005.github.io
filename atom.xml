@@ -4,13 +4,329 @@
   <title><![CDATA[Echo-ohcE]]></title>
   <link href="www.echo-ohce.com/atom.xml" rel="self"/>
   <link href="www.echo-ohce.com/"/>
-  <updated>2017-07-08T10:12:38-07:00</updated>
+  <updated>2018-05-01T10:29:48-07:00</updated>
   <id>www.echo-ohce.com/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[Finite State]]></title>
+    <link href="www.echo-ohce.com/15216148471093.html"/>
+    <updated>2018-03-20T23:47:27-07:00</updated>
+    <id>www.echo-ohce.com/15216148471093.html</id>
+    <content type="html"><![CDATA[
+<p>For Finite State Automata and Finite State Transducer and their application in NLP</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">FSA</a>
+<ul>
+<li>
+<a href="#toc_1">Motivation, Why Automata?</a>
+</li>
+<li>
+<a href="#toc_2">Theory — Finite State Automata and You!</a>
+</li>
+<li>
+<a href="#toc_3">In Practice — An Automaton as a data structure</a>
+</li>
+<li>
+<a href="#toc_4">Teh Codez — Building an Automaton</a>
+</li>
+<li>
+<a href="#toc_5">Automaton Creation Considerations</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_6">Finite-State-Transducers</a>
+<ul>
+<li>
+<a href="#toc_7">Quick Primer on Finite State Machines</a>
+</li>
+<li>
+<a href="#toc_8">FSMs for Language Processing</a>
+</li>
+<li>
+<a href="#toc_9">Finite State Transducers</a>
+</li>
+<li>
+<a href="#toc_10">Converting Rules to FSTs</a>
+</li>
+<li>
+<a href="#toc_11">Extending the FSTs</a>
+</li>
+<li>
+<a href="#toc_12">Composing a single FST</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">Using Finite State Transducers in Lucene</a>
+</li>
+</ul>
+
+
+<hr/>
+
+<h1 id="toc_0">FSA</h1>
+
+<p><a href="https://opensourceconnections.com/blog/2013/02/21/lucene-4-finite-state-automaton-in-10-minutes-intro-tutorial/">This article</a> is intended to help you bootstrap your ability to work with Finite State Automata (note automata == plural of automaton). Automata are a unique data structure, requiring a bit of theory to process and understand. Hopefully what’s below can give you a foundation for playing with these fun and useful Lucene data structures!</p>
+
+<h2 id="toc_1">Motivation, Why Automata?</h2>
+
+<p>When working in search, a big part of the job is making sense of loosely-structured text. For example, suppose we have a list of about 1000 valid first names and 100,000 last names. Before ingesting data into a search application, we need to extract first and last names from free-form text.</p>
+
+<p>Unfortunately the data sometimes has full names in the format “LastName, FirstName” like “Turnbull, Doug”. In other places, however, full names are listed “FirstName LastName” like “Doug Turnbull”. Add a few extra representations, and to make sense out of what strings represent valid names becomes a chore.</p>
+
+<p>This becomes especially troublesome when we’re depending on these as natural identifiers for looking up or joining across multiple data sets. Each data set might textually represent the natural identifier in subtly different ways. We want to capture the representations across multiple data sets to ensure our join works properly.</p>
+
+<p>So… Whats a text jockey to do when faced with such annoying inconsistencies?</p>
+
+<p>You might initially think “regular expression”. Sadly, a normal regular expression can’t help in this case. Just trying to write a regular expression that allows a controlled vocabulary of 100k valid last names but nothing else is non-trivial. Not to mention the task of actually using such a regular expression.</p>
+
+<p>But there is one tool that looks promising for solving this problem. Lucene 4.0’s new Automaton API. Lets explore what this API has to offer by first reminding ourselves about a bit of CS theory.</p>
+
+<h2 id="toc_2">Theory — Finite State Automata and You!</h2>
+
+<p>Lucene’s Automaton API provides a way to create and use Finite State Automata(FSAs). For those who don’t remember their senior level computer science, FSA is a computational model whereby input symbols are read by the computer — the automaton — to drive a state machine. The state machine is simply a graph with nodes and labeled, directed edges. Each node in the graph is a state, and each edge is a transition labeled with a potential input symbol. By matching the current node’s edges to the current input symbol, the automaton follows edges to the next state. The next input symbol is read, and based on the transitions of the new state, we transition to yet another state, so-on and so-forth.</p>
+
+<p>More importantly here, FSA’s are a way of specifying a Regular Language. If we think of all the input symbols as elements of a language, we can use an FSA to specify a language and determine if a given input string is valid for the language. We do this by processing the input string, following the transitions of an FSA until we reach a terminus node. If we exhaust the input symbols at such a node, then the string of symbols can be said to match the language. Otherwise, we can say the input string does not match the language.</p>
+
+<p>So for example, in the figure below. The string “nice” that is the sequence of symbols “n”, “i”, “c”, “e” are accepted as a member of the language. All other strings are rejected:</p>
+
+<p><img src="media/15216148471093/15216152173144.jpg" alt=""/><br/>
+<em>An FSA specifying a language that accepts the word &quot;nice&quot;</em></p>
+
+<p>A regular language could be just a set of valid strings. Or, it could be something a bit fuzzier like a Levenshtein distance or regular expression which as it turns out can be represented in a regular language. But even more powerfully, it can be a concatenation, union, or intersection of all of these.</p>
+
+<h2 id="toc_3">In Practice — An Automaton as a data structure</h2>
+
+<p>In practice, Lucene automata are useful as as a data structure that bridges between a traditional Set&lt;&gt; and hand-written regular expression. When compared to a HashSet or TreeSet the memory representation (can be) much, much smaller, with very fast lookups. Moreover, Automata give you fuzzier features like regular expression matching.</p>
+
+<p>Its not a general purpose set replacement, however. For an automaton, the set is all the strings of symbols that match the language. However, due to all the fuzzy matching potentially using “regular expressions” enumerating all the input strings that match the language, that is enumerating the members of the set, is non-trivial and might never terminate. Think about it this way, traversal involves manually traversing a graph, so every node, whether a terminus or not, must be visited. This traversal might never terminate because you could have a * regular expression. So enumerating the strings that match the language will involve infinitely repeating the pattern before the *.</p>
+
+<p>Another factor to consider is that while lookup time and memory usage are much, much smaller when compared to a Set&lt;&gt;, indexing can be very time consuming. For the use case of creating an automaton up front to specify a relatively static language once this isn’t a big deal. But for data structures that change frequently, automatons shouldn’t be the first choice.</p>
+
+<p>When compared to a regular expression, the Automaton lends itself to being able to hold more complex regular languages than the ones you could specify in a traditional regular expression. For example, it would be difficult to specify a regular expression that had 500,000 potential first names followed by 1,000 last names unioned with 1,000 last names, a comma, followed by one of 500,000 first names. That’s Perl that’s not even write only. Automaton’s give you the ability to effectively write an extremely rich and large a “regular expression” in readable code in a way that won’t make generating/parsing such a regular expression a giant chore.</p>
+
+<p>Next, lets see how we actually build a useful automaton</p>
+
+<h2 id="toc_4">Teh Codez — Building an Automaton</h2>
+
+<p>(Note all code below can be found at <a href="https://github.com/o19s/lucene_automata_tutorial">this</a> github repo)</p>
+
+<p>To show off the API, lets take the example we discussed at the outset. Lets say our language allows two forms of full names “FirstName LastName” and “LastName, FirstName”. For simplicity, lets validate only a set of names. First Names: {&quot;Doug&quot;, &quot;John&quot;} and last names {&quot;Berryman&quot;, &quot;Turnbull&quot;}. So in our world all the valid names are “Doug Berryman”, “Doug Turnbull”, “John Berryman”, and “John Turnbull”. Forms where last name comes first followed by a comma, followed by the first name (ie “Turnbull, Doug”) are also considered valid.</p>
+
+<p>So how do we use the Lucene API to build at Automaton to validate this syntax?</p>
+
+<p>There are two key classes that you’ll use over-and-over for building meaningful automata. First the BasicAutomata class provides static methods for constructing automata out of simple building blocks (in our case individual strings). Second the BasicOperations class provides utility methods for combining Automata into unions, intersections, or concatenations of other automata.</p>
+
+<p>Outside of these two central classes, we can also fold in additional automata from other classes. For example, regular expressions via the RegExp class.</p>
+
+<p>Ok, now lets actually start putting together some code. Lets first look at the form “FirstName LastName”. We want to specify a language that takes any of our first names {“John”, “Doug”}, followed by some number of whitespace characters, then followed by any of our last names {“Turnbull”, “Berryman”}.</p>
+
+<p>Our first piece of code forms the foundation for all of our other automata. One of the basic automata we need to build is simply one built from a set of valid strings. For example, an automaton for last names that says “Turnbull” is valid, “Berryman” is valid, but “Pugh” is not.</p>
+
+<p>As this task is going to be a pretty common, occurrence, we’ll be using this utility function that builds an automaton for accepting only the values from the passed in String array:</p>
+
+<pre><code class="language-java">/**
+ * @param strs
+ *   All the strings that we want to allow in the returned language
+ * @return
+ *   An automaton that allows only the passed in strings
+ */
+public static Automaton stringUnionAutomaton(String[] strs) {
+    Automaton strUnion = null;
+    // Simply loop through the strings and place them in the automaton
+    for (String str: strs) {
+        // Basic building block, make an automaton that accepts a singl
+        // string
+        Automaton currStrAutomaton = BasicAutomata.makeString(str);
+        if (strUnion == null) {
+            strUnion = currStrAutomaton;
+        }
+        else {
+            // Combine the current string with the Automata for the
+            // previous string, saying that this new string is also valid
+            strUnion = BasicOperations.union(strUnion, currStrAutomaton);
+        }
+    }
+    return strUnion;
+}
+</code></pre>
+
+<p>Notice how on every iteration, we create an automaton for the current string. The first iteration initializes the resulting automaton(strUnion) to the current string’s automata (currStrAutomaton&#39;). On subsequent iterations, we set the resultingstrUnionto the union ofcurrStrAutomatonand itself. Finally returningstrUnion` as the union of all the strings passed in.</p>
+
+<p>With this building block, we can build up a more complex Automaton for our FirstName LastName form:</p>
+
+<pre><code class="language-java">/**
+ * @param firstNames
+ *   Set of allowable first names
+ * @param lastNames
+ *   Set of allowable last names
+ * @return
+ *   An automaton that allows FirstName\s+LastName
+ */
+public static Automaton createFirstBeforeLastAutomaton(String[] firstNames, String[] lastNames) {
+    List&lt;Automaton&gt; allAutomatons = new ArrayList&lt;Automaton&gt;();
+    // Use our builder to create an automaton that allows all the first names
+    allAutomatons.add(stringUnionAutomaton(firstNames));
+
+    // Add in an Automaton that allows any whitespace by using
+    // the regular expression
+    RegExp anyNumberOfSpaces = new RegExp(&quot;[ \t]+&quot;);
+    Automaton anySpaces = anyNumberOfSpaces.toAutomaton();
+    allAutomatons.add(anySpaces);
+
+    // Add in an Automaton that allows all our last names
+    allAutomatons.add(stringUnionAutomaton(lastNames));
+
+    // Return the concatenation off all these automatons
+    return BasicOperations.concatenate(allAutomatons);
+}
+</code></pre>
+
+<p>In this code, we’re building three automata and returning the concatenation of all three. So to be a member of the concatenated automaton’s language, if a string passes the first automaton, then with additional characters passes the second automaton, and finally as characters are exhausted finishes the last automaton, we’ll consider this a valid member of this language.</p>
+
+<p>Note the use of the RegExp class. This class supports basic regular-expression matching and allows us to match one-or-more tabs or spaces in the input.</p>
+
+<p>The LastName, FirstName form is similar:</p>
+
+<pre><code class="language-java">public static Automaton createLastBeforeFirstAutomaton(String[] firstNames, String[] lastNames) {
+    List&lt;Automaton&gt; allAutomatons = new ArrayList&lt;Automaton&gt;();
+    allAutomatons.add(stringUnionAutomaton(lastNames));
+
+    RegExp commaPlusAnyNumberOfSpaces = new RegExp(&quot;,[ \t]+&quot;);
+    allAutomatons.add(commaPlusAnyNumberOfSpaces.toAutomaton());
+    allAutomatons.add(stringUnionAutomaton(firstNames));
+    return BasicOperations.concatenate(allAutomatons);
+}
+</code></pre>
+
+<p>The only difference here is we’re validating last names before first and our regex separator now has a comma. Otherwise, this is very similar to the other form.</p>
+
+<p>To finish things off, we simply have to create an automata that takes the union of both forms, allowing strings of either language to be valid in the resulting language:</p>
+
+<pre><code class="language-java">public static Automaton createNameValidator(String[] firstNames,
+                                            String[] lastNames) {
+    return BasicOperations.union(createFirstBeforeLastAutomaton(firstNames, lastNames),
+                                 createLastBeforeFirstAutomaton(firstNames, lastNames));
+}
+</code></pre>
+
+<p>Woohoo! You should be ready to go! Just keep in mind one or two things when building more complex automata:</p>
+
+<h2 id="toc_5">Automaton Creation Considerations</h2>
+
+<p>One of the things that makes the Automaton special is the potential minimal in-memory representation of the data structure. This gives you powerful lookup capabilities against a complex language with a large vocabulary, but noticeably increases index time when compared to a traditional data structure.</p>
+
+<p>To ensure the minimal representation of an Automaton, its important to note that Lucene may not be always keeping the most optimal representation of the data structure in memory. Without minimizing, you could have problems with lookup speed and will certainly have problems exhausting the jvm heap.</p>
+
+<p>For example, if we said that “Ed” and “Eddy” are valid strings in our language, we might initially have something like:</p>
+
+<pre><code>         []---E---&gt;[]---d---[*]
+          \
+           ---E---&gt;[]---d---[]---d---[]---y---[*]
+</code></pre>
+
+<p>Add this up over time, and we end up with a horrendous looking graph that leaves you wondering why anyone would ever bother using Automata!</p>
+
+<p>Part of the secret sauce to Lucene’s Automaton’s is minimizations. Instead of representing the graph as a gnarly web of duplicated gobbly, gook, we can perform the minimization operation on the graph above to be simply:</p>
+
+<pre><code>         []---E---&gt;[]---d---[*]
+                        \
+                         d---[]---y---[*]
+</code></pre>
+
+<p>By periodically calling Automata.minimize you can reduce the memory footprint of your automaton.</p>
+
+<p>You can track roughly how big your automaton is getting with Automata.getNumberOfStates() and Automata.getNumberOfTransitions. Its generally a good idea to keep an eye on the size of your automaton and deal with any bloat that occurs during indexing.</p>
+
+<h1 id="toc_6">Finite-State-Transducers</h1>
+
+<p><a href="http://infolocata.com/mirovia/finite-state-transducers-for-natural-language-processing/">Finite State Transducers</a> provide a method for performing mathematical operations on ordered collections of context-sensitive rewrite rules such as those commonly used to implement fundamental natural language processing tasks. Multiple rules may be composed into a single pass, mega rule, significantly increasing the efficiency of rule-based systems.</p>
+
+<h2 id="toc_7">Quick Primer on Finite State Machines</h2>
+
+<p>A finite-state machine (FSM) or automata is an abstract mathematical model of computation that is capable of storing a status or state and changing this state based on input. While not as powerful as other computational models such as Turing machines due to their limited memory, FSMs are applicable to a number of electronic modeling, engineering, and language processing problems. An FSM can be represented as a set of nodes representing the various states of the system and labeled edges between these nodes where the edges represent transitions from one state to another and the labels represent conditions on these transitions. A stream of input (an input tape containing a string) is then ‘processed’ by the FSM, potentially causing a number of state transitions. The simple FSM example below is a remarkably accurate computational model for a ferret:</p>
+
+<p><img src="media/15216148471093/15216155212383.jpg" alt=""/></p>
+
+<p>The daily behavior of my ferret, Pangur Bán, would best be represented by an input tape containing the string, ‘tired,tired,tired,tired,hungry,tired,tired,tired,bored,tired,tired,tired’:</p>
+
+<h2 id="toc_8">FSMs for Language Processing</h2>
+
+<p>In language processing, an FSM containing a start state (node) and an end state can be used to generate or recognize a language defined by all possible combinations of symbols (conditional labels) on each of the edges generated by traversing the FSM from the start state to the end state. The class of languages generated by finite automata is known as the class of regular languages.</p>
+
+<h2 id="toc_9">Finite State Transducers</h2>
+
+<p>A finite state transducer (FST) is a special type of finite state machine. Specifically, an FST has two tapes, an input string and an output string. Rather than just traversing (and accepting or rejecting) an input string, an FST translates the contents of its input string to its output string. Or put another way, it accepts a string on its input tape and generates another string on its output tape.</p>
+
+<p>Context-Sensitive Rules<br/>
+FSTs are particularly useful in the implementation of certain natural language processing tasks. Context-sensitive rewriting rules (ex: ax → bx) are adequate for implementing certain computational linguistic tasks such as morphological stemming and part-of-speech tagging. Such rewrite rules are also computationally equivalent to finite-state transducers, providing a unique path for optimizing rule based systems.</p>
+
+<p>Take, for example, the following set of ordered context-sensitive rules:</p>
+
+<p>1)  change ‘c’ to ‘b’ if followed by ‘x’       cx → bx<br/>
+2)  change ‘a’ to ‘b’ if preceded by ‘rs’      rsa → rsb<br/>
+3)  change ‘b’ to ‘a’ if preceded by ‘rs’ and followed by ‘xy’     rsbxy → rsaxy<br/>
+Given the following string on the input tape:</p>
+
+<p>rsaxyrscxy</p>
+
+<p>the application of the given rule set would proceed as follows:</p>
+
+<p>1) rsaxyrscxy → rsaxyrsbxy<br/>
+2) rsaxyrsbxy → rsbxyrsbxy<br/>
+3) rsbxyrsbxy → rsaxyrsaxy</p>
+
+<p>The time required to apply a sequence of context-sensitive rules is dependent upon the number of rules, the size of the context window, and the number of characters in the input string. The inefficiencies  in such an implementation are highlighted in this example by the multi-step transformation required to translate ‘c‘ to ‘b‘ then ‘b‘ to ‘a‘ by rules 1 and 3, and the redundant transformation of ‘a‘ to ‘b‘ and back to ‘a‘ by rules 2 and 3. Finite State Transducers provide a path to eliminate these inefficiencies. But first we need to convert the rules to State Machines.</p>
+
+<h2 id="toc_10">Converting Rules to FSTs</h2>
+
+<p>To do this, we simple represent each rule as an FST where each link between states represent the acceptance of an input character and the expression of the corresponding output character. This input / output combination is denoted within an FST by labeling edges with both the input and output character separated by the ‘/’ character. Following is an FST for each of the above rules:<br/>
+<img src="media/15216148471093/15216155691636.jpg" alt=""/></p>
+
+<h2 id="toc_11">Extending the FSTs</h2>
+
+<p>While the FSTs above represent our set of context-sensitive rules, they would be of little use in matching against an input string as each is designed to process exactly the context widow described in its corresponding rule. To make each FST applicable to a string of arbitrary length and perform the necessary translation each time the rule is fired, we will need to extend each of the Transducers. We do this by allowing for every possible input in our language at each state. For example, rule 1 must be able to handle the string rsaxyrscxy. Since rule 1 matches the string ‘cx‘ and outputs the string ‘bx‘, it must handle the characters ‘r‘, ‘s‘, ‘a‘, ‘x‘, ‘y‘, ‘r‘, and ‘s‘ before finally encountering ‘c‘ and ‘x‘. Then it must handle the final ‘y‘ character. Each of these characters (and all other possible characters) could be explicitly listed on its own individual edge, but to simplify, we can create a single edge labeled with ‘?/?‘, to match and output any character not already represented on another edge leading from that state. FST extension of rules with a trailing context will also require the use of edges with an input but no output (labeled with ‘ε‘ for output) and edges with multiple outputs. Following is the extension for each of the above FSTs:<br/>
+<img src="media/15216148471093/15216156059817.jpg" alt=""/></p>
+
+<h2 id="toc_12">Composing a single FST</h2>
+
+<p>One of the operations that can be performed on a pair of FSTs is composition. The composition operation will take two deterministic FSTs, A and B, and combine their nodes and edges into a single deterministic FST. The resulting Transducer will accept an input string of arbitrary length and output the equivalent of applying Transducer A followed by Transducer B. A full explanation of the FST composition algorithm is beyond the scope of this write-up. Following is the FST resulting from the composition of FSTs 1 and 2 followed by the composition of the resulting FST and FST 3:<br/>
+<img src="media/15216148471093/15216156228351.jpg" alt=""/></p>
+
+<p>Note that while the output of applying the final FST to the input string ‘rsaxyrscxy’ is exactly equivalent to the output of applying each of the individual context-sensitive rules (‘rsaxyrsaxy‘), the transformation required only a single pass through the FST and did not result in any inefficient transformations. While the time required to apply the original rules was dependent upon the number of rules, the size of the context window, and the number of characters on the input tape, application time of the final FST is dependent only upon the number of characters on the input tape.</p>
+
+<h1 id="toc_13">Using Finite State Transducers in Lucene</h1>
+
+<p><a href="http://blog.mikemccandless.com/2010/12/using-finite-state-transducers-in.html">FSTs</a> are finite-state machines that map a term (byte sequence) to an arbitrary output. They also look cool:<br/>
+<img src="media/15216148471093/15216158111078.jpg" alt=""/><br/>
+That FST maps the sorted words mop, moth, pop, star, stop and top to their ordinal number (0, 1, 2, ...). As you traverse the arcs, you sum up the outputs, so stop hits 3 on the s and 1 on the o, so its output ordinal is 4. The outputs can be arbitrary numbers or byte sequences, or combinations, etc. -- it&#39;s pluggable.</p>
+
+<p>Essentially, an FST is a SortedMap<ByteSequence,SomeOutput>, if the arcs are in sorted order. With the right representation, it requires far less RAM than other SortedMap implementations, but has a higher CPU cost during lookup. The low memory footprint is vital for Lucene since an index can easily have many millions (sometimes, billions!) of unique terms.</p>
+
+<p>There&#39;s a great deal of theory behind FSTs. They generally support the same operations as FSMs (determinize, minimize, union, intersect, etc.). You can also compose them, where the outputs of one FST are intersected with the inputs of the next, resulting in a new FST.</p>
+
+<p>There are some nice general-purpose FST toolkits (OpenFst looks great) that support all these operations, but for Lucene I decided to implement this neat algorithm which incrementally builds up the minimal unweighted FST from pre-sorted inputs. This is a perfect fit for Lucene since we already store all our terms in sorted (unicode) order.</p>
+
+<p>The resulting implementation (currently a patch on LUCENE-2792) is fast and memory efficient: it builds the 9.8 million terms in a 10 million Wikipedia index in ~8 seconds (on a fast computer), requiring less than 256 MB heap. The resulting FST is 69 MB. It can also build a prefix trie, pruning by how many terms come through each node, with even less memory.</p>
+
+<p>Note that because addition is commutative, an FST with numeric outputs is not guaranteed to be minimal in my implementation; perhaps if I could generalize the algorithm to a weighted FST instead, which also stores a weight on each arc, that would yield the minimal FST. But I don&#39;t expect this will be a problem in practice for Lucene.</p>
+
+<p>In the patch I modified the SimpleText codec, which was loading all terms into a TreeMap mapping the BytesRef term to an int docFreq and long filePointer, to use an FST instead, and all tests pass!</p>
+
+<p>There are lots of other potential places in Lucene where we could use FSTs, since we often need map the index terms to &quot;something&quot;. For example, the terms index maps to a long file position; the field cache maps to ordinals; the terms dictionary maps to codec-specific metadata, etc. We also have multi-term queries (eg Prefix, Wildcard, Fuzzy, Regexp) that need to test a large number of terms, that could work directly via intersection with the FST instead (many apps could easily fit their entire terms dict in RAM as an FST since the format is so compact). The FST could be used for a key/value store. Lots of fun things to try!</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[advanced Analytics with Spark Reading Notes]]></title>
@@ -571,6 +887,15 @@ i.stop()
 <li>
 <a href="#toc_16">check what pid is listening to the port</a>
 </li>
+<li>
+<a href="#toc_17">change mode for folder and file recursively</a>
+</li>
+<li>
+<a href="#toc_18">input absolute path in mac os finder</a>
+</li>
+<li>
+<a href="#toc_19">split file by regex using <code>csplit</code></a>
+</li>
 </ul>
 
 
@@ -812,6 +1137,42 @@ stty -ixon
 <pre><code class="language-bash">lsof -i :4444 # I used this to check whether my Selenium server has been shut down
 </code></pre>
 
+<h1 id="toc_17">change mode for folder and file recursively</h1>
+
+<p>Change folder mode to 755 and change file mode to 644, and change all executable files to 755. The base model here is <code>pig</code></p>
+
+<pre><code class="language-bash"># change all folders to 755, which is needed for files to be 755
+find ./pig -type d -exec chmod 755 {} \;
+# change all files to be 644
+find ./pig -type f -exec chmod 644 {} \;
+# change all executable files to be 755
+find . -name &quot;*.sh&quot; f -exec chmod 755 {} \;
+</code></pre>
+
+<h1 id="toc_18">input absolute path in mac os finder</h1>
+
+<p>Especially useful for hidden folders<br/>
+<code>CMD + SHIFT + G</code>: its name is <code>Go to the folder</code></p>
+
+<p><a href="http://www.alexandre-gomes.com/?p=376">reference</a></p>
+
+<h1 id="toc_19">split file by regex using <code>csplit</code></h1>
+
+<p>Note for mac OSX, the need install the GNU version of <code>csplit</code>:</p>
+
+<pre><code class="language-bash">brew install coreutils
+</code></pre>
+
+<p>then call <code>gcsplit</code> instead of <code>csplit</code>. <a href="https://stackoverflow.com/a/4323899/4229125">Reference</a></p>
+
+<p><a href="https://xaizek.github.io/2014-07-23/splitting-text-files-by-pattern/">This post</a> is a good tutorial of using this tool.</p>
+
+<p>To my simply use case of splitting the file by <code>=====</code>:</p>
+
+<pre><code class="language-bash"># temp_diff is the file I need split on
+gcsplit temp_diff /=====/ {*}
+</code></pre>
+
 <hr/>
 
 <ul>
@@ -865,6 +1226,15 @@ stty -ixon
 </li>
 <li>
 <a href="#toc_16">check what pid is listening to the port</a>
+</li>
+<li>
+<a href="#toc_17">change mode for folder and file recursively</a>
+</li>
+<li>
+<a href="#toc_18">input absolute path in mac os finder</a>
+</li>
+<li>
+<a href="#toc_19">split file by regex using <code>csplit</code></a>
 </li>
 </ul>
 
@@ -2119,25 +2489,28 @@ for id1, id2 in itertools.combinations(newSeenIds, 2):
 <a href="#toc_8">Oh Shit, git</a>
 </li>
 <li>
-<a href="#toc_9">Local unstaged change do not want to tracked and be committed</a>
+<a href="#toc_9">Exclude local unstaged changes from being tracked</a>
 </li>
 <li>
-<a href="#toc_10">git stash</a>
+<a href="#toc_10">Locally ignore some unstaged changes</a>
 </li>
 <li>
-<a href="#toc_11">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+<a href="#toc_11">git stash</a>
 </li>
 <li>
-<a href="#toc_12">Github page</a>
+<a href="#toc_12">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
 </li>
 <li>
-<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
+<a href="#toc_13">Github page</a>
 </li>
 <li>
-<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
+<a href="#toc_14">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Git/Mint workflow @ In</a>
+<a href="#toc_15">Git revert to a previous commit both locally and remotely</a>
+</li>
+<li>
+<a href="#toc_16">Pick only some files from a commit</a>
 </li>
 </ul>
 
@@ -2218,7 +2591,7 @@ the <code>-r</code> is recursive, the <code>-f</code> is force (in case, this tr
 
 <p><a href="http://ohshitgit.com">An interesting blog describe git scenarios in plain english</a></p>
 
-<h1 id="toc_9">Local unstaged change do not want to tracked and be committed</h1>
+<h1 id="toc_9">Exclude local unstaged changes from being tracked</h1>
 
 <p>This <a href="http://stackoverflow.com/questions/13630849/git-difference-between-assume-unchanged-and-skip-worktree">post</a> described my need:</p>
 
@@ -2234,7 +2607,17 @@ git update-index --skip-worktree dpp/graph/proguard.gradle
 
 <p>The difference between <code>--assume-unchanged</code> and <code>--skip-worktree</code> is described well <a href="http://stackoverflow.com/a/13631525/4229125">here</a></p>
 
-<h1 id="toc_10">git stash</h1>
+<h1 id="toc_10">Locally ignore some unstaged changes</h1>
+
+<p>This is actually the same thing as above. But this method is much easier and cleaner.</p>
+
+<p>Update this file <code>.git/info/exclude</code>. This file has the same format as normally <code>.gitignore</code> but is not shared with others.</p>
+
+<p>If after update this file, still shows the unstaged changes, do the above steps. But my own experience is update this file is sufficient.</p>
+
+<p><a href="https://stackoverflow.com/a/1753078/4229125">post on stackoverflow</a>  </p>
+
+<h1 id="toc_11">git stash</h1>
 
 <pre><code class="language-bash"># before checkout another branch
 git stash
@@ -2249,7 +2632,7 @@ git stash drop --index stash@{0}
 git stash pop
 </code></pre>
 
-<h1 id="toc_11">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
+<h1 id="toc_12">Set two separate GitLab (Corp) and GitHub (Personal) account</h1>
 
 <p>The most important steps are:<br/>
 1. Edit <code>~/.ssh/config</code> file and set up the two hosts.<br/>
@@ -2258,11 +2641,11 @@ git stash pop
 
 <p>The main reference post is <a href="https://gist.github.com/rosswd/e1afd2b0b0d515517eac">here</a></p>
 
-<h1 id="toc_12">Github page</h1>
+<h1 id="toc_13">Github page</h1>
 
 <p>Nothing special, just first need first create an empty repository using the unique name required.</p>
 
-<h1 id="toc_13">Quick way of adding untracked files into .gitignore:</h1>
+<h1 id="toc_14">Quick way of adding untracked files into .gitignore:</h1>
 
 <pre><code class="language-bash">git status --porcelain | grep &#39;^??&#39; | cut -c4- &gt;&gt; .gitignore
 </code></pre>
@@ -2274,102 +2657,34 @@ git stash pop
 
 <p><a href="https://stackoverflow.com/a/15142010/4229125">stackoverflow post</a></p>
 
-<h1 id="toc_14">Git revert to a previous commit both locally and remotely</h1>
+<h1 id="toc_15">Git revert to a previous commit both locally and remotely</h1>
 
 <ul>
 <li>first find the commit SHA by: <code>git log --all</code>, or <code>git l</code></li>
 <li>check current branch is <code>ygdev</code></li>
-<li>revert locally: <code>git revert --hard SHA</code></li>
+<li>revert locally: <code>git reset --hard SHA</code></li>
 <li>revert remotely: <code>git push -f upstream ygdev</code>. Need use <code>-f</code> to force update</li>
 </ul>
 
-<h1 id="toc_15">Git/Mint workflow @ In</h1>
+<h1 id="toc_16">Pick only some files from a commit</h1>
 
-<p>The main part is based on <a href="https://iwww.corp.linkedin.com/wiki/cf/display/TOOLS/Git+Workflow#GitWorkflow-historyline">this wiki page</a></p>
+<p>It is not <code>cherry-pick</code>, <code>cherry-pick</code> means pick some commits, not some files inside a commit.</p>
 
-<p>using the <code>seas-activities</code> MP as the example. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Run+Galene+Locally">This is the tutorial, that I am following, but with my own workflow</a></p>
+<ul>
+<li><p>List the change of the files between the commit (we need pick from) and the current head</p>
 
-<p><font color='salmon'>Update: found this <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/NYC+Data+Team+New+Hire+Onboarding+Guide#NYCDataTeamNewHireOnboardingGuide-3.VersionControl">git workflow doc</a>. it is very clear. </font></p>
+<pre><code class="language-bash">git diff --name-only ef0e558f 62ba3f1b
+</code></pre></li>
+<li><p>Apply the files you need</p>
 
-<p><strong>For the first machine (mac):</strong></p>
+<pre><code class="language-bash">git checkout source_branch &lt;paths&gt;...
+git checkout ygdev verticals/federated/src/main/java/com/linkedin/galene/federatedsearch/federated/search/blenders/rankers/FederatedSearchRankerFactory.java
+</code></pre></li>
+<li><p>Want see exactly what changed in one file between two commit</p>
 
-<ol>
-<li><code>mint checkout</code> checkout the multiproduct</li>
-<li><code>git remote -v</code> show the remote </li>
-<li>go to <a href="https://gitli.corp.linkedin.com/ygan-inlabs">my personal project</a> and add a new repo <code>seas-activities</code> under my personal project</li>
-<li>The upstream corresponding to my own repo is <code>git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code>.</li>
-<li>Add the upstream to this git: 
-<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
-<li>push the <code>master</code> branch to the <code>upstream</code>:
-<code>git push upstream master</code></li>
-<li>checkout a <code>ygdev</code> branch: <code>git checkout -b ygdev</code></li>
-<li>push the <code>ygdev</code> branch to the <code>upstream</code>:
-<code>git push upstream</code> </li>
-<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
-<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
-</ol>
-
-<p><strong>For the second machine (linux):</strong></p>
-
-<ol>
-<li><code>mint checkout</code> checkout the multiproduct</li>
-<li><code>git remote -v</code> show the remote </li>
-<li>Add the upstream to this git: 
-<code>git remote add upstream git@gitli.corp.linkedin.com:ygan-inlabs/seas-activities.git</code></li>
-<li>fetch from upstream: <code>git fetch upstream</code></li>
-<li>checkout my <code>dev</code> branch from my personal repo: <code>git checkout ygdev</code></li>
-<li>Working on <code>ygdev</code> branch, and push to<code>upstream</code> always: <code>git push upstream</code></li>
-<li>When need pull, have to specify both the remote and the branch: <code>git pull upstream ygdev</code></li>
-</ol>
-
-<p><strong>After dev job done and prepare for review</strong></p>
-
-<ol>
-<li>first push to upstream ygdev: <code>git push upstream ygdev</code></li>
-<li>checkout master: <code>git checkout master</code></li>
-<li>update master: <code>mint update</code></li>
-<li>checkout dev: <code>git checkout ygdev</code></li>
-<li>rebase my dev: <code>git rebase master</code></li>
-<li>check whether need <code>squash</code> or not by: <code>git l</code>. Making sure there is only 1 commit. <a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/Craftsmanship+-+One+Git+commit+per+push">ref1</a>, <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a></li>
-<li><font color='salmon'><strong>Note that from <a href="https://iwww.corp.linkedin.com/wiki/cf/display/PRT/AdApps+Git+Workflow">ref2</a>, seems we should create review from my personal branch. But this time I did it on the master branch. Should try next time</strong></font></li>
-<li><code>git review create --open</code></li>
-</ol>
-
-<p><strong>After rb gets <code>Ship it!</code></strong></p>
-
-<ol>
-<li>checkout master branch: <code>git checkout master</code></li>
-<li>update: <code>mint update</code></li>
-<li>checkout dev: <code>git checkout ygdev</code></li>
-<li>rebase my dev: <code>git rebase master</code></li>
-<li>update upstream dev: <code>git push -f upstream ygdev</code></li>
-<li>Now the <code>git l</code> should show one single line with only one commit</li>
-<li>checkout master: <code>git checkout master</code></li>
-<li><code>git review dcommit -r &lt;rb#&gt;</code></li>
-<li>check again <code>git l</code></li>
-<li><code>git push</code></li>
-</ol>
-
-<p><strong>After checkin, PCL failed</strong></p>
-
-<ol>
-<li>Due to other irrelevant cause</li>
-<li>The committed version got automatically reverted</li>
-<li><code>git checkout master</code></li>
-<li><code>mint update</code></li>
-<li><code>git checkout ygdev</code></li>
-<li><code>git rebase master</code></li>
-<li><code>git cherry-pick &lt;SHA&gt;</code></li>
-<li><code>git commit --amend</code></li>
-<li>Add the reason into the commit message: <em>resubmit due to irrelevant PCL failure</em></li>
-<li><code>git push upstream ygdev</code></li>
-<li><code>git checkout master</code></li>
-<li><code>git rebase ygdev</code></li>
-<li><code>git push upstream master</code></li>
-<li><code>git push</code></li>
-</ol>
-
-<p><a href="https://iwww.corp.linkedin.com/wiki/cf/display/ENGS/git+primer%3A+basic+LI+workflow">A good internal summary git post</a></p>
+<pre><code class="language-bash">git diff ef0e558f 62ba3f1b -- product-spec.json
+</code></pre></li>
+</ul>
 
 <hr/>
 
@@ -2402,25 +2717,28 @@ git stash pop
 <a href="#toc_8">Oh Shit, git</a>
 </li>
 <li>
-<a href="#toc_9">Local unstaged change do not want to tracked and be committed</a>
+<a href="#toc_9">Exclude local unstaged changes from being tracked</a>
 </li>
 <li>
-<a href="#toc_10">git stash</a>
+<a href="#toc_10">Locally ignore some unstaged changes</a>
 </li>
 <li>
-<a href="#toc_11">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
+<a href="#toc_11">git stash</a>
 </li>
 <li>
-<a href="#toc_12">Github page</a>
+<a href="#toc_12">Set two separate GitLab (Corp) and GitHub (Personal) account</a>
 </li>
 <li>
-<a href="#toc_13">Quick way of adding untracked files into .gitignore:</a>
+<a href="#toc_13">Github page</a>
 </li>
 <li>
-<a href="#toc_14">Git revert to a previous commit both locally and remotely</a>
+<a href="#toc_14">Quick way of adding untracked files into .gitignore:</a>
 </li>
 <li>
-<a href="#toc_15">Git/Mint workflow @ In</a>
+<a href="#toc_15">Git revert to a previous commit both locally and remotely</a>
+</li>
+<li>
+<a href="#toc_16">Pick only some files from a commit</a>
 </li>
 </ul>
 
@@ -2593,97 +2911,6 @@ math:
 </li>
 <li>
 <a href="#toc_7">Future work</a>
-</li>
-</ul>
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[gradle]]></title>
-    <link href="www.echo-ohce.com/14979138208242.html"/>
-    <updated>2017-06-19T16:10:20-07:00</updated>
-    <id>www.echo-ohce.com/14979138208242.html</id>
-    <content type="html"><![CDATA[
-<p>This documents all the tips, pitfalls I experienced along the way. Keep updating.</p>
-
-<span id="more"></span><!-- more -->
-
-<h1 id="toc_0">DB gradle build jar without testing</h1>
-
-<pre><code class="language-bash"># delete previous built jars
-gradle clean
-
-gradle build -x test
-</code></pre>
-
-<h1 id="toc_1">Gradle build jar with dependencies self contained</h1>
-
-<p>For this simple purpose, do not need use <code>shadowJar</code> plugin</p>
-
-<p>My example is trying to include <a href="https://mvnrepository.com/artifact/org.uaparser/uap-scala_2.11"><code>group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;</code></a> in my <code>spark2.jar</code>, and of course all dependencies of the <code>uaparser</code> jar</p>
-
-<pre><code class="language-gradle">...
-
-configurations {
-    // configuration that holds jars to include in the jar
-    extraLibs
-}
-dependencies {
-    ...
-    extraLibs group: &#39;org.uaparser&#39;, name: &#39;uap-scala_2.11&#39;, version: &#39;0.1.0&#39;
-    configurations.compile.extendsFrom(configurations.extraLibs)
-    ...
-}
-
-...
-
-jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-</code></pre>
-
-<p>Now what you put behind <code>extraLibs</code> will be both compiled and included into your jar as a dependency.</p>
-
-<p>The command for building the jar is:   </p>
-
-<pre><code class="language-bash">gradle jar   
-</code></pre>
-
-<p>This is because <code>jar</code> is an task, and the <code>fatJar</code> is created at <code>build/libs/</code></p>
-
-<p><a href="https://discuss.gradle.org/t/how-to-include-dependencies-in-jar/19571/5">reference</a></p>
-
-<p>My own example is at <code>repo/drawbridge/dpp/spark2/build.gradle</code> and the git branch <code>ali2</code></p>
-
-<h1 id="toc_2">Avro auto-generated source code and IntelliJ</h1>
-
-<p>Need do the following three things for IntelliJ to pickup the source code and recognize the auto-generated source files.</p>
-
-<ol>
-<li>Install the <code>Apache Avro™ Support</code> plugin</li>
-<li><code>mint checkout ***</code> checkout the multi-product</li>
-<li><code>mint build</code></li>
-<li><code>mint idea</code></li>
-<li>open it in IntelliJ</li>
-</ol>
-
-<p>The above <strong>order</strong> matters. <a href="https://github.com/commercehub-oss/gradle-avro-plugin#intellij-integration">Official plugin reference</a></p>
-
-<hr/>
-
-<ul>
-<li>
-<a href="#toc_0">DB gradle build jar without testing</a>
-</li>
-<li>
-<a href="#toc_1">Gradle build jar with dependencies self contained</a>
-</li>
-<li>
-<a href="#toc_2">Avro auto-generated source code and IntelliJ</a>
 </li>
 </ul>
 
@@ -3817,6 +4044,33 @@ oozie.use.system.libpath=true
 <li>
 <a href="#toc_33">Learning from piggybank <code>HashFNV</code></a>
 </li>
+<li>
+<a href="#toc_34">Pig type and Avro complex datatype</a>
+</li>
+<li>
+<a href="#toc_35">Specify complex data type using schema declaration</a>
+</li>
+<li>
+<a href="#toc_36">Pig local mode load local file system data</a>
+</li>
+<li>
+<a href="#toc_37">Pig, Avro, Python UDF <code>float</code> and <code>double</code> type</a>
+</li>
+<li>
+<a href="#toc_38">Config memory of Mapper &amp; Reducer in Yarn</a>
+</li>
+<li>
+<a href="#toc_39">Pass a specific hadoop config parameter to Pig</a>
+</li>
+<li>
+<a href="#toc_40">Pig Set command</a>
+</li>
+<li>
+<a href="#toc_41">Pig Spill</a>
+</li>
+<li>
+<a href="#toc_42">Pig operator causes reduce phase and use of <code>parallel</code> clause</a>
+</li>
 </ul>
 
 
@@ -4458,6 +4712,165 @@ DESCRIBE one_field;
 * <code>HashFNV1</code> is at <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV1.java?view=markup">here</a><br/>
 * <code>HashFNV2</code> is at <a href="http://svn.apache.org/viewvc/pig/trunk/contrib/piggybank/java/src/main/java/org/apache/pig/piggybank/evaluation/string/HashFNV2.java?view=markup">here</a></p>
 
+<h1 id="toc_34">Pig type and Avro complex datatype</h1>
+
+<p>The most frequently used Avro complex datatype in pig are:<br/>
+* <code>records</code><br/>
+* <code>arrays</code> </p>
+
+<h1 id="toc_35">Specify complex data type using schema declaration</h1>
+
+<p><img src="media/14742423250700/15080203565504.jpg" alt=""/></p>
+
+<p>reference is from this <a href="http://anutoshdatta.blogspot.com/2013/03/data-types-and-schema-in-pig.html">post</a></p>
+
+<h1 id="toc_36">Pig local mode load local file system data</h1>
+
+<ol>
+<li>run in local mode: <code>pig -x local</code></li>
+<li>load local data, adding <code>file:///</code> and use the absolute path;</li>
+</ol>
+
+<p>If not so, possible error is:</p>
+
+<blockquote>
+<p>Caused by: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.security.AccessControlException): SIMPLE authentication is not enabled.  Available:[TOKEN, KERBEROS]</p>
+</blockquote>
+
+<p>Example:</p>
+
+<pre><code class="language-sql">old = load &#39;file:///export/home/ygan/li-spark-shell/data/avroTemp/part-r-00001.avro&#39; using LiAvroStorage();
+</code></pre>
+
+<h1 id="toc_37">Pig, Avro, Python UDF <code>float</code> and <code>double</code> type</h1>
+
+<p>The root cause is that in python, there is no <code>java</code> equivalent <code>float</code> type. Any python UDF returned <code>float</code> value, is actually <code>double</code> in Pig</p>
+
+<p>Refer to this <a href="https://issues.apache.org/jira/browse/PIG-3357">post</a><br/>
+<code>java<br/>
+} else if (pyObject instanceof PyFloat) {<br/>
+   // J(P)ython is loosely typed, supports only float type, <br/>
+   // hence we convert everything to double to save precision<br/>
+   javaObj = pyObject.__tojava__(Double.class);<br/>
+}<br/>
+</code></p>
+
+<p>So, in order to get the <code>float</code> type inside pig or saved in avro format, we need do explicit cast <code>(float)</code> inside pig.</p>
+
+<p>Cast inside complex type by redefine the datatype doest not work in pig:</p>
+
+<p><strong><font color='red'>not working</font></strong></p>
+
+<pre><code class="language-sql">history_features_temp0 = foreach (group cnt_type_member by memberId) generate group as memberId, 
+                            intentionUtils.getMemberHistoryFeatures(cnt_type_member.(historyType, cntPerTypePerMember)) 
+                                as memberHistoryFeatures : bag{t:(featureName: chararray, featureValue: float)};
+
+</code></pre>
+
+<p>in which the output of python udf: <code>intentionUtils.getMemberHistoryFeatures</code>:</p>
+
+<pre><code class="language-python">@outputSchema(&#39;memberHistoryFeatures:{t:(featureName:chararray, featureValue:float)}&#39;)`
+
+</code></pre>
+
+<p><strong><font color='red'>working</font></strong></p>
+
+<pre><code class="language-sql">history_features_temp0 = foreach (group cnt_type_member by memberId) generate group as memberId,
+                            flatten(intentionUtils.getMemberHistoryFeatures(
+                              cnt_type_member.(historyType, cntPerTypePerMember)))
+                              as (featureName: chararray, featureValue: double);
+history_features = foreach history_features_temp0 generate memberId as memberId, featureName as featureName,
+                      (float) featureValue as featureValue: float;
+
+</code></pre>
+
+<p>Need un-nest the complex dataType then explicit cast.</p>
+
+<h1 id="toc_38">Config memory of Mapper &amp; Reducer in Yarn</h1>
+
+<p>Based on a really good post <a href="https://documentation.altiscale.com/heapsize-for-mappers-and-reducers">here</a></p>
+
+<p>There are three memory related parameters:<br/>
+1. <code>yarn.scheduler.maximum-allocation-mb</code>: The total memory allocated for yarn by Node Manager. Normally it is the majority part of the machine&#39;s RAM. eg. 244GB<br/>
+2. <code>mapreduce.{map|reduce}.memory.mb</code>: Used by YARN to set the memory size of the container being used to run the map or reduce task. If the task grows beyond this limit, YARN will kill the container<br/>
+3. <code>mapreduce.{map|reduce}.java.opts</code>: To execute the actual map or reduce task, YARN will run a JVM within the container. This parameter is intended to pass options to this JVM. This can include <code>­Xmx</code> to set max heap size of the JVM. However, it is limited by the actual size of the container as set by <code>mapreduce.{map|reduce}.memory.mb</code>.<br/>
+4. A good rule of thumb is to set the jave heap size to be 10% less than the container size<br/>
+    <code>mapreduce.{map|reduce}.java.opts = mapreduce.{map|reduce}.memory.mb x 0.9</code><br/>
+5. At here, we see that default value: <code>mapreduce.map.memory.mb=2048</code>, and <code>mapreduce.map.java.opts=-Xmx1G</code></p>
+
+<p>Note: The two properties <code>yarn.nodemanager.resource.memory-mb</code> and <code>yarn.scheduler.maximum-allocation-mb</code> normally cannot be set by customers. </p>
+
+<p><img src="media/14742423250700/15083447009513.jpg" alt=""/></p>
+
+<p>Example of setting:</p>
+
+<pre><code class="language-bash">hadoop jar &lt;jarName&gt; -Dmapreduce.map.memory.mb=4096 -Dmapreduce.map.java.opts=-Xmx3686m
+</code></pre>
+
+<h1 id="toc_39">Pass a specific hadoop config parameter to Pig</h1>
+
+<p>There are multiple places you can pass hadoop configuration parameter to Pig. Here is a list from high priority to low priority (configuration in high priority will override the configuration in low priority):<br/>
+1. set command<br/>
+2. -P properties_file<br/>
+3. pig.properties<br/>
+4. java system property/environmental variable<br/>
+5. Hadoop configuration file: hadoop-site.xml/core-site.xml/hdfs-site.xml/mapred-site.xml, or Pig specific hadoop configuration file: pig-cluster-hadoop-site.xml)</p>
+
+<p>Both 3 and 5 require the configuration file in classpath.</p>
+
+<p><a href="https://cwiki.apache.org/confluence/display/PIG/FAQ#FAQ-Q:HowcanIpassaspecifichadoopconfigurationparametertoPig?">Reference from the official doc</a></p>
+
+<h1 id="toc_40">Pig Set command</h1>
+
+<p><a href="https://pig.apache.org/docs/r0.15.0/cmds.html#set">Official doc</a><br/>
+All Pig and Hadoop properties can be set, either in the Pig script or via the Grunt command line.</p>
+
+<p>Example of correct setting inside pig script:</p>
+
+<pre><code class="language-sql">-- need this to increase 3rd application&#39;s mapper time (too short)
+-- this should also help increase the reducer time (too short)
+set pig.maxCombinedSplitSize 536870912;
+-- need this to reduce Mapper Spill
+set mapreduce.task.io.sort.mb &#39;1024&#39;;
+set mapreduce.map.memory.mb &#39;4096&#39;;
+set mapreduce.map.java.opts &#39;-Xmx3686m&#39;;
+</code></pre>
+
+<h1 id="toc_41">Pig Spill</h1>
+
+<p>Two methods<br/>
+1. Increase the size of in-memory sort buffer <code>mapreduce.task.io.sort.mb</code> (set as above), default 100M. But <strong><font color='red'>NOTE: it can only go up to 2047MB</font></strong>. <code>mapreduce.task.io.sort.mb</code> is the total amount of buffer memory to use while sorting files, in megabytes. Reference: <a href="https://stackoverflow.com/a/45370437">stackoverflow</a><br/>
+2. Compress mapper output (set <code>mapreduce.map.output.compress</code> and <code>mapreduce.map.output.compress.codec</code>). Example of my setting in the gradle Hadoop DSL:</p>
+
+<pre><code class="language-groovy">propertySet(&#39;pig-common&#39;) {
+  set properties: [
+    &#39;pig.additional.jars&#39;: [
+      &#39;./lib/daily-member-feature-pipeline*.jar&#39;
+    ].join(&#39;:&#39;),
+  &#39;pig.home&#39; : &#39;/export/apps/pig/linkedin-pig-h2-0.15.0.li23-1&#39;,
+  ]
+  set jvmProperties: [&#39;fs.permissions.umask-mode&#39;                       : &#39;022&#39;,
+                      &#39;mapreduce.map.env&#39;                               : &#39;JYTHONPATH=job.jar/Lib&#39;,
+                      &#39;mapreduce.reduce.env&#39;                            : &#39;JYTHONPATH=job.jar/Lib&#39;,
+                      &#39;mapreduce.map.java.opts&#39;                         : &#39;-Xmx1G&#39;,
+                      &#39;mapreduce.reduce.java.opts&#39;                      : &#39;-Xmx1G&#39;,
+                      &#39;java.io.tmpdir&#39;                                  : &#39;/grid/a/mapred/tmp&#39;,
+                      &#39;mapreduce.map.output.compress&#39;                   : true,
+                      &#39;mapreduce.output.fileoutputformat.compress&#39;      : true,
+                      &#39;mapreduce.output.fileoutputformat.compress.type&#39; : &#39;BLOCK&#39;,
+                      &#39;mapreduce.output.fileoutputformat.compress.codec&#39;: &#39;org.apache.hadoop.io.compress.DefaultCodec&#39;,
+                      &#39;avro.mapred.deflate.level&#39;                       : 6,
+                      &#39;pig.tmpfilecompression&#39;                          : true,
+                      &#39;pig.tmpfilecompression.codec&#39;                    : &#39;gz&#39;,]
+}
+</code></pre>
+
+<h1 id="toc_42">Pig operator causes reduce phase and use of <code>parallel</code> clause</h1>
+
+<p>The operations starts a reduce phase:<br/>
+COGROUP, CROSS, DISTINCT, GROUP, JOIN (inner), JOIN (outer), and ORDER.<br/>
+See reference <a href="https://pig.apache.org/docs/r0.7.0/cookbook.html#Use+the+PARALLEL+Clause">here</a></p>
+
 <hr/>
 
 <ul>
@@ -4562,6 +4975,33 @@ DESCRIBE one_field;
 </li>
 <li>
 <a href="#toc_33">Learning from piggybank <code>HashFNV</code></a>
+</li>
+<li>
+<a href="#toc_34">Pig type and Avro complex datatype</a>
+</li>
+<li>
+<a href="#toc_35">Specify complex data type using schema declaration</a>
+</li>
+<li>
+<a href="#toc_36">Pig local mode load local file system data</a>
+</li>
+<li>
+<a href="#toc_37">Pig, Avro, Python UDF <code>float</code> and <code>double</code> type</a>
+</li>
+<li>
+<a href="#toc_38">Config memory of Mapper &amp; Reducer in Yarn</a>
+</li>
+<li>
+<a href="#toc_39">Pass a specific hadoop config parameter to Pig</a>
+</li>
+<li>
+<a href="#toc_40">Pig Set command</a>
+</li>
+<li>
+<a href="#toc_41">Pig Spill</a>
+</li>
+<li>
+<a href="#toc_42">Pig operator causes reduce phase and use of <code>parallel</code> clause</a>
 </li>
 </ul>
 
@@ -4699,6 +5139,12 @@ DESCRIBE one_field;
 </li>
 <li>
 <a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
+<li>
+<a href="#toc_40">numpy broadcasting</a>
+</li>
+<li>
+<a href="#toc_41">Install matplotlib on Mac</a>
 </li>
 </ul>
 
@@ -5820,6 +6266,40 @@ sys.path.append(cwd)
 from lightgbm import LGBMClassifier
 </code></pre>
 
+<h1 id="toc_40">numpy broadcasting</h1>
+
+<p>The purpose of doing broadcasting is to make two numpy array with different shape converting to the <strong>same</strong> shape, so that element-wise operation can be implemented.</p>
+
+<p>Functions that does element-wise operation and supports broadcasting are known as universal functions <code>ufunc</code></p>
+
+<p>Broadcasting two arrays together follows these rules:</p>
+
+<ul>
+<li>If the arrays do not have the same rank, prepend the shape of the lower rank array with 1s until both shapes have the same length.</li>
+<li>The two arrays are said to be compatible in a dimension if they have the same size in the dimension, or if one of the arrays has size 1 in that dimension.</li>
+<li>The arrays can be broadcast together if they are compatible in all dimensions.</li>
+<li>After broadcasting, each array behaves as if it had shape equal to the elementwise maximum of shapes of the two input arrays.</li>
+<li>In any dimension where one array had size 1 and the other array had size greater than 1, the first array behaves as if it were copied along that dimension</li>
+</ul>
+
+<p><a href="http://scipy.github.io/old-wiki/pages/EricsBroadcastingDoc">Array Broadcasting in numpy blog</a><br/>
+<a href="http://cs231n.github.io/python-numpy-tutorial/#numpy-broadcasting">A very good python tutorial from Stanford</a></p>
+
+<h1 id="toc_41">Install matplotlib on Mac</h1>
+
+<p>I had this issue when installing <code>matplotlib</code> (using <code>pip install matplotlib</code>) in the virtualenv for LNKD spark-notebook. The error message is like this</p>
+
+<blockquote>
+<p>The following required packages can not be built: * freetype * Try installing freetype with <code>brew install freetype</code> * libpng * </p>
+</blockquote>
+
+<p>However, after I <code>brew install freetype</code> still matplotlib could not find it</p>
+
+<p>Solution: <code>brew install pkg-config</code></p>
+
+<p>After installed this, re-run <code>pip install matplotlib</code>. no more issue.<br/>
+<a href="https://stackoverflow.com/a/24685596/4229125">reference post</a></p>
+
 <hr/>
 
 <ul>
@@ -5942,6 +6422,12 @@ from lightgbm import LGBMClassifier
 </li>
 <li>
 <a href="#toc_39">Deploy an egg package to distributed nodes on hadoop</a>
+</li>
+<li>
+<a href="#toc_40">numpy broadcasting</a>
+</li>
+<li>
+<a href="#toc_41">Install matplotlib on Mac</a>
 </li>
 </ul>
 
